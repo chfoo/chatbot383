@@ -23,6 +23,9 @@ Commands
 ``!mail text``
     Give a message containing ``text`` for the bot to deliver.
 
+``!riot``
+    Make the bot want to riot.
+
 ``!rip thing``
     Pay respects to ``thing``.
 

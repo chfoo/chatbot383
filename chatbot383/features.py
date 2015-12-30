@@ -75,6 +75,7 @@ class Features(object):
         bot.register_command(r'!groudon(ger)?($|\s.*)', self._roar_command)
         bot.register_command(r'!klappa($|\s.*)', self._klappa_command)
         bot.register_command(r'!(mail|post)($|\s.{,100})$', self._mail_command)
+        bot.register_command(r'!riot($|\s.*)', self._riot_command)
         bot.register_command(r'!rip (.{,50})$', self._rip_command)
 
     def _collect_recent_message(self, session):
@@ -139,6 +140,10 @@ class Features(object):
 
         session.reply('{} Your request does not apply to any recent messages!'
                       .format(gen_roar()))
+
+    def _riot_command(self, session):
+        session.say('{} Riot, I say! Riot, you may! {}'
+                    .format(gen_roar(), gen_roar().upper()))
 
     def _rip_command(self, session):
         session.say('{} Rest in peace, {}. Press F to pay your respects.'
