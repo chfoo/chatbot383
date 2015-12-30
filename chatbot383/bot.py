@@ -1,8 +1,10 @@
 import logging
 import queue
+import random
 import re
-
 import itertools
+import time
+
 
 _logger = logging.getLogger(__name__)
 
@@ -39,6 +41,7 @@ class Bot(object):
         self._channels = channels
         self._main_client = main_client
         self._group_client = group_client
+        self._user_limiter = UserLimiter()
 
         self._commands = []
         self._message_handlers = []
@@ -132,10 +135,14 @@ class Bot(object):
         our_username = session.client.get_nickname(lower=True)
 
         if username != our_username:
+            if not self._user_limiter.is_user_ok(username):
+                return
+
             for pattern, command_func in self._commands:
                 match = re.match(pattern, text)
 
                 if match:
+                    self._user_limiter.update(username)
                     session.match = match
                     command_func(session)
                     break
@@ -155,3 +162,24 @@ class Bot(object):
 
         for channel in channels:
             session.bot.join(channel)
+
+
+class UserLimiter(object):
+    def __init__(self, min_interval=5):
+        self._min_interval = min_interval
+        self._table = {}
+
+    def is_user_ok(self, username):
+        if username not in self._table:
+            return True
+
+        time_now = time.time()
+
+        return time_now - self._table[username] > self._min_interval
+
+    def update(self, username):
+        self._table[username] = time.time()
+
+        if len(self._table) > 500:
+            key = random.choice(self._table)
+            del self._table[key]
