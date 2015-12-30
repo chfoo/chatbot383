@@ -88,7 +88,7 @@ class Client(irc.client.SimpleIRCClient):
 
     def _on_pubmsg(self, connection, event):
         channel = irc.strings.lower(event.target)
-        nick = dict(event.tags).get('display-name') or event.source.nick
+        nick = self.tags_to_dict(event.tags).get('display-name') or event.source.nick
         username = irc.strings.lower(event.source.nick)
         text = event.arguments[0]
 
@@ -102,7 +102,7 @@ class Client(irc.client.SimpleIRCClient):
 
     def _on_action(self, connection, event):
         channel = irc.strings.lower(event.target)
-        nick = dict(event.tags).get('display-name') or event.source.nick
+        nick = self.tags_to_dict(event.tags).get('display-name') or event.source.nick
         username = irc.strings.lower(event.source.nick)
         text = event.arguments[0]
 
@@ -215,6 +215,13 @@ class Client(irc.client.SimpleIRCClient):
             return irc.strings.lower(self.connection.get_nickname())
         else:
             return self.connection.get_nickname()
+
+    @classmethod
+    def tags_to_dict(cls, tags):
+        return dict([
+            (item.get('key'), item.get('value'))
+            for item in tags
+        ])
 
 
 class ClientThread(threading.Thread):
