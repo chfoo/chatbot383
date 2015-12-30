@@ -8,7 +8,7 @@ import re
 
 _logger = logging.getLogger(__name__)
 
-IRC_RATE_LIMIT = 30 / (20 - 0.5)
+IRC_RATE_LIMIT = (20 - 0.5) / 30
 RECONNECT_INTERVAL = 60 * 2
 
 
