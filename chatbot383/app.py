@@ -22,10 +22,10 @@ class App(object):
         main_address[1] = int(main_address[1])
         group_address[1] = int(group_address[1])
 
-        self._main_client.autoconnect(
+        self._main_client.async_connect(
             main_address[0], main_address[1], username, password=password
         )
-        self._group_client.autoconnect(
+        self._group_client.async_connect(
             group_address[0], group_address[1], username, password=password
         )
 

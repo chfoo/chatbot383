@@ -2,6 +2,7 @@ import logging
 import queue
 import threading
 
+import functools
 import irc.client
 import irc.strings
 import re
@@ -41,6 +42,10 @@ class Client(irc.client.SimpleIRCClient):
         do_nothing = lambda c, e: None
         method = getattr(self, "_on_" + event.type, do_nothing)
         method(connection, event)
+
+    def async_connect(self, *args, **kwargs):
+        self.reactor.execute_delayed(
+            0, functools.partial(self.autoconnect, *args, **kwargs))
 
     def autoconnect(self, *args, **kwargs):
         _logger.info('Connecting %s...', args[:2] or self.connection.server_address)
