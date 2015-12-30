@@ -14,6 +14,9 @@ Commands
 ``!groudonger``
     Make the bot roar.
 
+``!klappa``
+    Kappa //
+
 ``!rip thing``
     Pay respects to ``thing``.
 
