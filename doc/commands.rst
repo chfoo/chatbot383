@@ -17,6 +17,12 @@ Commands
 ``!klappa``
     Kappa //
 
+``!mail``
+    Receive and read a message.
+
+``!mail text``
+    Give a message containing ``text`` for the bot to deliver.
+
 ``!rip thing``
     Pay respects to ``thing``.
 

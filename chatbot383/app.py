@@ -1,6 +1,6 @@
 from chatbot383.bot import Bot
 from chatbot383.client import Client, ClientThread
-from chatbot383.features import Features
+from chatbot383.features import Features, Database
 
 
 class App(object):
@@ -12,7 +12,9 @@ class App(object):
         self._group_client_thread = ClientThread(self._group_client)
         channels = self._config['channels']
         self._bot = Bot(channels, self._main_client, self._group_client)
-        self._features = Features(self._bot, self._config['help_text'])
+        database = Database(self._config['database'])
+        self._features = Features(self._bot, self._config['help_text'],
+                                  database)
 
     def run(self):
         username = self._config['username']

@@ -2,13 +2,70 @@ import collections
 import random
 import re
 
+import sqlite3
+
+import time
+
 from chatbot383.roar import gen_roar
 
 
+class MailbagFullError(ValueError):
+    pass
+
+
+class Database(object):
+    def __init__(self, db_path):
+        self._path = db_path
+        self._con = sqlite3.connect(db_path)
+
+        self._init_db()
+
+    def _init_db(self):
+        with self._con:
+            self._con.execute('''CREATE TABLE IF NOT EXISTS mail
+            (id INTEGER PRIMARY KEY AUTOINCREMENT,
+            timestamp INTEGER NOT NULL,
+            username TEXT NOT NULL,
+            text TEXT NOT NULL,
+            status TEXT NOT NULL
+            )
+            ''')
+            self._con.execute('''CREATE INDEX IF NOT EXISTS mail_status_index
+            ON mail (status)
+            ''')
+
+    def get_mail(self):
+        with self._con:
+            row = self._con.execute('''SELECT id, username, text FROM
+            mail WHERE status = ?''', ('unread',)).fetchone()
+
+            if row:
+                mail_info = {
+                    'username': row[1],
+                    'text': row[2]
+                }
+                self._con.execute('''UPDATE mail SET status = ?
+                WHERE id = ?''', ('read', row[0]))
+                return mail_info
+
+    def put_mail(self, username, text):
+        with self._con:
+            row = self._con.execute('''SELECT count(1) FROM mail
+            WHERE status = 'unread' ''').fetchone()
+
+            if row[0] >= 5:
+                raise MailbagFullError()
+
+            self._con.execute('''INSERT INTO mail
+            (timestamp, username, text, status) VALUES (?, ?, ?, 'unread')
+            ''', (int(time.time()), username, text))
+
+
 class Features(object):
-    def __init__(self, bot, help_text):
+    def __init__(self, bot, help_text, database):
         self._bot = bot
         self._help_text = help_text
+        self._database = database
         self._recent_messages = collections.defaultdict(lambda: collections.deque(maxlen=10))
 
         bot.register_message_handler('pubmsg', self._collect_recent_message)
@@ -17,6 +74,7 @@ class Features(object):
         bot.register_command(r's/(.+)/(.+)/([gi]*)', self._regex_command)
         bot.register_command(r'!groudon(ger)?($|\s.*)', self._roar_command)
         bot.register_command(r'!klappa($|\s.*)', self._klappa_command)
+        bot.register_command(r'!(mail|post)($|\s.{,100})$', self._mail_command)
         bot.register_command(r'!rip (.{,50})$', self._rip_command)
 
     def _collect_recent_message(self, session):
@@ -88,3 +146,32 @@ class Features(object):
 
     def _klappa_command(self, session):
         session.say('{}'.format(gen_roar()))
+
+    def _mail_command(self, session):
+        mail_text = session.match.group(2).strip()
+
+        if mail_text:
+            try:
+                self._database.put_mail(session.message['username'], mail_text)
+            except MailbagFullError:
+                session.reply(
+                    '{} Incredulous! My mailbag is full! Read one instead!'
+                    .format(gen_roar()))
+            else:
+                session.reply(
+                    'Tremendous! I will deliver this mail to the next '
+                    'recipient without fail! {}'.format(gen_roar()))
+        else:
+            mail_info = self._database.get_mail()
+
+            if not mail_info:
+                session.reply(
+                    '{} Outlandish! There is no mail! You should send some!'
+                    .format(gen_roar())
+                )
+            else:
+                session.reply(
+                    '{} I am delivering mail! Here it is from {}: {}'
+                    .format(gen_roar(), mail_info['username'],
+                            mail_info['text'])
+                )
