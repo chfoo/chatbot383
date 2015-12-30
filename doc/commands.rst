@@ -1,19 +1,19 @@
 Commands
 ========
 
-`!help`
+``!help``
     Show link to this page.
 
-`s/pattern/replacement/options`
+``s/pattern/replacement/options``
     Correct someone's message.
 
-    * `pattern` is a regular expression
-    * `replacement` is the replacement text
-    * `options` is a combination of: `g` to replace all, `i` for case-insensitive
+    * ``pattern`` is a regular expression
+    * ``replacement`` is the replacement text
+    * ``options`` is a combination of: ``g`` to replace all, ``i`` for case-insensitive
 
-`!groudonger`
+``!groudonger``
     Make the bot roar.
 
-`!rip thing`
-    Pay respects to `thing`.
+``!rip thing``
+    Pay respects to ``thing``.
 
