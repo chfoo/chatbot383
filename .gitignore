@@ -1,0 +1,12 @@
+# intellij
+.idea/
+*.iml
+
+# python
+__pycache__
+*.py[co]
+
+
+test_data/
+
+*~

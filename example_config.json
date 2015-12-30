@@ -1,0 +1,11 @@
+{
+    "main_server": "irc.twitch.tv:6667",
+    "group_server": "192.16.64.180:6667",
+    "username": "USERNAMEHERE",
+    "password": "oauth:OAUTHTOKENHERE",
+    "channels": [
+        "#jtv", 
+        "#_example_1234"
+    ],
+    "help_text": "I am powered by chatbot383 but my owner did not configure me thoroughly."
+}
