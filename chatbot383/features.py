@@ -22,6 +22,7 @@ class Database(object):
 
     def _init_db(self):
         with self._con:
+            self._con.execute('''PRAGMA journal_mode=WAL;''')
             self._con.execute('''CREATE TABLE IF NOT EXISTS mail
             (id INTEGER PRIMARY KEY AUTOINCREMENT,
             timestamp INTEGER NOT NULL,
