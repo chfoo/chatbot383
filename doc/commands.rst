@@ -31,3 +31,6 @@ Commands
 
 ``!rip thing``
     Ask to pay respects to ``thing``.
+
+``!song``, ``!song thing``
+    Donger song or ``thing`` song.

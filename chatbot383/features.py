@@ -6,6 +6,7 @@ import sqlite3
 
 import time
 
+from chatbot383.bot import Limiter
 from chatbot383.roar import gen_roar
 
 
@@ -63,11 +64,21 @@ class Database(object):
 
 
 class Features(object):
+    DONGER_SONG_TEMPLATE = (
+        'I like to raise my {donger} I do it all the time ヽ༼ຈل͜ຈ༽ﾉ '
+        'and every time its lowered┌༼ຈل͜ຈ༽┐ '
+        'I cry and start to whine ┌༼@ل͜@༽┐'
+        'But never need to worry ༼ ºل͟º༽ '
+        'my {donger}\'s staying strong ヽ༼ຈل͜ຈ༽ﾉ'
+        'A {donger} saved is a {donger} earned so sing the {donger} song!'
+    )
+
     def __init__(self, bot, help_text, database):
         self._bot = bot
         self._help_text = help_text
         self._database = database
         self._recent_messages = collections.defaultdict(lambda: collections.deque(maxlen=25))
+        self._spam_limiter = Limiter(min_interval=10)
 
         bot.register_message_handler('pubmsg', self._collect_recent_message)
         bot.register_message_handler('action', self._collect_recent_message)
@@ -77,6 +88,7 @@ class Features(object):
         bot.register_command(r'!klappa($|\s.*)', self._klappa_command)
         bot.register_command(r'!(mail|post)($|\s.{,100})$', self._mail_command)
         bot.register_command(r'!praise($|\s.{,50})$', self._praise_command)
+        bot.register_command(r'!song($|\s.{,12})$', self._song_command)
         bot.register_command(r'!riot($|\s.{,50})$', self._riot_command)
         bot.register_command(r'!rip($|\s.{,50})$', self._rip_command)
 
@@ -154,6 +166,20 @@ class Features(object):
             session.say('{} Praise {}!'.format(gen_roar(), text))
         else:
             session.say('{} Praise it! Raise it!'.format(gen_roar()))
+
+    def _song_command(self, session):
+        limiter_key = ('song', session.message['channel'])
+        if not self._spam_limiter.is_ok(limiter_key):
+            return
+
+        text = session.match.group(1).strip()
+
+        if not text:
+            text = 'Groudonger'
+
+        session.say(self.DONGER_SONG_TEMPLATE.format(donger=text))
+
+        self._spam_limiter.update(limiter_key)
 
     def _riot_command(self, session):
         text = session.match.group(1).strip()
