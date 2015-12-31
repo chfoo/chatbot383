@@ -82,15 +82,15 @@ class Features(object):
 
         bot.register_message_handler('pubmsg', self._collect_recent_message)
         bot.register_message_handler('action', self._collect_recent_message)
-        bot.register_command(r'!(groudonger)?help($|\s.*)', self._help_command)
+        bot.register_command(r'(?i)!(groudonger)?help($|\s.*)', self._help_command)
         bot.register_command(r's/(.+)/(.+)/([gi]*)', self._regex_command)
-        bot.register_command(r'!groudon(ger)?($|\s.*)', self._roar_command)
-        bot.register_command(r'!klappa($|\s.*)', self._klappa_command)
-        bot.register_command(r'!(mail|post)($|\s.{,100})$', self._mail_command)
-        bot.register_command(r'!praise($|\s.{,50})$', self._praise_command)
-        bot.register_command(r'!song($|\s.{,12})$', self._song_command)
-        bot.register_command(r'!riot($|\s.{,50})$', self._riot_command)
-        bot.register_command(r'!rip($|\s.{,50})$', self._rip_command)
+        bot.register_command(r'(?i)!groudon(ger)?($|\s.*)', self._roar_command)
+        bot.register_command(r'(?i)!klappa($|\s.*)', self._klappa_command)
+        bot.register_command(r'(?i)!(mail|post)($|\s.{,100})$', self._mail_command)
+        bot.register_command(r'(?i)!praise($|\s.{,50})$', self._praise_command)
+        bot.register_command(r'(?i)!song($|\s.{,12})$', self._song_command)
+        bot.register_command(r'(?i)!riot($|\s.{,50})$', self._riot_command)
+        bot.register_command(r'(?i)!rip($|\s.{,50})$', self._rip_command)
 
     def _collect_recent_message(self, session):
         if session.message['event_type'] in ('pubmsg', 'action'):
