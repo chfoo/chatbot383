@@ -41,7 +41,8 @@ class Bot(object):
         self._channels = channels
         self._main_client = main_client
         self._group_client = group_client
-        self._user_limiter = UserLimiter()
+        self._user_limiter = Limiter(min_interval=5)
+        self._channel_spam_limiter = Limiter(min_interval=1)
 
         self._commands = []
         self._message_handlers = []
@@ -132,10 +133,13 @@ class Bot(object):
         message = session.message
         text = message['text']
         username = message['username']
+        channel = message['channel']
         our_username = session.client.get_nickname(lower=True)
 
         if username != our_username:
-            if not self._user_limiter.is_user_ok(username):
+            if not self._user_limiter.is_ok(username):
+                return
+            if not self._channel_spam_limiter.is_ok(channel):
                 return
 
             for pattern, command_func in self._commands:
@@ -143,6 +147,7 @@ class Bot(object):
 
                 if match:
                     self._user_limiter.update(username)
+                    self._channel_spam_limiter.update(channel)
                     session.match = match
                     command_func(session)
                     break
@@ -164,21 +169,21 @@ class Bot(object):
             session.bot.join(channel)
 
 
-class UserLimiter(object):
+class Limiter(object):
     def __init__(self, min_interval=5):
         self._min_interval = min_interval
         self._table = {}
 
-    def is_user_ok(self, username):
-        if username not in self._table:
+    def is_ok(self, key):
+        if key not in self._table:
             return True
 
         time_now = time.time()
 
-        return time_now - self._table[username] > self._min_interval
+        return time_now - self._table[key] > self._min_interval
 
-    def update(self, username):
-        self._table[username] = time.time()
+    def update(self, key):
+        self._table[key] = time.time()
 
         if len(self._table) > 500:
             key = random.choice(self._table)
