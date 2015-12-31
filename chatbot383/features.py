@@ -83,7 +83,7 @@ class Features(object):
         bot.register_message_handler('pubmsg', self._collect_recent_message)
         bot.register_message_handler('action', self._collect_recent_message)
         bot.register_command(r'(?i)!(groudonger)?help($|\s.*)', self._help_command)
-        bot.register_command(r's/(.+)/(.+)/([gi]*)', self._regex_command)
+        bot.register_command(r's/(.+/.*)', self._regex_command)
         bot.register_command(r'(?i)!groudon(ger)?($|\s.*)', self._roar_command)
         bot.register_command(r'(?i)!klappa($|\s.*)', self._klappa_command)
         bot.register_command(r'(?i)!(mail|post)($|\s.{,100})$', self._mail_command)
@@ -108,9 +108,14 @@ class Features(object):
         session.say('{} {} {}'.format(gen_roar(), gen_roar(), gen_roar().upper()))
 
     def _regex_command(self, session):
-        search_pattern = session.match.group(1)
-        replacement = session.match.group(2)
-        options = session.match.group(3)
+        parts = session.match.group(1).split('/')
+
+        if not (2 <= len(parts) <= 3):
+            return
+
+        search_pattern = parts[0]
+        replacement = parts[1]
+        options = parts[2] if len(parts) == 3 else ''
         flags = 0
         count = 1
 
