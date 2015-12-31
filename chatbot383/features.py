@@ -67,7 +67,7 @@ class Features(object):
         self._bot = bot
         self._help_text = help_text
         self._database = database
-        self._recent_messages = collections.defaultdict(lambda: collections.deque(maxlen=10))
+        self._recent_messages = collections.defaultdict(lambda: collections.deque(maxlen=25))
 
         bot.register_message_handler('pubmsg', self._collect_recent_message)
         bot.register_message_handler('action', self._collect_recent_message)
@@ -82,7 +82,11 @@ class Features(object):
     def _collect_recent_message(self, session):
         if session.message['event_type'] in ('pubmsg', 'action'):
             channel = session.message['channel']
-            self._recent_messages[channel].append(session.message)
+            username = session.message['username']
+            our_username = session.client.get_nickname(lower=True)
+
+            if username != our_username:
+                self._recent_messages[channel].append(session.message)
 
     def _help_command(self, session):
         session.reply('{} {}'.format(gen_roar(), self._help_text))
