@@ -12,7 +12,7 @@ Commands
     * ``options`` is a combination of: ``g`` to replace all, ``i`` for case-insensitive
 
 ``!groudonger``
-    Make the bot roar.
+    Roar.
 
 ``!klappa``
     Kappa //
@@ -23,9 +23,11 @@ Commands
 ``!mail text``
     Give a message containing ``text`` for the bot to deliver.
 
-``!riot``
-    Make the bot want to riot.
+``!praise``, ``!praise thing``
+   Praise it or praise ``thing``.
+
+``!riot``, ``!riot thing``
+    Riot or riot about ``thing``.
 
 ``!rip thing``
-    Pay respects to ``thing``.
-
+    Ask to pay respects to ``thing``.

@@ -76,8 +76,9 @@ class Features(object):
         bot.register_command(r'!groudon(ger)?($|\s.*)', self._roar_command)
         bot.register_command(r'!klappa($|\s.*)', self._klappa_command)
         bot.register_command(r'!(mail|post)($|\s.{,100})$', self._mail_command)
-        bot.register_command(r'!riot($|\s.*)', self._riot_command)
-        bot.register_command(r'!rip (.{,50})$', self._rip_command)
+        bot.register_command(r'!praise($|\s.{,50})$', self._praise_command)
+        bot.register_command(r'!riot($|\s.{,50})$', self._riot_command)
+        bot.register_command(r'!rip($|\s.{,50})$', self._rip_command)
 
     def _collect_recent_message(self, session):
         if session.message['event_type'] in ('pubmsg', 'action'):
@@ -146,13 +147,29 @@ class Features(object):
         session.reply('{} Your request does not apply to any recent messages!'
                       .format(gen_roar()))
 
+    def _praise_command(self, session):
+        text = session.match.group(1).strip()
+
+        if text:
+            session.say('{} Praise {}!'.format(gen_roar(), text))
+        else:
+            session.say('{} Praise it! Raise it!'.format(gen_roar()))
+
     def _riot_command(self, session):
-        session.say('{} Riot, I say! Riot, you may! {}'
-                    .format(gen_roar(), gen_roar().upper()))
+        text = session.match.group(1).strip()
+
+        if text:
+            session.say('{} {} or riot! {}'
+                        .format(gen_roar(), text, gen_roar().upper()))
+        else:
+            session.say('{} Riot, I say! Riot, you may! {}'
+                        .format(gen_roar(), gen_roar().upper()))
 
     def _rip_command(self, session):
+        text = session.match.group(1).strip() or session.message['nick']
+
         session.say('{} Rest in peace, {}. Press F to pay your respects.'
-                    .format(gen_roar(), session.match.group(1)))
+                    .format(gen_roar(), text))
 
     def _klappa_command(self, session):
         session.say('{}'.format(gen_roar()))
