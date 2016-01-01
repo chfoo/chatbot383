@@ -144,7 +144,7 @@ class Features(object):
                     session.reply('{} {}!'.format(gen_roar(), error.args[0].title()))
                     return
 
-                if len(new_text) > 400:
+                if len(new_text.encode('utf-8', 'replace')) > 400:
                     session.reply('{} Message length exceeds my capabilities!'
                                   .format(gen_roar()))
                     return
