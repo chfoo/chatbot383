@@ -64,7 +64,7 @@ class Bot(object):
         if text == '':
             return True
 
-        if len(text) > 400:
+        if len(text) > 400 or len(text.encode('utf-8', 'replace')) > 500:
             return False
 
         if text[0] in './!`_':
