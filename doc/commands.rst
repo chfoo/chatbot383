@@ -34,3 +34,7 @@ Commands
 
 ``!song``, ``!song thing``
     Donger song or ``thing`` song.
+
+``!xd``
+    Smiling face with open mouth and tightly-closed eyes
+

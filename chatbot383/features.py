@@ -91,6 +91,7 @@ class Features(object):
         bot.register_command(r'(?i)!song($|\s.{,12})$', self._song_command)
         bot.register_command(r'(?i)!riot($|\s.{,50})$', self._riot_command)
         bot.register_command(r'(?i)!rip($|\s.{,50})$', self._rip_command)
+        bot.register_command(r'(?i)!(xd|minglee|chfoo)($|\s.*)', self._xd_command)
 
     def _collect_recent_message(self, session):
         if session.message['event_type'] in ('pubmsg', 'action'):
@@ -193,17 +194,33 @@ class Features(object):
             session.say('{} {} or riot! {}'
                         .format(gen_roar(), text, gen_roar().upper()))
         else:
-            session.say('{} Riot, I say! Riot, you may! {}'
-                        .format(gen_roar(), gen_roar().upper()))
+            session.say(
+                '{} {} {}'.format(
+                    gen_roar(),
+                    random.choice((
+                        'Riot, I say! Riot, you may!',
+                        'Riot!',
+                        '{} riot!'.format(session.message['nick']),
+                        'Groudonger riot!',
+                    )),
+                    gen_roar().upper()
+                ))
 
     def _rip_command(self, session):
         text = session.match.group(1).strip() or session.message['nick']
 
-        session.say('{} Rest in peace, {}. Press F to pay your respects.'
-                    .format(gen_roar(), text))
+        session.say(
+            '{} {}, {}. Press F to pay your respects.'.format(
+                gen_roar(), random.choice(('RIP', 'Rest in peace')), text
+            ))
 
     def _klappa_command(self, session):
-        session.say('{}'.format(gen_roar()))
+        session.say('{}'.format(random.choice(('Kappa //', gen_roar()))))
+
+    def _xd_command(self, session):
+        session.say('{} xD MingLee'.format(
+            gen_roar().lower().replace('!', '?'))
+        )
 
     def _mail_command(self, session):
         mail_text = session.match.group(2).strip()
