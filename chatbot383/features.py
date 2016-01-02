@@ -1,4 +1,5 @@
 import collections
+import copy
 import random
 import re
 
@@ -77,7 +78,7 @@ class Features(object):
         self._bot = bot
         self._help_text = help_text
         self._database = database
-        self._recent_messages = collections.defaultdict(lambda: collections.deque(maxlen=25))
+        self._recent_messages_for_regex = collections.defaultdict(lambda: collections.deque(maxlen=100))
         self._spam_limiter = Limiter(min_interval=10)
 
         bot.register_message_handler('pubmsg', self._collect_recent_message)
@@ -100,7 +101,7 @@ class Features(object):
             our_username = session.client.get_nickname(lower=True)
 
             if username != our_username:
-                self._recent_messages[channel].append(session.message)
+                self._recent_messages_for_regex[channel].append(session.message)
 
     def _help_command(self, session):
         session.reply('{} {}'.format(gen_roar(), self._help_text))
@@ -132,8 +133,9 @@ class Features(object):
             session.reply('{} {}!'.format(gen_roar(), error.args[0].title()))
             return
 
-        for history_message in reversed(self._recent_messages[session.message['channel']]):
+        for history_message in reversed(self._recent_messages_for_regex[session.message['channel']]):
             text = history_message['text']
+            channel = session.message['channel']
 
             if text.startswith('s/'):
                 continue
@@ -152,14 +154,25 @@ class Features(object):
 
                 if random.random() < 0.1:
                     new_text = gen_roar()
+                    fake_out = True
+                else:
+                    fake_out = False
 
                 session.say(
-                    '{user} wishes to correct {target_user}: {text}'.format(
+                    '{user} wishes to {stacked}correct {target_user}: {text}'.format(
                         user=session.message['nick'],
                         target_user=history_message['nick'],
-                        text=new_text
+                        text=new_text,
+                        stacked='re' if history_message.get('stacked') else '',
                     )
                 )
+
+                if not fake_out:
+                    stacked_message = copy.copy(history_message)
+                    stacked_message['text'] = new_text
+                    stacked_message['stacked'] = True
+                    self._recent_messages_for_regex[channel].append(stacked_message)
+
                 return
 
         session.reply('{} Your request does not apply to any recent messages!'
