@@ -93,6 +93,7 @@ class Features(object):
         bot.register_command(r'(?i)!riot($|\s.{,50})$', self._riot_command)
         bot.register_command(r'(?i)!rip($|\s.{,50})$', self._rip_command)
         bot.register_command(r'(?i)!(xd|minglee|chfoo)($|\s.*)', self._xd_command)
+        bot.register_command(r'.*\b[xX][dD] +MingLee\b.*', self._xd_rand_command)
 
     def _collect_recent_message(self, session):
         if session.message['event_type'] in ('pubmsg', 'action'):
@@ -234,6 +235,17 @@ class Features(object):
         session.say('{} xD MingLee'.format(
             gen_roar().lower().replace('!', '?'))
         )
+
+    def _xd_rand_command(self, session):
+        if random.random() < 0.1 or \
+                session.message['username'] == 'wow_deku_onehand' and \
+                session.message['text'].strip() == 'xD MingLee':
+            def rep_func(match):
+                return '!' if random.random() < 0.6 else '1'
+
+            session.say('{} xD MingLee'.format(
+                re.sub('!', rep_func, gen_roar().lower()))
+            )
 
     def _mail_command(self, session):
         mail_text = session.match.group(2).strip()
