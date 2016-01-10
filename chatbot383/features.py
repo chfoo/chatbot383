@@ -56,7 +56,7 @@ class Database(object):
             row = self._con.execute('''SELECT count(1) FROM mail
             WHERE status = 'unread' ''').fetchone()
 
-            if row[0] >= 5:
+            if row[0] >= 25:
                 raise MailbagFullError()
 
             self._con.execute('''INSERT INTO mail
@@ -87,7 +87,7 @@ class Features(object):
         bot.register_command(r's/(.+/.*)', self._regex_command)
         bot.register_command(r'(?i)!groudon(ger)?($|\s.*)', self._roar_command)
         bot.register_command(r'(?i)!klappa($|\s.*)', self._klappa_command)
-        bot.register_command(r'(?i)!(mail|post)($|\s.{,100})$', self._mail_command)
+        bot.register_command(r'(?i)!(mail|post)($|\s.{,200})$', self._mail_command)
         bot.register_command(r'(?i)!praise($|\s.{,50})$', self._praise_command)
         bot.register_command(r'(?i)!song($|\s.{,12})$', self._song_command)
         bot.register_command(r'(?i)!riot($|\s.{,50})$', self._riot_command)
