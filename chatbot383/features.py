@@ -40,7 +40,7 @@ class Database(object):
     def get_mail(self):
         with self._con:
             row = self._con.execute('''SELECT id, username, text FROM
-            mail WHERE status = ?''', ('unread',)).fetchone()
+            mail WHERE status = ? LIMIT 1''', ('unread',)).fetchone()
 
             if row:
                 mail_info = {
@@ -51,10 +51,29 @@ class Database(object):
                 WHERE id = ?''', ('read', row[0]))
                 return mail_info
 
+    def get_old_mail(self):
+        with self._con:
+            row = self._con.execute('''SELECT max(id) FROM mail''').fetchone()
+
+            max_id = row[0]
+
+            row = self._con.execute(
+                '''SELECT username, text FROM
+                mail WHERE status = ? AND id > ?''',
+                ('read', random.randint(0, max_id))
+            ).fetchone()
+
+            if row:
+                mail_info = {
+                    'username': row[0],
+                    'text': row[1]
+                }
+                return mail_info
+
     def put_mail(self, username, text):
         with self._con:
             row = self._con.execute('''SELECT count(1) FROM mail
-            WHERE status = 'unread' ''').fetchone()
+            WHERE status = 'unread' LIMIT 1''').fetchone()
 
             if row[0] >= 25:
                 raise MailbagFullError()
@@ -269,6 +288,9 @@ class Features(object):
                     'recipient without fail! {}'.format(gen_roar()))
         else:
             mail_info = self._database.get_mail()
+
+            if not mail_info and random.random() < 0.3:
+                mail_info = self._database.get_old_mail()
 
             if not mail_info:
                 session.reply(
