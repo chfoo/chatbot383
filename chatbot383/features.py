@@ -7,6 +7,8 @@ import sqlite3
 
 import time
 
+import arrow
+
 from chatbot383.bot import Limiter
 from chatbot383.roar import gen_roar
 
@@ -39,13 +41,14 @@ class Database(object):
 
     def get_mail(self):
         with self._con:
-            row = self._con.execute('''SELECT id, username, text FROM
+            row = self._con.execute('''SELECT id, username, text, timestamp FROM
             mail WHERE status = ? LIMIT 1''', ('unread',)).fetchone()
 
             if row:
                 mail_info = {
                     'username': row[1],
-                    'text': row[2]
+                    'text': row[2],
+                    'timestamp': row[3],
                 }
                 self._con.execute('''UPDATE mail SET status = ?
                 WHERE id = ?''', ('read', row[0]))
@@ -58,7 +61,7 @@ class Database(object):
             max_id = row[0]
 
             row = self._con.execute(
-                '''SELECT username, text FROM
+                '''SELECT username, text, timestamp FROM
                 mail WHERE status = ? AND id > ?''',
                 ('read', random.randint(0, max_id))
             ).fetchone()
@@ -66,7 +69,8 @@ class Database(object):
             if row:
                 mail_info = {
                     'username': row[0],
-                    'text': row[1]
+                    'text': row[1],
+                    'timestamp': row[2],
                 }
                 return mail_info
 
@@ -303,7 +307,11 @@ class Features(object):
                 )
             else:
                 session.reply(
-                    '{} I am delivering mail! Here it is from {}: {}'
-                    .format(gen_roar(), mail_info['username'],
-                            mail_info['text'])
+                    '{roar} I am delivering mail! '
+                    'Here it is, {date}, from {username}: {msg}'
+                    .format(
+                        roar=gen_roar(),
+                        username=mail_info['username'],
+                        date=arrow.get(mail_info['timestamp']).humanize(),
+                        msg=mail_info['text'])
                 )
