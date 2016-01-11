@@ -130,7 +130,8 @@ class Features(object):
         session.say('{} {} {}'.format(gen_roar(), gen_roar(), gen_roar().upper()))
 
     def _regex_command(self, session):
-        parts = session.match.group(1).split('/')
+        # Special split http://stackoverflow.com/a/21107911/1524507
+        parts = re.split(r'(?<!\\)/', session.match.group(1))
 
         if not (2 <= len(parts) <= 3):
             return
