@@ -288,10 +288,13 @@ class Features(object):
                     'Tremendous! I will deliver this mail to the next '
                     'recipient without fail! {}'.format(gen_roar()))
         else:
-            mail_info = self._database.get_mail()
-
-            if not mail_info and random.random() < 0.3:
+            if random.random() < 0.3:
                 mail_info = self._database.get_old_mail()
+            else:
+                mail_info = self._database.get_mail()
+
+                if not mail_info and random.random() < 0.3:
+                    mail_info = self._database.get_old_mail()
 
             if not mail_info:
                 session.reply(
