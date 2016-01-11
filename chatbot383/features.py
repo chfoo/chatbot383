@@ -87,7 +87,7 @@ class Features(object):
         bot.register_command(r's/(.+/.*)', self._regex_command)
         bot.register_command(r'(?i)!groudon(ger)?($|\s.*)', self._roar_command)
         bot.register_command(r'(?i)!klappa($|\s.*)', self._klappa_command)
-        bot.register_command(r'(?i)!(mail|post)($|\s.{,200})$', self._mail_command)
+        bot.register_command(r'(?i)!(mail|post)($|\s.*)$', self._mail_command)
         bot.register_command(r'(?i)!praise($|\s.{,50})$', self._praise_command)
         bot.register_command(r'(?i)!song($|\s.{,12})$', self._song_command)
         bot.register_command(r'(?i)!riot($|\s.{,50})$', self._riot_command)
@@ -251,6 +251,12 @@ class Features(object):
         mail_text = session.match.group(2).strip()
 
         if mail_text:
+            if len(mail_text) > 200:
+                session.reply('{} Your message is too burdensome! '
+                              'Send a concise version instead.'
+                              .format(gen_roar()))
+                return
+
             try:
                 self._database.put_mail(session.message['username'], mail_text)
             except MailbagFullError:
