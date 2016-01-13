@@ -17,10 +17,10 @@ Commands
 ``!klappa``
     Kappa //
 
-``!mail``
+``!mail`` or ``!post``
     Receive and read a message.
 
-``!mail text``
+``!mail text`` or ``!post text``
     Give a message containing ``text`` for the bot to deliver.
 
 ``!praise``, ``!praise thing``
@@ -34,6 +34,9 @@ Commands
 
 ``!song``, ``!song thing``
     Donger song or ``thing`` song.
+
+``!sort text``
+    Sort letters in ``text`` in order by Unicode value.
 
 ``!xd``
     Smiling face with open mouth and tightly-closed eyes

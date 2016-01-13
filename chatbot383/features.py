@@ -113,6 +113,7 @@ class Features(object):
         bot.register_command(r'(?i)!(mail|post)($|\s.*)$', self._mail_command)
         bot.register_command(r'(?i)!praise($|\s.{,50})$', self._praise_command)
         bot.register_command(r'(?i)!song($|\s.{,12})$', self._song_command)
+        bot.register_command(r'(?i)!sort\s+(.*)', self._sort_command)
         bot.register_command(r'(?i)!riot($|\s.{,50})$', self._riot_command)
         bot.register_command(r'(?i)!rip($|\s.{,50})$', self._rip_command)
         bot.register_command(r'(?i)!(xd|minglee|chfoo)($|\s.*)', self._xd_command)
@@ -224,6 +225,13 @@ class Features(object):
         session.say(self.DONGER_SONG_TEMPLATE.format(donger=text))
 
         self._spam_limiter.update(limiter_key)
+
+    def _sort_command(self, session):
+        text = session.match.group(1).strip()
+
+        if text:
+            sorted_text = ''.join(sorted(text)).strip()
+            session.say('{} Sorted! {}'.format(gen_roar(), sorted_text))
 
     def _riot_command(self, session):
         text = session.match.group(1).strip()
