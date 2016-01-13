@@ -111,6 +111,7 @@ class Features(object):
         bot.register_command(r'(?i)!groudon(ger)?($|\s.*)', self._roar_command)
         bot.register_command(r'(?i)!klappa($|\s.*)', self._klappa_command)
         bot.register_command(r'(?i)!(mail|post)($|\s.*)$', self._mail_command)
+        bot.register_command(r'(?i)!pick\s+(.*)', self._pick_command)
         bot.register_command(r'(?i)!praise($|\s.{,50})$', self._praise_command)
         bot.register_command(r'(?i)!shuffle\s+(.*)', self._shuffle_command)
         bot.register_command(r'(?i)!song($|\s.{,12})$', self._song_command)
@@ -204,6 +205,13 @@ class Features(object):
 
         session.reply('{} Your request does not apply to any recent messages!'
                       .format(gen_roar()))
+
+    def _pick_command(self, session):
+        text = session.match.group(1).strip()
+
+        if text:
+            result = random.choice(text.split(',')).strip()
+            session.say('{} Picked! {}'.format(gen_roar(), result))
 
     def _praise_command(self, session):
         text = session.match.group(1).strip()
