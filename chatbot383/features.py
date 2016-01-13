@@ -112,6 +112,7 @@ class Features(object):
         bot.register_command(r'(?i)!klappa($|\s.*)', self._klappa_command)
         bot.register_command(r'(?i)!(mail|post)($|\s.*)$', self._mail_command)
         bot.register_command(r'(?i)!praise($|\s.{,50})$', self._praise_command)
+        bot.register_command(r'(?i)!shuffle\s+(.*)', self._shuffle_command)
         bot.register_command(r'(?i)!song($|\s.{,12})$', self._song_command)
         bot.register_command(r'(?i)!sort\s+(.*)', self._sort_command)
         bot.register_command(r'(?i)!riot($|\s.{,50})$', self._riot_command)
@@ -211,6 +212,15 @@ class Features(object):
             session.say('{} Praise {}!'.format(gen_roar(), text))
         else:
             session.say('{} Praise it! Raise it!'.format(gen_roar()))
+
+    def _shuffle_command(self, session):
+        text = session.match.group(1).strip()
+
+        if text:
+            shuffle_list = list(text)
+            random.shuffle(shuffle_list)
+            shuffle_text = ''.join(shuffle_list).strip()
+            session.say('{} Shuffled! {}'.format(gen_roar(), shuffle_text))
 
     def _song_command(self, session):
         limiter_key = ('song', session.message['channel'])

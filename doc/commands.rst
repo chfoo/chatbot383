@@ -32,6 +32,10 @@ Commands
 ``!rip thing``
     Ask to pay respects to ``thing``.
 
+``!shuffle text``
+
+    Shuffle letters in ``text``.
+
 ``!song``, ``!song thing``
     Donger song or ``thing`` song.
 
