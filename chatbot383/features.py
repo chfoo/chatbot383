@@ -96,6 +96,7 @@ class Features(object):
         'my {donger}\'s staying strong ヽ༼ຈل͜ຈ༽ﾉ'
         'A {donger} saved is a {donger} earned so sing the {donger} song!'
     )
+    TOO_LONG_TEXT_TEMPLATE = '{} Message length exceeds my capabilities!'
 
     def __init__(self, bot, help_text, database):
         self._bot = bot
@@ -112,14 +113,27 @@ class Features(object):
         bot.register_command(r'(?i)!klappa($|\s.*)', self._klappa_command)
         bot.register_command(r'(?i)!(mail|post)($|\s.*)$', self._mail_command)
         bot.register_command(r'(?i)!pick\s+(.*)', self._pick_command)
-        bot.register_command(r'(?i)!praise($|\s.{,50})$', self._praise_command)
+        bot.register_command(r'(?i)!praise($|\s.{,100})$', self._praise_command)
         bot.register_command(r'(?i)!shuffle\s+(.*)', self._shuffle_command)
-        bot.register_command(r'(?i)!song($|\s.{,12})$', self._song_command)
+        bot.register_command(r'(?i)!song($|\s.{,50})$', self._song_command)
         bot.register_command(r'(?i)!sort\s+(.*)', self._sort_command)
-        bot.register_command(r'(?i)!riot($|\s.{,50})$', self._riot_command)
-        bot.register_command(r'(?i)!rip($|\s.{,50})$', self._rip_command)
+        bot.register_command(r'(?i)!riot($|\s.{,100})$', self._riot_command)
+        bot.register_command(r'(?i)!rip($|\s.{,100})$', self._rip_command)
         bot.register_command(r'(?i)!(xd|minglee|chfoo)($|\s.*)', self._xd_command)
         bot.register_command(r'.*\b[xX][dD] +MingLee\b.*', self._xd_rand_command)
+
+    @classmethod
+    def is_too_long(cls, text):
+        return len(text.encode('utf-8', 'replace')) > 400
+
+    @classmethod
+    def _try_say_or_reply_too_long(cls, formatted_text, session):
+        if cls.is_too_long(formatted_text):
+            session.reply(cls.TOO_LONG_TEXT_TEMPLATE.format(gen_roar()))
+            return False
+        else:
+            session.say(formatted_text)
+            return True
 
     def _collect_recent_message(self, session):
         if session.message['event_type'] in ('pubmsg', 'action'):
@@ -175,25 +189,23 @@ class Features(object):
                     session.reply('{} {}!'.format(gen_roar(), error.args[0].title()))
                     return
 
-                if len(new_text.encode('utf-8', 'replace')) > 400:
-                    session.reply('{} Message length exceeds my capabilities!'
-                                  .format(gen_roar()))
-                    return
-
                 if random.random() < 0.1:
                     new_text = gen_roar()
                     fake_out = True
                 else:
                     fake_out = False
 
-                session.say(
-                    '{user} wishes to {stacked}correct {target_user}: {text}'.format(
+                formatted_text = '{user} wishes to {stacked}correct ' \
+                    '{target_user}: {text}'.format(
                         user=session.message['nick'],
                         target_user=history_message['nick'],
                         text=new_text,
                         stacked='re' if history_message.get('stacked') else '',
-                    )
                 )
+
+                ok = self._try_say_or_reply_too_long(formatted_text, session)
+                if not ok:
+                    return
 
                 if not fake_out:
                     stacked_message = copy.copy(history_message)
@@ -209,26 +221,37 @@ class Features(object):
     def _pick_command(self, session):
         text = session.match.group(1).strip()
 
-        if text:
-            result = random.choice(text.split(',')).strip()
-            session.say('{} Picked! {}'.format(gen_roar(), result))
+        if not text:
+            return
+
+        result = random.choice(text.split(',')).strip()
+        formatted_text = '{} Picked! {}'.format(gen_roar(), result)
+
+        self._try_say_or_reply_too_long(formatted_text, session)
 
     def _praise_command(self, session):
         text = session.match.group(1).strip()
 
         if text:
-            session.say('{} Praise {}!'.format(gen_roar(), text))
+            formatted_text = '{} Praise {}!'.format(gen_roar(), text)
         else:
-            session.say('{} Praise it! Raise it!'.format(gen_roar()))
+            formatted_text = '{} Praise it! Raise it!'.format(gen_roar())
+
+        self._try_say_or_reply_too_long(formatted_text, session)
 
     def _shuffle_command(self, session):
         text = session.match.group(1).strip()
 
-        if text:
-            shuffle_list = list(text)
-            random.shuffle(shuffle_list)
-            shuffle_text = ''.join(shuffle_list).strip()
-            session.say('{} Shuffled! {}'.format(gen_roar(), shuffle_text))
+        if not text:
+            return
+
+        shuffle_list = list(text)
+        random.shuffle(shuffle_list)
+        shuffle_text = ''.join(shuffle_list).strip()
+
+        formatted_text = '{} Shuffled! {}'.format(gen_roar(), shuffle_text)
+
+        self._try_say_or_reply_too_long(formatted_text, session)
 
     def _song_command(self, session):
         limiter_key = ('song', session.message['channel'])
@@ -240,25 +263,31 @@ class Features(object):
         if not text:
             text = 'Groudonger'
 
-        session.say(self.DONGER_SONG_TEMPLATE.format(donger=text))
+        formatted_text = self.DONGER_SONG_TEMPLATE.format(donger=text)
+
+        self._try_say_or_reply_too_long(formatted_text, session)
 
         self._spam_limiter.update(limiter_key)
 
     def _sort_command(self, session):
         text = session.match.group(1).strip()
 
-        if text:
-            sorted_text = ''.join(sorted(text)).strip()
-            session.say('{} Sorted! {}'.format(gen_roar(), sorted_text))
+        if not text:
+            return
+
+        sorted_text = ''.join(sorted(text)).strip()
+        formatted_text = '{} Sorted! {}'.format(gen_roar(), sorted_text)
+
+        self._try_say_or_reply_too_long(formatted_text, session)
 
     def _riot_command(self, session):
         text = session.match.group(1).strip()
 
         if text:
-            session.say('{} {} or riot! {}'
-                        .format(gen_roar(), text, gen_roar().upper()))
+            formatted_text = '{} {} or riot! {}'\
+                .format(gen_roar(), text, gen_roar().upper())
         else:
-            session.say(
+            formatted_text = \
                 '{} {} {}'.format(
                     gen_roar(),
                     random.choice((
@@ -268,15 +297,19 @@ class Features(object):
                         'Groudonger riot!',
                     )),
                     gen_roar().upper()
-                ))
+                )
+
+        self._try_say_or_reply_too_long(formatted_text, session)
 
     def _rip_command(self, session):
         text = session.match.group(1).strip() or session.message['nick']
 
-        session.say(
+        formatted_text = \
             '{} {}, {}. Press F to pay your respects.'.format(
                 gen_roar(), random.choice(('RIP', 'Rest in peace')), text
-            ))
+            )
+
+        self._try_say_or_reply_too_long(formatted_text, session)
 
     def _klappa_command(self, session):
         session.say('{}'.format(random.choice(('Kappa //', gen_roar()))))
