@@ -107,6 +107,7 @@ class Features(object):
 
         bot.register_message_handler('pubmsg', self._collect_recent_message)
         bot.register_message_handler('action', self._collect_recent_message)
+        bot.register_command(r'(?i)!double(team)?($|\s.*)', self._double_command)
         bot.register_command(r'(?i)!(groudonger)?help($|\s.*)', self._help_command)
         bot.register_command(r's/(.+/.*)', self._regex_command)
         bot.register_command(r'(?i)!groudon(ger)?($|\s.*)', self._roar_command)
@@ -217,6 +218,17 @@ class Features(object):
 
         session.reply('{} Your request does not apply to any recent messages!'
                       .format(gen_roar()))
+
+    def _double_command(self, session):
+        text = session.match.group(2).strip()
+
+        if not text:
+            text = 'ヽ༼ຈل͜ຈ༽ﾉ DOUBLE TEAM ヽ༼ຈل͜ຈ༽ﾉ'
+
+        double_text = ''.join(char * 2 for char in text)
+        formatted_text = '{} Doubled! {}'.format(gen_roar(), double_text)
+
+        self._try_say_or_reply_too_long(formatted_text, session)
 
     def _pick_command(self, session):
         text = session.match.group(1).strip()

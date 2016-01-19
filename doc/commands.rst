@@ -11,7 +11,10 @@ Commands
     * ``replacement`` is the replacement text
     * ``options`` is a combination of: ``g`` to replace all, ``i`` for case-insensitive
 
-``!groudonger``
+``!double text`` or ``!doubleteam text``
+    Doubles the letters in ``text``.
+
+``!groudon`` or ``!groudonger``
     Roar.
 
 ``!klappa``
