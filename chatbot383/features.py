@@ -79,7 +79,7 @@ class Database(object):
             row = self._con.execute('''SELECT count(1) FROM mail
             WHERE status = 'unread' LIMIT 1''').fetchone()
 
-            if row[0] >= 25:
+            if row[0] >= 50:
                 raise MailbagFullError()
 
             self._con.execute('''INSERT INTO mail
