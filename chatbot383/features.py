@@ -86,6 +86,13 @@ class Database(object):
             (timestamp, username, text, status) VALUES (?, ?, ?, 'unread')
             ''', (int(time.time()), username, text))
 
+    def get_status_count(self, status):
+        with self._con:
+            row = self._con.execute('''SELECT count(1) FROM mail
+            WHERE status = ? LIMIT 1''', (status,)).fetchone()
+
+            return row[0]
+
 
 class Features(object):
     DONGER_SONG_TEMPLATE = (
@@ -113,6 +120,7 @@ class Features(object):
         bot.register_command(r'(?i)!groudon(ger)?($|\s.*)', self._roar_command)
         bot.register_command(r'(?i)!klappa($|\s.*)', self._klappa_command)
         bot.register_command(r'(?i)!(mail|post)($|\s.*)$', self._mail_command)
+        bot.register_command(r'(?i)!(mail|post)status($|\s.*)', self._mail_status_command)
         bot.register_command(r'(?i)!pick\s+(.*)', self._pick_command)
         bot.register_command(r'(?i)!praise($|\s.{,100})$', self._praise_command)
         bot.register_command(r'(?i)!shuffle\s+(.*)', self._shuffle_command)
@@ -386,3 +394,16 @@ class Features(object):
                         date=arrow.get(mail_info['timestamp']).humanize(),
                         msg=mail_info['text'])
                 )
+
+    def _mail_status_command(self, session):
+        unread_count = self._database.get_status_count('unread')
+        read_count = self._database.get_status_count('read')
+
+        session.reply(
+            '{roar} {unread} unread, {read} read, {total} total!'.format(
+                roar=gen_roar(),
+                unread=unread_count,
+                read=read_count,
+                total=unread_count + read_count
+            )
+        )

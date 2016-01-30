@@ -26,6 +26,9 @@ Commands
 ``!mail text`` or ``!post text``
     Give a message containing ``text`` for the bot to deliver.
 
+``!mailstatus`` or ``!poststatus``
+    Number of unread and unread messages.
+
 ``!pick item1, item2, item3, ...``
    Randomly select one of ``item``.
 
