@@ -126,6 +126,7 @@ class Features(object):
         bot.register_command(r'(?i)!shuffle\s+(.*)', self._shuffle_command)
         bot.register_command(r'(?i)!song($|\s.{,50})$', self._song_command)
         bot.register_command(r'(?i)!sort\s+(.*)', self._sort_command)
+        bot.register_command(r'(?i)!rand(?:om)?case\s+(.*)', self._rand_case_command)
         bot.register_command(r'(?i)!riot($|\s.{,100})$', self._riot_command)
         bot.register_command(r'(?i)!rip($|\s.{,100})$', self._rip_command)
         bot.register_command(r'(?i)!(xd|minglee|chfoo)($|\s.*)', self._xd_command)
@@ -297,6 +298,17 @@ class Features(object):
 
         sorted_text = ''.join(sorted(text)).strip()
         formatted_text = '{} Sorted! {}'.format(gen_roar(), sorted_text)
+
+        self._try_say_or_reply_too_long(formatted_text, session)
+
+    def _rand_case_command(self, session):
+        text = session.match.group(1).strip()
+
+        rand_case_text = ''.join(
+            char.swapcase() if random.randint(0, 1) else char for char in text
+        )
+
+        formatted_text = '{} Random case! {}'.format(gen_roar(), rand_case_text)
 
         self._try_say_or_reply_too_long(formatted_text, session)
 

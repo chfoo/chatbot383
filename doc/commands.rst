@@ -35,6 +35,9 @@ Commands
 ``!praise``, ``!praise thing``
    Praise it or praise ``thing``.
 
+``!randcase text``
+    Randomly change the case of ``text``.
+
 ``!riot``, ``!riot thing``
     Riot or riot about ``thing``.
 
