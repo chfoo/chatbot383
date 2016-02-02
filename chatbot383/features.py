@@ -110,6 +110,7 @@ class Features(object):
         self._help_text = help_text
         self._database = database
         self._recent_messages_for_regex = collections.defaultdict(lambda: collections.deque(maxlen=100))
+        self._last_message = None
         self._spam_limiter = Limiter(min_interval=10)
 
         bot.register_message_handler('pubmsg', self._collect_recent_message)
@@ -123,10 +124,10 @@ class Features(object):
         bot.register_command(r'(?i)!(mail|post)status($|\s.*)', self._mail_status_command)
         bot.register_command(r'(?i)!pick\s+(.*)', self._pick_command)
         bot.register_command(r'(?i)!praise($|\s.{,100})$', self._praise_command)
-        bot.register_command(r'(?i)!shuffle\s+(.*)', self._shuffle_command)
+        bot.register_command(r'(?i)!(?:shuffle|scramble)($|\s.*)', self._shuffle_command)
         bot.register_command(r'(?i)!song($|\s.{,50})$', self._song_command)
-        bot.register_command(r'(?i)!sort\s+(.*)', self._sort_command)
-        bot.register_command(r'(?i)!rand(?:om)?case\s+(.*)', self._rand_case_command)
+        bot.register_command(r'(?i)!sort($|\s.*)', self._sort_command)
+        bot.register_command(r'(?i)!rand(?:om)?case($|\s.*)', self._rand_case_command)
         bot.register_command(r'(?i)!riot($|\s.{,100})$', self._riot_command)
         bot.register_command(r'(?i)!rip($|\s.{,100})$', self._rip_command)
         bot.register_command(r'(?i)!(xd|minglee|chfoo)($|\s.*)', self._xd_command)
@@ -153,6 +154,9 @@ class Features(object):
 
             if username != our_username:
                 self._recent_messages_for_regex[channel].append(session.message)
+
+                if not session.message['text'].startswith('!'):
+                    self._last_message = session.message
 
     def _help_command(self, session):
         session.reply('{} {}'.format(gen_roar(), self._help_text))
@@ -231,8 +235,10 @@ class Features(object):
     def _double_command(self, session):
         text = session.match.group(2).strip()
 
-        if not text:
+        if not text and (session.match.group(1) or not self._last_message):
             text = 'ヽ༼ຈل͜ຈ༽ﾉ DOUBLE TEAM ヽ༼ຈل͜ຈ༽ﾉ'
+        elif not text:
+            text = self._last_message['text']
 
         double_text = ''.join(char * 2 for char in text)
         formatted_text = '{} Doubled! {}'.format(gen_roar(), double_text)
@@ -243,7 +249,7 @@ class Features(object):
         text = session.match.group(1).strip()
 
         if not text:
-            return
+            text = 'heads,tails'
 
         result = random.choice(text.split(',')).strip()
         formatted_text = '{} Picked! {}'.format(gen_roar(), result)
@@ -263,8 +269,10 @@ class Features(object):
     def _shuffle_command(self, session):
         text = session.match.group(1).strip()
 
-        if not text:
-            return
+        if not text and self._last_message:
+            text = self._last_message['text']
+        elif not text:
+            text = 'Groudonger'
 
         shuffle_list = list(text)
         random.shuffle(shuffle_list)
@@ -293,8 +301,10 @@ class Features(object):
     def _sort_command(self, session):
         text = session.match.group(1).strip()
 
-        if not text:
-            return
+        if not text and self._last_message:
+            text = self._last_message['text']
+        elif not text:
+            text = 'Groudonger'
 
         sorted_text = ''.join(sorted(text)).strip()
         formatted_text = '{} Sorted! {}'.format(gen_roar(), sorted_text)
@@ -303,6 +313,11 @@ class Features(object):
 
     def _rand_case_command(self, session):
         text = session.match.group(1).strip()
+
+        if not text and self._last_message:
+            text = self._last_message['text']
+        elif not text:
+            text = 'Groudonger'
 
         rand_case_text = ''.join(
             char.swapcase() if random.randint(0, 1) else char for char in text
