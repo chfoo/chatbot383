@@ -128,6 +128,7 @@ class Features(object):
         bot.register_command(r'(?i)!song($|\s.{,50})$', self._song_command)
         bot.register_command(r'(?i)!sort($|\s.*)', self._sort_command)
         bot.register_command(r'(?i)!rand(?:om)?case($|\s.*)', self._rand_case_command)
+        bot.register_command(r'(?i)!release($|\s.{,100})$', self._release_command)
         bot.register_command(r'(?i)!riot($|\s.{,100})$', self._riot_command)
         bot.register_command(r'(?i)!rip($|\s.{,100})$', self._rip_command)
         bot.register_command(r'(?i)!(xd|minglee|chfoo)($|\s.*)', self._xd_command)
@@ -324,6 +325,16 @@ class Features(object):
         )
 
         formatted_text = '{} Random case! {}'.format(gen_roar(), rand_case_text)
+
+        self._try_say_or_reply_too_long(formatted_text, session)
+
+    def _release_command(self, session):
+        text = session.match.group(1).strip() or session.message['nick']
+
+        formatted_text = \
+            '{roar} {text} was released. Farewell, {text}!'.format(
+                roar=gen_roar(), text=text
+            )
 
         self._try_say_or_reply_too_long(formatted_text, session)
 

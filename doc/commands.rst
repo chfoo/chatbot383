@@ -38,6 +38,9 @@ Commands
 ``!randcase text``
     Randomly change the case of ``text``.
 
+``!release thing``
+    Release ``thing`` back into the wild.
+
 ``!riot``, ``!riot thing``
     Riot or riot about ``thing``.
 
