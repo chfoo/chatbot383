@@ -11,7 +11,8 @@ class App(object):
         self._main_client_thread = ClientThread(self._main_client)
         self._group_client_thread = ClientThread(self._group_client)
         channels = self._config['channels']
-        self._bot = Bot(channels, self._main_client, self._group_client)
+        self._bot = Bot(channels, self._main_client, self._group_client,
+                        ignored_users=self._config.get('ignored_users'))
         database = Database(self._config['database'])
         self._features = Features(self._bot, self._config['help_text'],
                                   database)

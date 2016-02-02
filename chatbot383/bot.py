@@ -37,10 +37,11 @@ class InboundMessageSession(object):
 
 
 class Bot(object):
-    def __init__(self, channels, main_client, group_client):
+    def __init__(self, channels, main_client, group_client, ignored_users=None):
         self._channels = channels
         self._main_client = main_client
         self._group_client = group_client
+        self._ignored_users = frozenset(ignored_users or ())
         self._user_limiter = Limiter(min_interval=5)
         self._channel_spam_limiter = Limiter(min_interval=1)
 
@@ -135,6 +136,9 @@ class Bot(object):
         username = message['username']
         channel = message['channel']
         our_username = session.client.get_nickname(lower=True)
+
+        if username in self._ignored_users:
+            return
 
         if username != our_username:
             if not self._user_limiter.is_ok(username):
