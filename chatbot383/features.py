@@ -110,7 +110,7 @@ class Features(object):
         self._help_text = help_text
         self._database = database
         self._recent_messages_for_regex = collections.defaultdict(lambda: collections.deque(maxlen=100))
-        self._last_message = None
+        self._last_message = {}
         self._spam_limiter = Limiter(min_interval=10)
 
         bot.register_message_handler('pubmsg', self._collect_recent_message)
@@ -157,7 +157,7 @@ class Features(object):
                 self._recent_messages_for_regex[channel].append(session.message)
 
                 if not session.message['text'].startswith('!'):
-                    self._last_message = session.message
+                    self._last_message[channel] = session.message
 
     def _help_command(self, session):
         session.reply('{} {}'.format(gen_roar(), self._help_text))
@@ -235,11 +235,12 @@ class Features(object):
 
     def _double_command(self, session):
         text = session.match.group(2).strip()
+        last_message = self._last_message.get(session.message['channel'])
 
-        if not text and (session.match.group(1) or not self._last_message):
+        if not text and (session.match.group(1) or not last_message):
             text = 'ヽ༼ຈل͜ຈ༽ﾉ DOUBLE TEAM ヽ༼ຈل͜ຈ༽ﾉ'
         elif not text:
-            text = self._last_message['text']
+            text = last_message['text']
 
         double_text = ''.join(char * 2 for char in text)
         formatted_text = '{} Doubled! {}'.format(gen_roar(), double_text)
@@ -269,9 +270,10 @@ class Features(object):
 
     def _shuffle_command(self, session):
         text = session.match.group(1).strip()
+        last_message = self._last_message.get(session.message['channel'])
 
-        if not text and self._last_message:
-            text = self._last_message['text']
+        if not text and last_message:
+            text = last_message['text']
         elif not text:
             text = 'Groudonger'
 
@@ -301,9 +303,10 @@ class Features(object):
 
     def _sort_command(self, session):
         text = session.match.group(1).strip()
+        last_message = self._last_message.get(session.message['channel'])
 
-        if not text and self._last_message:
-            text = self._last_message['text']
+        if not text and last_message:
+            text = last_message['text']
         elif not text:
             text = 'Groudonger'
 
@@ -314,9 +317,10 @@ class Features(object):
 
     def _rand_case_command(self, session):
         text = session.match.group(1).strip()
+        last_message = self._last_message.get(session.message['channel'])
 
-        if not text and self._last_message:
-            text = self._last_message['text']
+        if not text and last_message:
+            text = last_message['text']
         elif not text:
             text = 'Groudonger'
 
