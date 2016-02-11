@@ -15,7 +15,7 @@ class App(object):
                         ignored_users=self._config.get('ignored_users'))
         database = Database(self._config['database'])
         self._features = Features(self._bot, self._config['help_text'],
-                                  database)
+                                  database, self._config)
 
     def run(self):
         username = self._config['username']

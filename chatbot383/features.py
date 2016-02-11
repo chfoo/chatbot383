@@ -1,5 +1,8 @@
 import collections
 import copy
+import json
+import logging
+import os
 import random
 import re
 
@@ -11,6 +14,9 @@ import arrow
 
 from chatbot383.bot import Limiter
 from chatbot383.roar import gen_roar
+
+
+_logger = logging.getLogger(__name__)
 
 
 class MailbagFullError(ValueError):
@@ -105,20 +111,22 @@ class Features(object):
     )
     TOO_LONG_TEXT_TEMPLATE = '{} Message length exceeds my capabilities!'
 
-    def __init__(self, bot, help_text, database):
+    def __init__(self, bot, help_text, database, config):
         self._bot = bot
         self._help_text = help_text
         self._database = database
+        self._config = config
         self._recent_messages_for_regex = collections.defaultdict(lambda: collections.deque(maxlen=100))
         self._last_message = {}
         self._spam_limiter = Limiter(min_interval=10)
 
         bot.register_message_handler('pubmsg', self._collect_recent_message)
         bot.register_message_handler('action', self._collect_recent_message)
+        bot.register_command(r's/(.+/.*)', self._regex_command)
         bot.register_command(r'(?i)!double(team)?($|\s.*)', self._double_command)
         bot.register_command(r'(?i)!(groudonger)?help($|\s.*)', self._help_command)
-        bot.register_command(r's/(.+/.*)', self._regex_command)
         bot.register_command(r'(?i)!groudon(ger)?($|\s.*)', self._roar_command)
+        bot.register_command(r'(?i)!hypestats($|\s.*)', self._hype_stats_command)
         bot.register_command(r'(?i)!klappa($|\s.*)', self._klappa_command)
         bot.register_command(r'(?i)!(mail|post)($|\s.*)$', self._mail_command)
         bot.register_command(r'(?i)!(mail|post)status($|\s.*)', self._mail_status_command)
@@ -133,6 +141,7 @@ class Features(object):
         bot.register_command(r'(?i)!rip($|\s.{,100})$', self._rip_command)
         bot.register_command(r'(?i)!(xd|minglee|chfoo)($|\s.*)', self._xd_command)
         bot.register_command(r'.*\b[xX][dD] +MingLee\b.*', self._xd_rand_command)
+
 
     @classmethod
     def is_too_long(cls, text):
@@ -164,6 +173,35 @@ class Features(object):
 
     def _roar_command(self, session):
         session.say('{} {} {}'.format(gen_roar(), gen_roar(), gen_roar().upper()))
+
+    def _hype_stats_command(self, session):
+        stats_filename = self._config.get('hype_stats_filename')
+
+        if not stats_filename or \
+                stats_filename and not os.path.exists(stats_filename):
+            session.reply(
+                '{} This command is currently unavailable!'.format(gen_roar()))
+            return
+
+        try:
+            with open(stats_filename) as file:
+                doc = json.load(file)
+
+            text_1 = '[{duration}] Lines/sec {averages_str} ' \
+                '· Hints/sec {hint_averages_str}'.format(
+                    duration=doc['stats']['duration'],
+                    averages_str=doc['stats']['averages_str'],
+                    hint_averages_str=doc['stats']['hint_averages_str'],
+            )
+            text_2 = 'Chat {chat_graph} · Hint {hint_graph}'.format(
+                chat_graph=doc['stats']['chat_graph'],
+                hint_graph=doc['stats']['hint_graph'],
+            )
+        except (ValueError, KeyError, IndexError):
+            _logger.exception('Error formatting stats')
+        else:
+            session.say(text_1)
+            session.say(text_2)
 
     def _regex_command(self, session):
         # Special split http://stackoverflow.com/a/21107911/1524507

@@ -17,6 +17,9 @@ Commands
 ``!groudon`` or ``!groudonger``
     Roar.
 
+``!hypestats``
+    Chat activity and statistics for TPP chat.
+
 ``!klappa``
     Kappa //
 
