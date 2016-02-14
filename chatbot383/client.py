@@ -95,6 +95,10 @@ class Client(irc.client.SimpleIRCClient):
         channel = irc.strings.lower(event.target)
         nick = self.tags_to_dict(event.tags).get('display-name') or event.source.nick
         username = irc.strings.lower(event.source.nick)
+
+        if not event.arguments:
+            return
+
         text = event.arguments[0]
 
         self._inbound_queue.put({
@@ -109,6 +113,10 @@ class Client(irc.client.SimpleIRCClient):
         channel = irc.strings.lower(event.target)
         nick = self.tags_to_dict(event.tags).get('display-name') or event.source.nick
         username = irc.strings.lower(event.source.nick)
+
+        if not event.arguments:
+            return
+
         text = event.arguments[0]
 
         self._inbound_queue.put({
