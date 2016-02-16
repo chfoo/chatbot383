@@ -3,6 +3,7 @@ import queue
 import random
 import re
 import itertools
+import sched
 import time
 
 
@@ -44,6 +45,7 @@ class Bot(object):
         self._ignored_users = frozenset(ignored_users or ())
         self._user_limiter = Limiter(min_interval=5)
         self._channel_spam_limiter = Limiter(min_interval=1)
+        self._scheduler = sched.scheduler()
 
         self._commands = []
         self._message_handlers = []
@@ -55,6 +57,10 @@ class Bot(object):
 
     def register_message_handler(self, event_type, func):
         self._message_handlers.append((event_type, func))
+
+    @property
+    def scheduler(self):
+        return self._scheduler
 
     @classmethod
     def is_group_chat(cls, channel_name):
@@ -79,6 +85,8 @@ class Bot(object):
     def run(self):
         while True:
             for client in (self._main_client, self._group_client):
+                self._scheduler.run(blocking=False)
+
                 try:
                     item = client.inbound_queue.get(timeout=0.2)
                 except queue.Empty:
