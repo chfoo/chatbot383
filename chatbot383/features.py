@@ -66,19 +66,21 @@ class Database(object):
 
             max_id = row[0]
 
-            row = self._con.execute(
-                '''SELECT username, text, timestamp FROM
-                mail WHERE status = ? AND id > ?''',
-                ('read', random.randint(0, max_id))
-            ).fetchone()
+            for dummy in range(10):
+                # Retry a few times until we get an old one
+                row = self._con.execute(
+                    '''SELECT username, text, timestamp FROM
+                    mail WHERE status = ? AND id > ?''',
+                    ('read', random.randint(0, max_id))
+                ).fetchone()
 
-            if row:
-                mail_info = {
-                    'username': row[0],
-                    'text': row[1],
-                    'timestamp': row[2],
-                }
-                return mail_info
+                if row:
+                    mail_info = {
+                        'username': row[0],
+                        'text': row[1],
+                        'timestamp': row[2],
+                    }
+                    return mail_info
 
     def put_mail(self, username, text):
         with self._con:
