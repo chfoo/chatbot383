@@ -17,6 +17,7 @@ from chatbot383.roar import gen_roar
 
 
 _logger = logging.getLogger(__name__)
+_random = random.Random()
 
 
 class MailbagFullError(ValueError):
@@ -71,7 +72,7 @@ class Database(object):
                 row = self._con.execute(
                     '''SELECT username, text, timestamp FROM
                     mail WHERE status = ? AND id > ?''',
-                    ('read', random.randint(0, max_id))
+                    ('read', _random.randint(0, max_id))
                 ).fetchone()
 
                 if row:
@@ -144,6 +145,12 @@ class Features(object):
         bot.register_command(r'(?i)!(xd|minglee|chfoo)($|\s.*)', self._xd_command)
         bot.register_command(r'.*\b[xX][dD] +MingLee\b.*', self._xd_rand_command)
 
+        self._reseed_rng_sched()
+
+    def _reseed_rng_sched(self):
+        _reseed()
+        _logger.debug('RNG reseeded')
+        self._bot.scheduler.enter(300, 0, self._reseed_rng_sched)
 
     @classmethod
     def is_too_long(cls, text):
@@ -244,7 +251,7 @@ class Features(object):
                     session.reply('{} {}!'.format(gen_roar(), error.args[0].title()))
                     return
 
-                if random.random() < 0.1:
+                if _random.random() < 0.1:
                     new_text = gen_roar()
                     fake_out = True
                 else:
@@ -293,7 +300,7 @@ class Features(object):
         if not text:
             text = 'heads,tails'
 
-        result = random.choice(text.split(',')).strip()
+        result = _random.choice(text.split(',')).strip()
         formatted_text = '{} Picked! {}'.format(gen_roar(), result)
 
         self._try_say_or_reply_too_long(formatted_text, session)
@@ -318,7 +325,7 @@ class Features(object):
             text = 'Groudonger'
 
         shuffle_list = list(text)
-        random.shuffle(shuffle_list)
+        _random.shuffle(shuffle_list)
         shuffle_text = ''.join(shuffle_list).strip()
 
         formatted_text = '{} Shuffled! {}'.format(gen_roar(), shuffle_text)
@@ -365,7 +372,7 @@ class Features(object):
             text = 'Groudonger'
 
         rand_case_text = ''.join(
-            char.swapcase() if random.randint(0, 1) else char for char in text
+            char.swapcase() if _random.randint(0, 1) else char for char in text
         )
 
         formatted_text = '{} Random case! {}'.format(gen_roar(), rand_case_text)
@@ -392,7 +399,7 @@ class Features(object):
             formatted_text = \
                 '{} {} {}'.format(
                     gen_roar(),
-                    random.choice((
+                    _random.choice((
                         'Riot, I say! Riot, you may!',
                         'Riot!',
                         '{} riot!'.format(session.message['nick']),
@@ -408,13 +415,13 @@ class Features(object):
 
         formatted_text = \
             '{} {}, {}. Press F to pay your respects.'.format(
-                gen_roar(), random.choice(('RIP', 'Rest in peace')), text
+                gen_roar(), _random.choice(('RIP', 'Rest in peace')), text
             )
 
         self._try_say_or_reply_too_long(formatted_text, session)
 
     def _klappa_command(self, session):
-        session.say('{}'.format(random.choice(('Kappa //', gen_roar()))))
+        session.say('{}'.format(_random.choice(('Kappa //', gen_roar()))))
 
     def _xd_command(self, session):
         session.say('{} xD MingLee'.format(
@@ -422,11 +429,11 @@ class Features(object):
         )
 
     def _xd_rand_command(self, session):
-        if random.random() < 0.1 or \
+        if _random.random() < 0.1 or \
                 session.message['username'] == 'wow_deku_onehand' and \
                 session.message['text'].strip() == 'xD MingLee':
             def rep_func(match):
-                return '!' if random.random() < 0.6 else '1'
+                return '!' if _random.random() < 0.6 else '1'
 
             session.say('{} xD MingLee'.format(
                 re.sub('!', rep_func, gen_roar().lower()))
@@ -453,12 +460,12 @@ class Features(object):
                     'Tremendous! I will deliver this mail to the next '
                     'recipient without fail! {}'.format(gen_roar()))
         else:
-            if random.random() < 0.3:
+            if _random.random() < 0.3:
                 mail_info = self._database.get_old_mail()
             else:
                 mail_info = self._database.get_mail()
 
-                if not mail_info and random.random() < 0.3:
+                if not mail_info and _random.random() < 0.3:
                     mail_info = self._database.get_old_mail()
 
             if not mail_info:
@@ -489,3 +496,17 @@ class Features(object):
                 total=unread_count + read_count
             )
         )
+
+
+_seed = int.from_bytes(os.urandom(2500), 'big')  # copied from std lib
+
+
+def _reseed():
+    # scrubs keep complaining about the rng so this function exists
+    global _seed
+    _seed = _seed ^ int.from_bytes(os.urandom(32), 'big')
+    _random.seed(_seed)
+
+    for dummy in range(1000):
+        # Discard the first few so people can't say it's biased initially
+        _random.random()
