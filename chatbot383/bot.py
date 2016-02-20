@@ -6,6 +6,7 @@ import itertools
 import sched
 import time
 
+from chatbot383.util import split_utf8
 
 _logger = logging.getLogger(__name__)
 
@@ -29,12 +30,14 @@ class InboundMessageSession(object):
     def client(self):
         return self._client
 
-    def reply(self, text, me=False):
+    def reply(self, text, me=False, multiline=False):
         self._bot.send_text(self._message['channel'], text, me=me,
-                            reply_to=self._message['nick'])
+                            reply_to=self._message['nick'],
+                            multiline=multiline)
 
-    def say(self, text, me=False):
-        self._bot.send_text(self._message['channel'], text, me=me)
+    def say(self, text, me=False, multiline=False):
+        self._bot.send_text(self._message['channel'], text, me=me,
+                            multiline=multiline)
 
 
 class Bot(object):
@@ -71,7 +74,7 @@ class Bot(object):
         if text == '':
             return True
 
-        if len(text) > 400 or len(text.encode('utf-8', 'replace')) > 500:
+        if len(text) > 400 or len(text.encode('utf-8', 'replace')) > 450:
             return False
 
         if text[0] in './!`_':
@@ -96,7 +99,8 @@ class Bot(object):
                                  client.connection.server_address, item)
                     self._process_message(item, client)
 
-    def send_text(self, channel, text, me=False, reply_to=None):
+    def send_text(self, channel, text, me=False, reply_to=None,
+                  multiline=False):
         if self.is_group_chat(channel):
             client = self._group_client
         else:
@@ -105,11 +109,20 @@ class Bot(object):
         if reply_to:
             text = '@{}, {}'.format(reply_to, text)
 
-        if not self.is_text_safe(text):
-            _logger.info('Discarded message %s %s', ascii(channel), ascii(text))
-            return
+        if multiline:
+            lines = self.split_multiline(text)
+        else:
+            lines = (text,)
 
-        client.privmsg(channel, text, action=me)
+        del text
+
+        for line in lines:
+            if not self.is_text_safe(line):
+                _logger.info('Discarded message %s %s',
+                             ascii(channel), ascii(line))
+                return
+
+            client.privmsg(channel, line, action=me)
 
     def send_whisper(self, username, text):
         if not self.is_text_safe(text):
@@ -119,6 +132,14 @@ class Bot(object):
         text = '/w {} {}'.format(username, text)
 
         self._group_client.privmsg('#jtv', text)
+
+    @classmethod
+    def split_multiline(cls, text, max_length=400):
+        for index, part in enumerate(split_utf8(text, max_length)):
+            if index == 0:
+                yield part
+            else:
+                yield '(...) ' + part
 
     def join(self, channel):
         if self.is_group_chat(channel):
