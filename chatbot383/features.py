@@ -481,7 +481,8 @@ class Features(object):
                         roar=gen_roar(),
                         username=mail_info['username'],
                         date=arrow.get(mail_info['timestamp']).humanize(),
-                        msg=mail_info['text'])
+                        msg=mail_info['text']),
+                    multiline=True
                 )
 
     def _mail_status_command(self, session):
