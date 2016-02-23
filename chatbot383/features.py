@@ -13,6 +13,7 @@ import time
 import arrow
 
 from chatbot383.bot import Limiter
+from chatbot383.regex import RegexServer, RegexTimeout
 from chatbot383.roar import gen_roar
 
 
@@ -122,6 +123,7 @@ class Features(object):
         self._recent_messages_for_regex = collections.defaultdict(lambda: collections.deque(maxlen=100))
         self._last_message = {}
         self._spam_limiter = Limiter(min_interval=10)
+        self._regex_server = RegexServer()
 
         bot.register_message_handler('pubmsg', self._collect_recent_message)
         bot.register_message_handler('action', self._collect_recent_message)
@@ -244,7 +246,16 @@ class Features(object):
             if text.startswith('s/'):
                 continue
 
-            if pattern.search(text):
+            try:
+                matched = self._regex_server.search(pattern, text)
+            except RegexTimeout:
+                _logger.warning(
+                    'Regex DoS by %s on %s', session.message['username'],
+                    session.message['channel'])
+                session.reply(gen_roar().upper())
+                return
+
+            if matched:
                 try:
                     new_text = pattern.sub(replacement, text, count=count)
                 except re.error as error:

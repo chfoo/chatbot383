@@ -1,6 +1,7 @@
 import argparse
 import json
 import logging
+import multiprocessing
 
 from chatbot383.app import App
 
@@ -18,6 +19,9 @@ def main():
 
     with open(args.config_file, 'r') as file:
         config = json.load(file)
+
+    # Using 'spawn' to avoid safe forking multithreaded process issue
+    multiprocessing.set_start_method('spawn')
 
     app = App(config)
     app.run()
