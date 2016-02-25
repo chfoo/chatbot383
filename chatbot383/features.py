@@ -454,7 +454,7 @@ class Features(object):
         mail_text = session.match.group(2).strip()
 
         if mail_text:
-            if len(mail_text) > 200:
+            if len(mail_text) > 300:
                 session.reply('{} Your message is too burdensome! '
                               'Send a concise version instead.'
                               .format(gen_roar()))
