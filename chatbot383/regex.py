@@ -46,7 +46,7 @@ class RegexServer(object):
         self._request_queue.put((pattern, text))
 
         try:
-            return self._response_queue.get(timeout=0.2)
+            return self._response_queue.get(timeout=1.0)
         except queue.Empty as error:
             self._stop_server()
             raise RegexTimeout() from error
