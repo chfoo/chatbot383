@@ -1,3 +1,5 @@
+import queue
+
 from chatbot383.bot import Bot
 from chatbot383.client import Client, ClientThread
 from chatbot383.features import Features, Database
@@ -6,12 +8,14 @@ from chatbot383.features import Features, Database
 class App(object):
     def __init__(self, config):
         self._config = config
-        self._main_client = Client()
-        self._group_client = Client()
+        inbound_queue = queue.Queue(100)
+        self._main_client = Client(inbound_queue=inbound_queue)
+        self._group_client = Client(inbound_queue=inbound_queue)
         self._main_client_thread = ClientThread(self._main_client)
         self._group_client_thread = ClientThread(self._group_client)
         channels = self._config['channels']
         self._bot = Bot(channels, self._main_client, self._group_client,
+                        inbound_queue,
                         ignored_users=self._config.get('ignored_users'))
         database = Database(self._config['database'])
         self._features = Features(self._bot, self._config['help_text'],

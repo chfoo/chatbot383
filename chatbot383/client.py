@@ -18,13 +18,13 @@ class InvalidTextError(ValueError):
 
 
 class Client(irc.client.SimpleIRCClient):
-    def __init__(self):
+    def __init__(self, inbound_queue=None):
         super().__init__()
 
         irc.client.ServerConnection.buffer_class.errors = 'replace'
         self.connection.set_rate_limit(IRC_RATE_LIMIT)
         self._running = True
-        self._inbound_queue = queue.Queue(100)
+        self._inbound_queue = inbound_queue or queue.Queue(100)
         self._outbound_queue = queue.Queue(10)
 
     @property
@@ -88,6 +88,7 @@ class Client(irc.client.SimpleIRCClient):
         self.connection.cap('REQ', 'twitch.tv/tags')
 
         self._inbound_queue.put({
+            'client': self,
             'event_type': 'welcome'
         })
 
@@ -102,6 +103,7 @@ class Client(irc.client.SimpleIRCClient):
         text = event.arguments[0]
 
         self._inbound_queue.put({
+            'client': self,
             'event_type': 'pubmsg',
             'channel': channel,
             'nick': nick,
@@ -120,6 +122,7 @@ class Client(irc.client.SimpleIRCClient):
         text = event.arguments[0]
 
         self._inbound_queue.put({
+            'client': self,
             'event_type': 'action',
             'channel': channel,
             'nick': nick,
@@ -132,6 +135,7 @@ class Client(irc.client.SimpleIRCClient):
         text = event.arguments[0]
 
         self._inbound_queue.put({
+            'client': self,
             'event_type': 'pubnotice',
             'channel': channel,
             'text': text
@@ -143,6 +147,7 @@ class Client(irc.client.SimpleIRCClient):
         username = irc.strings.lower(nick) if nick else None
 
         self._inbound_queue.put({
+            'client': self,
             'event_type': 'clearchat',
             'channel': channel,
             'nick': nick,
@@ -155,6 +160,7 @@ class Client(irc.client.SimpleIRCClient):
         text = event.arguments[0]
 
         self._inbound_queue.put({
+            'client': self,
             'event_type': 'whisper',
             'nick': nick,
             'username': username,

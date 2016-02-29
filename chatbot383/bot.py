@@ -41,10 +41,12 @@ class InboundMessageSession(object):
 
 
 class Bot(object):
-    def __init__(self, channels, main_client, group_client, ignored_users=None):
+    def __init__(self, channels, main_client, group_client, inbound_queue,
+                 ignored_users=None):
         self._channels = channels
         self._main_client = main_client
         self._group_client = group_client
+        self._inbound_queue = inbound_queue
         self._ignored_users = frozenset(ignored_users or ())
         self._user_limiter = Limiter(min_interval=5)
         self._channel_spam_limiter = Limiter(min_interval=1)
@@ -54,6 +56,9 @@ class Bot(object):
         self._message_handlers = []
 
         self.register_message_handler('welcome', self._join_channels)
+
+        assert self._main_client.inbound_queue == inbound_queue
+        assert self._group_client.inbound_queue == inbound_queue
 
     def register_command(self, command_regex, func):
         self._commands.append((command_regex, func))
@@ -87,17 +92,17 @@ class Bot(object):
 
     def run(self):
         while True:
-            for client in (self._main_client, self._group_client):
-                self._scheduler.run(blocking=False)
+            self._scheduler.run(blocking=False)
 
-                try:
-                    item = client.inbound_queue.get(timeout=0.2)
-                except queue.Empty:
-                    continue
-                else:
-                    _logger.debug('Process inbound queue item %s %s',
-                                 client.connection.server_address, item)
-                    self._process_message(item, client)
+            try:
+                item = self._inbound_queue.get(timeout=0.2)
+            except queue.Empty:
+                continue
+            else:
+                client = item['client']
+                _logger.debug('Process inbound queue item %s %s',
+                              client.connection.server_address, item)
+                self._process_message(item, client)
 
     def send_text(self, channel, text, me=False, reply_to=None,
                   multiline=False):
