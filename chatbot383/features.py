@@ -104,6 +104,54 @@ class Database(object):
             return row[0]
 
 
+class TokenNotifier(object):
+    def __init__(self, token_analysis_filename, channels):
+        self._token_analysis_filename = token_analysis_filename
+        self._channels = channels
+        self._last_button_labels = frozenset()
+
+    def notify(self, bot):
+        if not self._token_analysis_filename or \
+                not os.path.isfile(self._token_analysis_filename) or \
+                not self._channels:
+            return
+
+        if time.time() - os.path.getmtime(self._token_analysis_filename) > 120:
+            return
+
+        with open(self._token_analysis_filename) as file:
+            try:
+                doc = json.load(file)
+            except ValueError:
+                return
+
+        token_button_labels = set()
+
+        for button_label in sorted(doc['buttons'].keys()):
+            button_doc = doc['buttons'][button_label]
+
+            if button_doc['token_detected']:
+                token_button_labels.add(button_label)
+
+        if self._last_button_labels == token_button_labels:
+            return
+
+        self._last_button_labels = frozenset(token_button_labels)
+
+        if not token_button_labels:
+            return
+
+        text = '[Token] {roar} Detected tokens on: {buttons}'\
+            .format(
+                roar=gen_roar(),
+                buttons=', '.join(sorted(token_button_labels))
+            )
+
+        for channel in self._channels:
+            _logger.info('Token notify to %s', channel)
+            bot.send_text(channel, text)
+
+
 class Features(object):
     DONGER_SONG_TEMPLATE = (
         'I like to raise my {donger} I do it all the time ヽ༼ຈل͜ຈ༽ﾉ '
@@ -124,6 +172,10 @@ class Features(object):
         self._last_message = {}
         self._spam_limiter = Limiter(min_interval=10)
         self._regex_server = RegexServer()
+        self._token_notifier = TokenNotifier(
+            config.get('token_notify_filename'),
+            config.get('token_notify_channels')
+        )
 
         bot.register_message_handler('pubmsg', self._collect_recent_message)
         bot.register_message_handler('action', self._collect_recent_message)
@@ -148,11 +200,17 @@ class Features(object):
         bot.register_command(r'.*\b[xX][dD] +MingLee\b.*', self._xd_rand_command)
 
         self._reseed_rng_sched()
+        self._token_notify_sched()
 
     def _reseed_rng_sched(self):
         _reseed()
         _logger.debug('RNG reseeded')
         self._bot.scheduler.enter(300, 0, self._reseed_rng_sched)
+
+    def _token_notify_sched(self):
+        self._token_notifier.notify(self._bot)
+
+        self._bot.scheduler.enter(60, 0, self._token_notify_sched)
 
     @classmethod
     def is_too_long(cls, text):
