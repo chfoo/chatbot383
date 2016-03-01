@@ -174,6 +174,10 @@ class Client(irc.client.SimpleIRCClient):
             except queue.Empty:
                 break
 
+            if not self.connection.connected:
+                _logger.error('Not connected. Dropping output item %s', item)
+                return
+
             _logger.debug('Process outbound queue item %s %s',
                           item, self.connection.server_address)
 
