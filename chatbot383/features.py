@@ -109,38 +109,80 @@ class TokenNotifier(object):
         self._token_analysis_filename = token_analysis_filename
         self._channels = channels
         self._last_button_labels = frozenset()
+        self._last_timestamp = None
 
     def notify(self, bot):
-        if not self._token_analysis_filename or \
-                not os.path.isfile(self._token_analysis_filename) or \
-                not self._channels:
+        doc = self._read_file()
+
+        if not doc:
             return
 
-        if time.time() - os.path.getmtime(self._token_analysis_filename) > 120:
-            return
-
-        with open(self._token_analysis_filename) as file:
-            try:
-                doc = json.load(file)
-            except ValueError:
-                return
+        next_interval = self._get_next_update_interval()
 
         token_button_labels = set()
+        no_token_button_labels = set()
 
         for button_label in sorted(doc['buttons'].keys()):
             button_doc = doc['buttons'][button_label]
 
             if button_doc['token_detected']:
                 token_button_labels.add(button_label)
+            else:
+                no_token_button_labels.add(button_label)
 
         if self._last_button_labels == token_button_labels:
-            return
+            return next_interval
 
         self._last_button_labels = frozenset(token_button_labels)
 
-        if not token_button_labels:
+        if not token_button_labels or not no_token_button_labels:
+            # No tokens or all buttons have tokens (likely false positive)
+            return next_interval
+
+        self._send_to_channels(bot, token_button_labels)
+
+        return next_interval
+
+    def _read_file(self):
+        if not self._token_analysis_filename or \
+                not os.path.isfile(self._token_analysis_filename) or \
+                not self._channels:
+            self._last_timestamp = None
             return
 
+        time_now = time.time()
+        file_timestamp = os.path.getmtime(self._token_analysis_filename)
+
+        if time_now - file_timestamp > 120 or \
+                self._last_timestamp == file_timestamp:
+            return
+
+        if not self._last_timestamp:
+            _logger.info('Found token analysis file')
+
+        self._last_timestamp = file_timestamp
+
+        with open(self._token_analysis_filename) as file:
+            try:
+                doc = json.load(file)
+            except ValueError:
+                _logger.exception('Error reading file')
+                return
+            else:
+                return doc
+
+    def _get_next_update_interval(self):
+        if not self._last_timestamp:
+            return
+
+        time_now = time.time()
+        interval = 60 - (time_now - self._last_timestamp) + 10
+        interval = min(100, interval)
+        interval = max(10, interval)
+
+        return interval
+
+    def _send_to_channels(self, bot, token_button_labels):
         text = '[Token] {roar} Detected tokens on: {buttons}'\
             .format(
                 roar=gen_roar(),
@@ -208,9 +250,14 @@ class Features(object):
         self._bot.scheduler.enter(300, 0, self._reseed_rng_sched)
 
     def _token_notify_sched(self):
-        self._token_notifier.notify(self._bot)
+        interval = self._token_notifier.notify(self._bot)
 
-        self._bot.scheduler.enter(60, 0, self._token_notify_sched)
+        if not interval:
+            interval = 60
+
+        _logger.debug('Next token analysis interval %s', interval)
+
+        self._bot.scheduler.enter(interval, 0, self._token_notify_sched)
 
     @classmethod
     def is_too_long(cls, text):
