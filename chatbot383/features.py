@@ -25,6 +25,10 @@ class MailbagFullError(ValueError):
     pass
 
 
+class SenderOutboxFullError(MailbagFullError):
+    pass
+
+
 class Database(object):
     def __init__(self, db_path):
         self._path = db_path
@@ -86,10 +90,20 @@ class Database(object):
 
     def put_mail(self, username, text):
         with self._con:
+            row = self._con.execute(
+                '''SELECT count(1) FROM mail
+                WHERE status = 'unread' AND username = ? LIMIT 1
+                ''',
+                (username,)
+            ).fetchone()
+
+            if row[0] >= 10:
+                raise SenderOutboxFullError()
+
             row = self._con.execute('''SELECT count(1) FROM mail
             WHERE status = 'unread' LIMIT 1''').fetchone()
 
-            if row[0] >= 50:
+            if row[0] >= 100:
                 raise MailbagFullError()
 
             self._con.execute('''INSERT INTO mail
@@ -567,6 +581,10 @@ class Features(object):
 
             try:
                 self._database.put_mail(session.message['username'], mail_text)
+            except SenderOutboxFullError:
+                session.reply(
+                    '{} How embarrassing! Your outbox is full!'
+                    .format(gen_roar()))
             except MailbagFullError:
                 session.reply(
                     '{} Incredulous! My mailbag is full! Read one instead!'
