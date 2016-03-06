@@ -119,11 +119,13 @@ class Database(object):
 
 
 class TokenNotifier(object):
-    def __init__(self, token_analysis_filename, channels):
+    def __init__(self, token_analysis_filename, channels, update_interval=60):
         self._token_analysis_filename = token_analysis_filename
         self._channels = channels
+        self._update_interval = update_interval
         self._last_button_labels = frozenset()
         self._last_timestamp = None
+        self._limiter = Limiter(30)
 
     def notify(self, bot):
         doc = self._read_file()
@@ -153,7 +155,9 @@ class TokenNotifier(object):
             # No tokens or all buttons have tokens (likely false positive)
             return next_interval
 
-        self._send_to_channels(bot, token_button_labels)
+        if self._limiter.is_ok(None):
+            self._limiter.update(None)
+            self._send_to_channels(bot, token_button_labels)
 
         return next_interval
 
@@ -190,8 +194,8 @@ class TokenNotifier(object):
             return
 
         time_now = time.time()
-        interval = 60 - (time_now - self._last_timestamp) + 10
-        interval = min(100, interval)
+        interval = self._update_interval - (time_now - self._last_timestamp)
+        interval = min(300, interval)
         interval = max(10, interval)
 
         return interval
@@ -230,7 +234,8 @@ class Features(object):
         self._regex_server = RegexServer()
         self._token_notifier = TokenNotifier(
             config.get('token_notify_filename'),
-            config.get('token_notify_channels')
+            config.get('token_notify_channels'),
+            config.get('token_notify_interval', 60)
         )
 
         bot.register_message_handler('pubmsg', self._collect_recent_message)
