@@ -13,9 +13,12 @@ def main():
     args = arg_parser.parse_args()
 
     if args.debug:
-        logging.basicConfig(level=logging.DEBUG)
+        level = logging.DEBUG
     else:
-        logging.basicConfig(level=logging.INFO)
+        level = logging.INFO
+
+    logging.basicConfig(
+        level=level, format='%(asctime)s - %(levelname)s - %(message)s')
 
     with open(args.config_file, 'r') as file:
         config = json.load(file)
