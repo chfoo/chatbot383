@@ -133,6 +133,8 @@ class TokenNotifier(object):
         if not doc:
             return
 
+        _logger.info('Check for tokens')
+
         next_interval = self._get_next_update_interval()
 
         token_button_labels = set()
