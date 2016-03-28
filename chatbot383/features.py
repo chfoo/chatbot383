@@ -51,10 +51,12 @@ class Database(object):
             ON mail (status)
             ''')
 
-    def get_mail(self):
+    def get_mail(self, skip_username=None):
         with self._con:
-            row = self._con.execute('''SELECT id, username, text, timestamp FROM
-            mail WHERE status = ? LIMIT 1''', ('unread',)).fetchone()
+            row = self._con.execute(
+                '''SELECT id, username, text, timestamp FROM
+                mail WHERE status = ? AND username != ? LIMIT 1''',
+                ('unread', skip_username or '')).fetchone()
 
             if row:
                 mail_info = {
@@ -604,7 +606,12 @@ class Features(object):
             if _random.random() < 0.3:
                 mail_info = self._database.get_old_mail()
             else:
-                mail_info = self._database.get_mail()
+                if _random.random() < 0.7:
+                    skip_username = session.message['username']
+                else:
+                    skip_username = None
+
+                mail_info = self._database.get_mail(skip_username=skip_username)
 
                 if not mail_info and _random.random() < 0.3:
                     mail_info = self._database.get_old_mail()
