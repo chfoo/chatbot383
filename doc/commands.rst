@@ -51,7 +51,6 @@ Commands
     Ask to pay respects to ``thing``.
 
 ``!shuffle text``
-
     Shuffle letters in ``text``.
 
 ``!song``, ``!song thing``
