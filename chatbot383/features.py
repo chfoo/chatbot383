@@ -226,6 +226,7 @@ class Features(object):
         'A {donger} saved is a {donger} earned so sing the {donger} song!'
     )
     TOO_LONG_TEXT_TEMPLATE = '{} Message length exceeds my capabilities!'
+    MAIL_MAX_LEN = 300
 
     def __init__(self, bot, help_text, database, config):
         self._bot = bot
@@ -582,10 +583,13 @@ class Features(object):
         mail_text = session.match.group(2).strip()
 
         if mail_text:
-            if len(mail_text) > 300:
-                session.reply('{} Your message is too burdensome! '
-                              'Send a concise version instead.'
-                              .format(gen_roar()))
+            if len(mail_text) > self.MAIL_MAX_LEN:
+                session.reply(
+                    '{} Your message is too burdensome! '
+                    'Send a concise version instead. '
+                    '({}/{})'
+                    .format(gen_roar(), len(mail_text), self.MAIL_MAX_LEN)
+                )
                 return
 
             try:
@@ -618,7 +622,7 @@ class Features(object):
 
             if not mail_info:
                 session.reply(
-                    '{} Outlandish! There is no mail! You should send some!'
+                    '{} Outlandish! There is no new mail! You should send some!'
                     .format(gen_roar())
                 )
             else:
@@ -627,7 +631,7 @@ class Features(object):
                     'Here it is, {date}, from {username}: {msg}'
                     .format(
                         roar=gen_roar(),
-                        username=mail_info['username'],
+                        username=mail_info['username'].title(),
                         date=arrow.get(mail_info['timestamp']).humanize(),
                         msg=mail_info['text']),
                     multiline=True
