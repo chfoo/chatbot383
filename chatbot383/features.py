@@ -5,12 +5,14 @@ import logging
 import os
 import random
 import re
-
 import sqlite3
-
 import time
 
 import arrow
+
+import tellnext.store
+import tellnext.model
+import tellnext.generator
 
 from chatbot383.bot import Limiter
 from chatbot383.regex import RegexServer, RegexTimeout
@@ -216,6 +218,28 @@ class TokenNotifier(object):
             bot.send_text(channel, text)
 
 
+class TellnextGenerator(object):
+    def __init__(self, database_path):
+        self._store = tellnext.store.SQLiteStore(path=database_path)
+        self._model = tellnext.model.MarkovModel(store=self._store)
+        self._generator = tellnext.generator.Generator(self._model)
+
+    def get_paragraph(self, max_len=300):
+        sentences = []
+
+        while True:
+            sentence = self._generator.generate_sentence(max_words=50)[:max_len].capitalize() + ' '
+            sentences.append(sentence)
+
+            if sum(map(len, sentences)) >= max_len:
+                del sentences[-1]
+
+                if sentences:
+                    break
+
+        return ''.join(sentences)
+
+
 class Features(object):
     DONGER_SONG_TEMPLATE = (
         'I like to raise my {donger} I do it all the time ヽ༼ຈل͜ຈ༽ﾉ '
@@ -242,6 +266,10 @@ class Features(object):
             config.get('token_notify_channels'),
             config.get('token_notify_interval', 60)
         )
+        self._tellnext_generator = None
+
+        if os.path.isfile(config.get('tellnext_database')):
+            self._tellnext_generator = TellnextGenerator(config['tellnext_database'])
 
         bot.register_message_handler('pubmsg', self._collect_recent_message)
         bot.register_message_handler('action', self._collect_recent_message)
@@ -264,6 +292,7 @@ class Features(object):
         bot.register_command(r'(?i)!rip($|\s.{,100})$', self._rip_command)
         bot.register_command(r'(?i)!(xd|minglee|chfoo)($|\s.*)', self._xd_command)
         bot.register_command(r'.*\b[xX][dD] +MingLee\b.*', self._xd_rand_command)
+        bot.register_command(r'(?i)!(wow)($|\s.*)', self._wow_command)
 
         self._reseed_rng_sched()
         self._token_notify_sched()
@@ -578,6 +607,12 @@ class Features(object):
             session.say('{} xD MingLee'.format(
                 re.sub('!', rep_func, gen_roar().lower()))
             )
+
+    def _wow_command(self, session):
+        if self._tellnext_generator:
+            session.say('> {}'.format(self._tellnext_generator.get_paragraph()))
+        else:
+            session.reply('{} Feature not available!'.format(gen_roar()))
 
     def _mail_command(self, session):
         mail_text = session.match.group(2).strip()
