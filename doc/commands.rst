@@ -62,3 +62,5 @@ Commands
 ``!xd``
     Smiling face with open mouth and tightly-closed eyes
 
+``!wow``
+    Generate a short story or fanfic.
