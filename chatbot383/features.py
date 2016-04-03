@@ -291,7 +291,8 @@ class Features(object):
         bot.register_command(r'(?i)!riot($|\s.{,100})$', self._riot_command)
         bot.register_command(r'(?i)!rip($|\s.{,100})$', self._rip_command)
         bot.register_command(r'(?i)!(xd|minglee|chfoo)($|\s.*)', self._xd_command)
-        bot.register_command(r'.*\b[xX][dD] +MingLee\b.*', self._xd_rand_command)
+        # Temporary disabled. interferes with rate limit
+        # bot.register_command(r'.*\b[xX][dD] +MingLee\b.*', self._xd_rand_command)
         bot.register_command(r'(?i)!(wow)($|\s.*)', self._wow_command)
 
         self._reseed_rng_sched()
