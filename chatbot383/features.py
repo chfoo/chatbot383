@@ -268,7 +268,7 @@ class Features(object):
         )
         self._tellnext_generator = None
 
-        if os.path.isfile(config.get('tellnext_database')):
+        if os.path.isfile(config.get('tellnext_database', '')):
             self._tellnext_generator = TellnextGenerator(config['tellnext_database'])
 
         bot.register_message_handler('pubmsg', self._collect_recent_message)
