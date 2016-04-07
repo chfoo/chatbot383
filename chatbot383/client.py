@@ -1,11 +1,13 @@
 import logging
 import queue
+import ssl
 import threading
-
 import functools
+import re
+
 import irc.client
 import irc.strings
-import re
+import irc.connection
 
 _logger = logging.getLogger(__name__)
 
@@ -42,6 +44,17 @@ class Client(irc.client.SimpleIRCClient):
         do_nothing = lambda c, e: None
         method = getattr(self, "_on_" + event.type, do_nothing)
         method(connection, event)
+
+    @classmethod
+    def new_connect_factory(cls, hostname=None, use_ssl=False):
+        if use_ssl:
+            context = ssl.create_default_context()
+            wrapper = functools.partial(context.wrap_socket, server_hostname=hostname)
+            connect_factory = irc.connection.Factory(wrapper=wrapper)
+        else:
+            connect_factory = irc.connection.Factory()
+
+        return connect_factory
 
     def async_connect(self, *args, **kwargs):
         self.reactor.execute_delayed(
