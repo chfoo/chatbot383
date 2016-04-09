@@ -202,7 +202,7 @@ class TokenNotifier(object):
         time_now = time.time()
         interval = self._update_interval - (time_now - self._last_timestamp)
         interval = min(300, interval)
-        interval = max(10, interval)
+        interval = max(5, interval)
 
         return interval
 
