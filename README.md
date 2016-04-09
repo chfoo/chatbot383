@@ -8,7 +8,7 @@ For commands, see `doc/commands.rst`.
 Requires:
 
 * Python 3.4+
-* Python `arrow` library
+* Python `arrow` (0.7+), `irc` (14.0+) libraries
 * Python [`tellnext` library](https://github.com/chfoo/tellnext)
 
 Install Python libraries using `pip install`. For `tellnext`, pip install with the git repository.
