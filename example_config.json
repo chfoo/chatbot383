@@ -1,6 +1,7 @@
 {
-    "main_server": "irc.twitch.tv:6667",
-    "group_server": "192.16.64.180:6667",
+    "main_server": "irc.chat.twitch.tv:6697",
+    "group_server": "irc.chat.twitch.tv:6697",
+    "ssl": true,
     "username": "USERNAMEHERE",
     "password": "oauth:OAUTHTOKENHERE",
     "channels": [
@@ -9,5 +10,14 @@
     ],
     "help_text": "I am powered by chatbot383 but my owner did not configure me thoroughly.",
     "database": "./chatbot383.db",
-    "ignored_users": ["annoying_person"]
+    "ignored_users": ["annoying_person"],
+    "mail_disabled_channels": [
+        "#child_friendly_channel"
+    ],
+
+    "x Optional specialized features; edit or remove below: ": null,
+    "x hype_stats_filename": "./stats.json",
+    "x token_notify_filename": "./token.json",
+    "x token_notify_interval": 12,
+    "x tellnext_database": "./model.db"
 }
