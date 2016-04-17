@@ -271,6 +271,8 @@ class Features(object):
         if os.path.isfile(config.get('tellnext_database', '')):
             self._tellnext_generator = TellnextGenerator(config['tellnext_database'])
 
+        self._mail_disabled_channels = config.get('mail_disabled_channels')
+
         bot.register_message_handler('pubmsg', self._collect_recent_message)
         bot.register_message_handler('action', self._collect_recent_message)
         bot.register_command(r's/(.+/.*)', self._regex_command)
@@ -616,6 +618,13 @@ class Features(object):
             session.reply('{} Feature not available!'.format(gen_roar()))
 
     def _mail_command(self, session):
+        if session.message['channel'] in self._mail_disabled_channels:
+            session.reply(
+                '{} My mail services cannot be used here.'
+                .format(gen_roar().replace('!', '.'))
+            )
+            return
+
         mail_text = session.match.group(2).strip()
 
         if mail_text:
