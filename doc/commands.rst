@@ -14,6 +14,15 @@ Commands
 ``!double text`` or ``!doubleteam text``
     Doubles the letters in ``text``.
 
+``!genmatch`` or ``!genmatch options`` or ``!genmatch options vs options``
+    Generate a themed token match. `options` can be color, weight, or type.
+
+    * Colors: black, blue, brown, gray, green, pink, purple, red, white, yellow
+    * Weight: light, medium, heavy
+    * Type: normal, fighting, flying, poison, ground, rock, bug, ghost,
+      steel, fire, water, grass, electric, psychic, ice, dragon, dark,
+      fairy (alias for normal)
+
 ``!groudon`` or ``!groudonger``
     Roar.
 

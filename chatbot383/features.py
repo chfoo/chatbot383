@@ -11,6 +11,7 @@ import time
 import arrow
 
 from chatbot383.bot import Limiter
+from chatbot383.featurecomponents.matchgen import MatchGenerator, MatchError
 from chatbot383.featurecomponents.tellnextdb import TellnextGenerator
 from chatbot383.featurecomponents.tokennotify import TokenNotifier
 from chatbot383.regex import RegexServer, RegexTimeout
@@ -151,6 +152,11 @@ class Features(object):
         if os.path.isfile(config.get('tellnext_database', '')):
             self._tellnext_generator = TellnextGenerator(config['tellnext_database'])
 
+        self._match_generator = None
+
+        if os.path.isfile(config.get('veekun_pokedex_database', '')):
+            self._match_generator = MatchGenerator(config['veekun_pokedex_database'])
+
         self._mail_disabled_channels = config.get('mail_disabled_channels')
 
         bot.register_message_handler('pubmsg', self._collect_recent_message)
@@ -172,6 +178,7 @@ class Features(object):
         bot.register_command(r'(?i)!release($|\s.{,100})$', self._release_command)
         bot.register_command(r'(?i)!riot($|\s.{,100})$', self._riot_command)
         bot.register_command(r'(?i)!rip($|\s.{,100})$', self._rip_command)
+        bot.register_command(r'(?i)!gen(?:erate)?match($|\s.*)$', self._generate_match_command)
         bot.register_command(r'(?i)!(xd|minglee|chfoo)($|\s.*)', self._xd_command)
         # Temporary disabled. interferes with rate limit
         # bot.register_command(r'.*\b[xX][dD] +MingLee\b.*', self._xd_rand_command)
@@ -574,6 +581,23 @@ class Features(object):
                 total=unread_count + read_count
             )
         )
+
+    def _generate_match_command(self, session):
+        if not self._match_generator:
+            session.reply('{} Feature not available!'.format(gen_roar()))
+            return
+
+        args = session.match.group(1).lower().split()
+        try:
+            session.reply('{} {}'.format(
+                gen_roar(), self._match_generator.get_match_string(args))
+            )
+        except MatchError as error:
+            session.reply('{} An error generating a match: {}'.format(
+                gen_roar(), error))
+        except (ValueError, IndexError, TypeError):
+            _logger.exception('Generate match error')
+            session.reply('{} An error occurred when generating a match!'.format(gen_roar()))
 
 
 _seed = int.from_bytes(os.urandom(2500), 'big')  # copied from std lib
