@@ -41,11 +41,10 @@ class InboundMessageSession(object):
 
 
 class Bot(object):
-    def __init__(self, channels, main_client, group_client, inbound_queue,
+    def __init__(self, channels, main_client, inbound_queue,
                  ignored_users=None):
         self._channels = channels
         self._main_client = main_client
-        self._group_client = group_client
         self._inbound_queue = inbound_queue
         self._ignored_users = frozenset(ignored_users or ())
         self._user_limiter = Limiter(min_interval=5)
@@ -58,7 +57,6 @@ class Bot(object):
         self.register_message_handler('welcome', self._join_channels)
 
         assert self._main_client.inbound_queue == inbound_queue
-        assert self._group_client.inbound_queue == inbound_queue
 
     def register_command(self, command_regex, func):
         self._commands.append((command_regex, func))
@@ -106,10 +104,7 @@ class Bot(object):
 
     def send_text(self, channel, text, me=False, reply_to=None,
                   multiline=False):
-        if self.is_group_chat(channel):
-            client = self._group_client
-        else:
-            client = self._main_client
+        client = self._main_client
 
         if reply_to:
             text = '@{}, {}'.format(reply_to, text)
@@ -136,7 +131,7 @@ class Bot(object):
 
         text = '/w {} {}'.format(username, text)
 
-        self._group_client.privmsg('#jtv', text)
+        self._main_client.privmsg('#jtv', text)
 
     @classmethod
     def split_multiline(cls, text, max_length=400):
@@ -147,10 +142,7 @@ class Bot(object):
                 yield '(...) ' + part
 
     def join(self, channel):
-        if self.is_group_chat(channel):
-            client = self._group_client
-        else:
-            client = self._main_client
+        client = self._main_client
 
         client.join(channel)
 
@@ -198,10 +190,7 @@ class Bot(object):
                 command_func(session)
 
     def _join_channels(self, session):
-        if session.client == self._group_client:
-            channels = filter(self.is_group_chat, self._channels)
-        else:
-            channels = itertools.filterfalse(self.is_group_chat, self._channels)
+        channels = self._channels
 
         for channel in channels:
             session.bot.join(channel)

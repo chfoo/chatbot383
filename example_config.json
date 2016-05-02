@@ -1,6 +1,5 @@
 {
     "main_server": "irc.chat.twitch.tv:6697",
-    "group_server": "irc.chat.twitch.tv:6697",
     "ssl": true,
     "username": "USERNAMEHERE",
     "password": "oauth:OAUTHTOKENHERE",
