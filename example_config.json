@@ -7,6 +7,7 @@
         "#jtv", 
         "#_example_1234"
     ],
+    "lurk_channels": [],
     "help_text": "I am powered by chatbot383 but my owner did not configure me thoroughly.",
     "database": "./chatbot383.db",
     "ignored_users": ["annoying_person"],

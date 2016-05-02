@@ -6,6 +6,8 @@ import itertools
 import sched
 import time
 
+import irc.strings
+
 from chatbot383.util import split_utf8
 
 _logger = logging.getLogger(__name__)
@@ -42,8 +44,9 @@ class InboundMessageSession(object):
 
 class Bot(object):
     def __init__(self, channels, main_client, inbound_queue,
-                 ignored_users=None):
-        self._channels = channels
+                 ignored_users=None, lurk_channels=()):
+        self._channels = frozenset(irc.strings.lower(channel) for channel in channels)
+        self._lurk_channels = frozenset(irc.strings.lower(channel) for channel in lurk_channels)
         self._main_client = main_client
         self._inbound_queue = inbound_queue
         self._ignored_users = frozenset(ignored_users or ())
@@ -104,6 +107,7 @@ class Bot(object):
 
     def send_text(self, channel, text, me=False, reply_to=None,
                   multiline=False):
+        channel = irc.strings.lower(channel)
         client = self._main_client
 
         if reply_to:
@@ -117,7 +121,7 @@ class Bot(object):
         del text
 
         for line in lines:
-            if not self.is_text_safe(line):
+            if not self.is_text_safe(line) or channel not in self._channels:
                 _logger.info('Discarded message %s %s',
                              ascii(channel), ascii(line))
                 return
@@ -166,6 +170,9 @@ class Bot(object):
         if username in self._ignored_users:
             return
 
+        if channel in self._lurk_channels:
+            return
+
         if username != our_username:
             if not self._user_limiter.is_ok(username):
                 return
@@ -190,7 +197,7 @@ class Bot(object):
                 command_func(session)
 
     def _join_channels(self, session):
-        channels = self._channels
+        channels = self._channels | self._lurk_channels
 
         for channel in channels:
             session.bot.join(channel)

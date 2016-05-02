@@ -14,7 +14,9 @@ class App(object):
         channels = self._config['channels']
         self._bot = Bot(channels, self._main_client,
                         inbound_queue,
-                        ignored_users=self._config.get('ignored_users'))
+                        ignored_users=self._config.get('ignored_users'),
+                        lurk_channels=self._config.get('lurk_channels'),
+                        )
         database = Database(self._config['database'])
         self._features = Features(self._bot, self._config['help_text'],
                                   database, self._config)
