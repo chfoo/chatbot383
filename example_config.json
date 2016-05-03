@@ -20,5 +20,6 @@
     "x token_notify_filename": "./token.json",
     "x token_notify_interval": 12,
     "x tellnext_database": "./model.db",
-    "x veekun_pokedex_database": "./veekun-pokedex.sqlite"
+    "x veekun_pokedex_database": "./veekun-pokedex.sqlite",
+    "x avoid_pikalaxbot": true
 }

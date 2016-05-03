@@ -159,6 +159,7 @@ class Features(object):
             self._match_generator = MatchGenerator(config['veekun_pokedex_database'])
 
         self._mail_disabled_channels = config.get('mail_disabled_channels')
+        self._avoid_pikalaxbot = config.get('avoid_pikalaxbot')
 
         bot.register_message_handler('pubmsg', self._collect_recent_message)
         bot.register_message_handler('action', self._collect_recent_message)
@@ -268,6 +269,11 @@ class Features(object):
             session.say(text_2)
 
     def _regex_command(self, session):
+        channel = session.message['channel']
+        if self._avoid_pikalaxbot and 'pikalaxbot' in self._user_list[channel]:
+            session.skip_rate_limit = True
+            return
+
         # Special split http://stackoverflow.com/a/21107911/1524507
         parts = re.split(r'(?<!\\)/', session.match.group(1))
 
