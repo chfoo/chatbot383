@@ -19,6 +19,7 @@ class InboundMessageSession(object):
         self._bot = bot
         self._client = client
         self.match = None
+        self.skip_rate_limit = False
 
     @property
     def message(self):
@@ -183,10 +184,13 @@ class Bot(object):
                 match = re.match(pattern, text)
 
                 if match:
-                    self._user_limiter.update(username)
-                    self._channel_spam_limiter.update(channel)
                     session.match = match
                     command_func(session)
+
+                    if not session.skip_rate_limit:
+                        self._user_limiter.update(username)
+                        self._channel_spam_limiter.update(channel)
+
                     break
 
     def _process_message_handlers(self, session):
