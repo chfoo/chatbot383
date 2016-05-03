@@ -59,6 +59,9 @@ Commands
 ``!rip thing``
     Ask to pay respects to ``thing``.
 
+``!roomsize``
+    Count number of users in chat room.
+
 ``!shuffle text``
     Shuffle letters in ``text``.
 

@@ -141,6 +141,7 @@ class Features(object):
         self._recent_messages_for_regex = collections.defaultdict(lambda: collections.deque(maxlen=100))
         self._last_message = {}
         self._spam_limiter = Limiter(min_interval=10)
+        self._user_list = collections.defaultdict(set)
         self._regex_server = RegexServer()
         self._token_notifier = TokenNotifier(
             config.get('token_notify_filename'),
@@ -178,11 +179,15 @@ class Features(object):
         bot.register_command(r'(?i)!release($|\s.{,100})$', self._release_command)
         bot.register_command(r'(?i)!riot($|\s.{,100})$', self._riot_command)
         bot.register_command(r'(?i)!rip($|\s.{,100})$', self._rip_command)
+        bot.register_command(r'(?i)!roomsize?($|\s.*)', self._room_size_command)
         bot.register_command(r'(?i)!gen(?:erate)?match($|\s.*)$', self._generate_match_command)
         bot.register_command(r'(?i)!(xd|minglee|chfoo)($|\s.*)', self._xd_command)
         # Temporary disabled. interferes with rate limit
         # bot.register_command(r'.*\b[xX][dD] +MingLee\b.*', self._xd_rand_command)
         bot.register_command(r'(?i)!(wow)($|\s.*)', self._wow_command)
+
+        bot.register_message_handler('join', self._join_callback)
+        bot.register_message_handler('part', self._part_callback)
 
         self._reseed_rng_sched()
         self._token_notify_sched()
@@ -479,6 +484,14 @@ class Features(object):
 
         self._try_say_or_reply_too_long(formatted_text, session)
 
+    def _room_size_command(self, session):
+        formatted_text = \
+            '{} {} users in chat room.'.format(
+                gen_roar(), len(self._user_list[session.message['channel']])
+            )
+
+        self._try_say_or_reply_too_long(formatted_text, session)
+
     def _klappa_command(self, session):
         session.say('{}'.format(_random.choice(('Kappa //', gen_roar()))))
 
@@ -598,6 +611,18 @@ class Features(object):
         except (ValueError, IndexError, TypeError):
             _logger.exception('Generate match error')
             session.reply('{} An error occurred when generating a match!'.format(gen_roar()))
+
+    def _join_callback(self, session):
+        usernames = self._user_list[session.message['channel']]
+        username = session.message['username']
+        usernames.add(username)
+
+    def _part_callback(self, session):
+        usernames = self._user_list[session.message['channel']]
+        username = session.message['username']
+
+        if username in usernames:
+            usernames.remove(username)
 
 
 _seed = int.from_bytes(os.urandom(2500), 'big')  # copied from std lib
