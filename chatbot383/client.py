@@ -180,6 +180,32 @@ class Client(irc.client.SimpleIRCClient):
             'text': text
         })
 
+    def _on_join(self, connection, event):
+        channel = irc.strings.lower(event.target)
+        nick = event.source.nick
+        username = irc.strings.lower(event.source.nick)
+
+        self._inbound_queue.put({
+            'client': self,
+            'event_type': 'join',
+            'channel': channel,
+            'nick': nick,
+            'username': username,
+        })
+
+    def _on_part(self, connection, event):
+        channel = irc.strings.lower(event.target)
+        nick = event.source.nick
+        username = irc.strings.lower(event.source.nick)
+
+        self._inbound_queue.put({
+            'client': self,
+            'event_type': 'part',
+            'channel': channel,
+            'nick': nick,
+            'username': username,
+        })
+
     def _process_outbound_messages(self):
         for dummy in range(5):
             try:
