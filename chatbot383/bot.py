@@ -77,14 +77,14 @@ class Bot(object):
         return channel_name.startswith('#_')
 
     @classmethod
-    def is_text_safe(cls, text):
+    def is_text_safe(cls, text, allow_command_prefix=False):
         if text == '':
             return True
 
         if len(text) > 400 or len(text.encode('utf-8', 'replace')) > 450:
             return False
 
-        if text[0] in './!`_':
+        if text[0] in './!`_' and not allow_command_prefix:
             return False
 
         if re.search(r'[\x00-\x1f]', text):
@@ -129,8 +129,8 @@ class Bot(object):
 
             client.privmsg(channel, line, action=me)
 
-    def send_whisper(self, username, text):
-        if not self.is_text_safe(text):
+    def send_whisper(self, username, text, allow_command_prefix=False):
+        if not self.is_text_safe(text, allow_command_prefix=allow_command_prefix):
             _logger.info('Discarded message %s %s', ascii(username), ascii(text))
             return
 
