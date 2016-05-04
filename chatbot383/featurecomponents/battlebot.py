@@ -181,8 +181,8 @@ class BattleBot(object):
         self._battle_session = None
 
     def _execute_move(self):
-        move_index = self._battle_session.get_move()
-        _logger.info('Do move %s', move_index + 1)
+        move_index = self._battle_session.get_move() + 1
+        _logger.info('Do move %s', move_index)
         self._bot.send_whisper(BATTLEBOT_USERNAME, '!move{}'.format(move_index), allow_command_prefix=True)
 
     def _execute_switch(self):
