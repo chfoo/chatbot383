@@ -234,9 +234,9 @@ class BattleBot(object):
             '''
             SELECT id, species_id
             FROM pokemon
-            WHERE replace(identifier, '-', '') = ?
+            WHERE replace(identifier, '-', '') LIKE ?
             ''',
-            (slug,)
+            ('{}%'.format(slug),)
         ).fetchone()
 
         if not row:

@@ -8,7 +8,7 @@ POKEDEX = os.environ.get('POKEDEX', 'veekun_pokedex.sqlite')
 
 
 class MockBot(object):
-    def send_whisper(self, username, text):
+    def send_whisper(self, username, text, allow_command_prefix=True):
         print('->', username, text)
 
     def send_text(self, channel, text):
