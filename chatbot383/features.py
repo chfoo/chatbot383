@@ -11,6 +11,7 @@ import time
 import arrow
 
 from chatbot383.bot import Limiter
+from chatbot383.featurecomponents.battlebot import BattleBot
 from chatbot383.featurecomponents.matchgen import MatchGenerator, MatchError
 from chatbot383.featurecomponents.tellnextdb import TellnextGenerator
 from chatbot383.featurecomponents.tokennotify import TokenNotifier
@@ -157,6 +158,10 @@ class Features(object):
 
         if os.path.isfile(config.get('veekun_pokedex_database', '')):
             self._match_generator = MatchGenerator(config['veekun_pokedex_database'])
+            self._battlebot = BattleBot(config['veekun_pokedex_database'], self._bot)
+
+            bot.register_message_handler('pubmsg', self._battlebot.message_callback)
+            bot.register_message_handler('whisper', self._battlebot.message_callback)
 
         self._mail_disabled_channels = config.get('mail_disabled_channels')
         self._avoid_pikalaxbot = config.get('avoid_pikalaxbot')
