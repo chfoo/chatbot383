@@ -326,7 +326,7 @@ class Features(object):
                     session.reply('{} {}!'.format(gen_roar(), error.args[0].title()))
                     return
 
-                if _random.random() < 0.1:
+                if _random.random() < 0.05:
                     new_text = gen_roar()
                     fake_out = True
                 else:
