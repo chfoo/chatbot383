@@ -507,9 +507,18 @@ class Features(object):
         session.say('{}'.format(_random.choice(('Kappa //', gen_roar()))))
 
     def _xd_command(self, session):
-        session.say('{} xD MingLee'.format(
-            gen_roar().lower().replace('!', '?'))
-        )
+        num = random.randint(0, 2)
+
+        if num == 0:
+            formatted_text = '{} xD MingLee'.format(
+                gen_roar().lower().replace('!', '?')
+            )
+        elif num == 1:
+            formatted_text = '{} xD MingLee'.format(gen_roar())
+        else:
+            formatted_text = 'xD MingLee'
+
+        session.say(formatted_text)
 
     def _xd_rand_command(self, session):
         if _random.random() < 0.1 or \
