@@ -11,7 +11,8 @@ from chatbot383.util import weighted_choice
 BATTLEBOT_USERNAME = 'wow_battlebot_onehand'
 BATTLEBOT_CHANNEL = '#_keredau_1423645868201'
 CHALLENGE_PATTERN = re.compile(r'You have been challenged to a Pokemon Battle by ([a-zA-Z0-9_]+)', re.IGNORECASE)
-SENDER_TEMPLATE_PATTERN = r'{} sends out ([^(]+) \(level (\d+)\)'
+SENDER_PATTERN = re.compile(r'([a-zA-Z0-9_]+) sends out ([^(]+) \(level (\d+)\)', re.IGNORECASE)
+SWITCH_PATTERN = re.compile(r'([a-zA-Z0-9_]+) calls back .+ and sent out ([^!]+)!', re.IGNORECASE)
 PROMPT_FOR_MOVE_PATTERN = re.compile(r'What will [^ ]+ do\?', re.IGNORECASE)
 PROMPT_FOR_SWITCH_PATTERN = re.compile(r'Type !switch', re.IGNORECASE)
 MOVE_SELECTION_PATTERN = re.compile(r'What will ([^ ]+) do\? (.+) \(!help', re.IGNORECASE)
@@ -64,7 +65,7 @@ class BattleSession(object):
         return self._state
 
     @property
-    def current_pokemon(self):
+    def current_pokemon(self) -> PokemonStats:
         return self._current_pokemon
 
     @current_pokemon.setter
@@ -72,7 +73,7 @@ class BattleSession(object):
         self._current_pokemon = pokemon
 
     @property
-    def opponent_pokemon(self):
+    def opponent_pokemon(self) -> PokemonStats:
         return self._opponent_pokemon
 
     @opponent_pokemon.setter
@@ -122,6 +123,10 @@ class BattleBot(object):
         self._bot = bot
         self._battle_session = None
 
+    @property
+    def session(self) -> BattleSession:
+        return self._battle_session
+
     def message_callback(self, session: InboundMessageSession):
         event_type = session.message['event_type']
 
@@ -164,10 +169,14 @@ class BattleBot(object):
                 self._execute_switch()
             elif WINNER_PATTERN.search(text):
                 self._end_battle()
-            else:
+            elif SENDER_PATTERN.search(text):
                 self._parse_opponent_pokemon(text)
+            elif SWITCH_PATTERN.search(text):
+                self._parse_opponent_switch(text)
 
     def _start_battle(self, opponent_username: str):
+        opponent_username = opponent_username.lower()
+
         _logger.info('Start battle with %s', opponent_username)
 
         self._battle_session = BattleSession(opponent_username, self._get_type_efficacy_table())
@@ -209,16 +218,36 @@ class BattleBot(object):
                      pokemon.dex_info.species_id, pokemon.moves)
 
     def _parse_opponent_pokemon(self, text):
-        pattern = SENDER_TEMPLATE_PATTERN.format(self._battle_session.opponent_username)
-        match = re.search(pattern, text, re.IGNORECASE)
+        matches = SENDER_PATTERN.finditer(text)
+
+        for match in matches:
+            if match:
+                username = match.group(1).lower()
+                if username != self._battle_session.opponent_username:
+                    continue
+
+                name = match.group(2)
+                level = int(match.group(3))
+
+                opponent_pokemon = self._new_pokemon(name)
+                self._battle_session.opponent_pokemon = opponent_pokemon
+                self._battle_session.opponent_pokemon.level = level
+
+                _logger.info('Opponent pokemon: %s',
+                             opponent_pokemon.dex_info.species_id)
+
+    def _parse_opponent_switch(self, text):
+        match = SWITCH_PATTERN.search(text)
 
         if match:
-            name = match.group(1)
-            level = int(match.group(2))
+            username = match.group(1).lower()
+            if username != self._battle_session.opponent_username:
+                return
+
+            name = match.group(2)
 
             opponent_pokemon = self._new_pokemon(name)
             self._battle_session.opponent_pokemon = opponent_pokemon
-            self._battle_session.opponent_pokemon.level = level
 
             _logger.info('Opponent pokemon: %s',
                          opponent_pokemon.dex_info.species_id)
