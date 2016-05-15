@@ -1,6 +1,9 @@
 Commands
 ========
 
+This is a help page for a chat bot. If you are trying to learn about a Twitch stream, please read the description by scrolling down the page or clicking the "i" icon button on mobile. (Traditional Twitch Plays streams do not have "!help" or "!commands" :P .)
+
+
 ``!help``
     Show link to this page.
 
