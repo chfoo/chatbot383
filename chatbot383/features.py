@@ -170,7 +170,7 @@ class Features(object):
         bot.register_message_handler('action', self._collect_recent_message)
         bot.register_command(r's/(.+/.*)', self._regex_command)
         bot.register_command(r'(?i)!double(team)?($|\s.*)', self._double_command)
-        bot.register_command(r'(?i)!(groudonger)?help($|\s.*)', self._help_command)
+        bot.register_command(r'(?i)!(groudonger)?(help|commands)($|\s.*)', self._help_command)
         bot.register_command(r'(?i)!groudon(ger)?($|\s.*)', self._roar_command)
         bot.register_command(r'(?i)!hypestats($|\s.*)', self._hype_stats_command)
         bot.register_command(r'(?i)!klappa($|\s.*)', self._klappa_command)
