@@ -8,13 +8,14 @@ import time
 
 import irc.strings
 
+from chatbot383.client import Client
 from chatbot383.util import split_utf8
 
 _logger = logging.getLogger(__name__)
 
 
 class InboundMessageSession(object):
-    def __init__(self, message, bot, client):
+    def __init__(self, message: dict, bot: 'Bot', client: Client):
         self._message = message
         self._bot = bot
         self._client = client
@@ -22,15 +23,15 @@ class InboundMessageSession(object):
         self.skip_rate_limit = False
 
     @property
-    def message(self):
+    def message(self) -> dict:
         return self._message
 
     @property
-    def bot(self):
+    def bot(self) -> 'Bot':
         return self._bot
 
     @property
-    def client(self):
+    def client(self) -> Client:
         return self._client
 
     def reply(self, text, me=False, multiline=False):
@@ -44,7 +45,8 @@ class InboundMessageSession(object):
 
 
 class Bot(object):
-    def __init__(self, channels, main_client, inbound_queue,
+    def __init__(self, channels, main_client: Client,
+                 inbound_queue: queue.Queue,
                  ignored_users=None, lurk_channels=()):
         self._channels = frozenset(irc.strings.lower(channel) for channel in channels)
         self._lurk_channels = frozenset(irc.strings.lower(channel) for channel in lurk_channels)
@@ -69,15 +71,23 @@ class Bot(object):
         self._message_handlers.append((event_type, func))
 
     @property
-    def scheduler(self):
+    def scheduler(self) -> sched.scheduler:
         return self._scheduler
 
     @classmethod
-    def is_group_chat(cls, channel_name):
+    def is_group_chat(cls, channel_name: str) -> bool:
         return channel_name.startswith('#_')
 
+    @property
+    def user_limiter(self) -> Limiter:
+        return self._user_limiter
+
+    @property
+    def channel_spam_limiter(self) -> Limiter:
+        return self._channel_spam_limiter
+
     @classmethod
-    def is_text_safe(cls, text, allow_command_prefix=False):
+    def is_text_safe(cls, text: str, allow_command_prefix: bool=False):
         if text == '':
             return True
 
@@ -161,7 +171,7 @@ class Bot(object):
         if event_type in ('pubmsg', 'action'):
             self._process_text_commands(session)
 
-    def _process_text_commands(self, session):
+    def _process_text_commands(self, session: InboundMessageSession):
         message = session.message
         text = message['text']
         username = message['username']
@@ -193,14 +203,14 @@ class Bot(object):
 
                     break
 
-    def _process_message_handlers(self, session):
+    def _process_message_handlers(self, session: InboundMessageSession):
         event_type = session.message['event_type']
 
         for command_event_type, command_func in self._message_handlers:
             if event_type == command_event_type:
                 command_func(session)
 
-    def _join_channels(self, session):
+    def _join_channels(self, session: InboundMessageSession):
         channels = self._channels | self._lurk_channels
 
         for channel in channels:
@@ -212,7 +222,7 @@ class Limiter(object):
         self._min_interval = min_interval
         self._table = {}
 
-    def is_ok(self, key):
+    def is_ok(self, key) -> bool:
         if key not in self._table:
             return True
 
