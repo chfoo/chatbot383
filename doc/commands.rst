@@ -44,6 +44,9 @@ This is a help page for a chat bot. If you are trying to learn about a Twitch st
 ``!mailstatus`` or ``!poststatus``
     Number of unread and unread messages.
 
+``!mute``
+    Make the bot ignore everyone in the chat room for a minute.
+
 ``!pick item1, item2, item3, ...``
    Randomly select one of ``item``.
 
@@ -55,6 +58,9 @@ This is a help page for a chat bot. If you are trying to learn about a Twitch st
 
 ``!release thing``
     Release ``thing`` back into the wild.
+
+``!reverse text``
+    Reverse the order of characters in ``text``.
 
 ``!riot``, ``!riot thing``
     Riot or riot about ``thing``.
@@ -76,6 +82,9 @@ This is a help page for a chat bot. If you are trying to learn about a Twitch st
 
 ``!xd``
     Smiling face with open mouth and tightly-closed eyes
+
+``!wordshuffle text``
+    Shuffle words in ``text``.
 
 ``!wow``
     Generate a short story or fanfic.

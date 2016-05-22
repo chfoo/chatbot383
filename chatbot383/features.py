@@ -1,4 +1,5 @@
 import collections
+import configparser
 import copy
 import json
 import logging
@@ -10,7 +11,7 @@ import time
 
 import arrow
 
-from chatbot383.bot import Limiter
+from chatbot383.bot import Limiter, Bot, InboundMessageSession
 from chatbot383.featurecomponents.battlebot import BattleBot
 from chatbot383.featurecomponents.matchgen import MatchGenerator, MatchError
 from chatbot383.featurecomponents.tellnextdb import TellnextGenerator
@@ -134,7 +135,8 @@ class Features(object):
     TOO_LONG_TEXT_TEMPLATE = '{} Message length exceeds my capabilities!'
     MAIL_MAX_LEN = 300
 
-    def __init__(self, bot, help_text, database, config):
+    def __init__(self, bot: Bot, help_text: str, database: Database,
+                 config: configparser.ConfigParser):
         self._bot = bot
         self._help_text = help_text
         self._database = database
@@ -176,13 +178,15 @@ class Features(object):
         bot.register_command(r'(?i)!klappa($|\s.*)', self._klappa_command)
         bot.register_command(r'(?i)!(mail|post)($|\s.*)$', self._mail_command)
         bot.register_command(r'(?i)!(mail|post)status($|\s.*)', self._mail_status_command)
+        bot.register_command(r'(?i)!mute($|\s.*)', self._mute_command, ignore_rate_limit=True)
         bot.register_command(r'(?i)!pick\s+(.*)', self._pick_command)
         bot.register_command(r'(?i)!praise($|\s.{,100})$', self._praise_command)
-        bot.register_command(r'(?i)!(?:shuffle|scramble)($|\s.*)', self._shuffle_command)
+        bot.register_command(r'(?i)!(word)?(?:shuffle|scramble)($|\s.*)', self._shuffle_command)
         bot.register_command(r'(?i)!song($|\s.{,50})$', self._song_command)
         bot.register_command(r'(?i)!sort($|\s.*)', self._sort_command)
         bot.register_command(r'(?i)!rand(?:om)?case($|\s.*)', self._rand_case_command)
         bot.register_command(r'(?i)!release($|\s.{,100})$', self._release_command)
+        bot.register_command(r'(?i)!reverse($|\s.*)', self._reverse_command)
         bot.register_command(r'(?i)!riot($|\s.{,100})$', self._riot_command)
         bot.register_command(r'(?i)!rip($|\s.{,100})$', self._rip_command)
         bot.register_command(r'(?i)!roomsize?($|\s.*)', self._room_size_command)
@@ -218,7 +222,7 @@ class Features(object):
         return len(text.encode('utf-8', 'replace')) > 400
 
     @classmethod
-    def _try_say_or_reply_too_long(cls, formatted_text, session):
+    def _try_say_or_reply_too_long(cls, formatted_text, session: InboundMessageSession):
         if cls.is_too_long(formatted_text):
             session.reply(cls.TOO_LONG_TEXT_TEMPLATE.format(gen_roar()))
             return False
@@ -226,7 +230,7 @@ class Features(object):
             session.say(formatted_text)
             return True
 
-    def _collect_recent_message(self, session):
+    def _collect_recent_message(self, session: InboundMessageSession):
         if session.message['event_type'] in ('pubmsg', 'action'):
             channel = session.message['channel']
             username = session.message['username']
@@ -238,13 +242,13 @@ class Features(object):
                 if not session.message['text'].startswith('!'):
                     self._last_message[channel] = session.message
 
-    def _help_command(self, session):
+    def _help_command(self, session: InboundMessageSession):
         session.reply('{} {}'.format(gen_roar(), self._help_text))
 
-    def _roar_command(self, session):
+    def _roar_command(self, session: InboundMessageSession):
         session.say('{} {} {}'.format(gen_roar(), gen_roar(), gen_roar().upper()))
 
-    def _hype_stats_command(self, session):
+    def _hype_stats_command(self, session: InboundMessageSession):
         stats_filename = self._config.get('hype_stats_filename')
 
         if not stats_filename or \
@@ -273,7 +277,7 @@ class Features(object):
             session.say(text_1)
             session.say(text_2)
 
-    def _regex_command(self, session):
+    def _regex_command(self, session: InboundMessageSession):
         channel = session.message['channel']
         if self._avoid_pikalaxbot and 'pikalaxbot' in self._user_list[channel]:
             session.skip_rate_limit = True
@@ -355,7 +359,7 @@ class Features(object):
         session.reply('{} Your request does not apply to any recent messages!'
                       .format(gen_roar()))
 
-    def _double_command(self, session):
+    def _double_command(self, session: InboundMessageSession):
         text = session.match.group(2).strip()
         last_message = self._last_message.get(session.message['channel'])
 
@@ -369,7 +373,12 @@ class Features(object):
 
         self._try_say_or_reply_too_long(formatted_text, session)
 
-    def _pick_command(self, session):
+    def _mute_command(self, session: InboundMessageSession):
+        channel = session.message['channel']
+        if self._bot.channel_spam_limiter.is_ok(channel):
+            self._bot.channel_spam_limiter.update(channel, offset=60)
+
+    def _pick_command(self, session: InboundMessageSession):
         text = session.match.group(1).strip()
 
         if not text:
@@ -380,7 +389,7 @@ class Features(object):
 
         self._try_say_or_reply_too_long(formatted_text, session)
 
-    def _praise_command(self, session):
+    def _praise_command(self, session: InboundMessageSession):
         text = session.match.group(1).strip()
 
         if text:
@@ -390,8 +399,9 @@ class Features(object):
 
         self._try_say_or_reply_too_long(formatted_text, session)
 
-    def _shuffle_command(self, session):
-        text = session.match.group(1).strip()
+    def _shuffle_command(self, session: InboundMessageSession):
+        word_shuffle = bool(session.match.group(1))
+        text = session.match.group(2).strip()
         last_message = self._last_message.get(session.message['channel'])
 
         if not text and last_message:
@@ -399,15 +409,21 @@ class Features(object):
         elif not text:
             text = 'Groudonger'
 
-        shuffle_list = list(text)
+        if word_shuffle:
+            shuffle_list = text.split()
+            sep = ' '
+        else:
+            shuffle_list = list(text)
+            sep = ''
+
         _random.shuffle(shuffle_list)
-        shuffle_text = ''.join(shuffle_list).strip()
+        shuffle_text = sep.join(shuffle_list).strip()
 
         formatted_text = '{} Shuffled! {}'.format(gen_roar(), shuffle_text)
 
         self._try_say_or_reply_too_long(formatted_text, session)
 
-    def _song_command(self, session):
+    def _song_command(self, session: InboundMessageSession):
         limiter_key = ('song', session.message['channel'])
         if not self._spam_limiter.is_ok(limiter_key):
             return
@@ -423,7 +439,7 @@ class Features(object):
 
         self._spam_limiter.update(limiter_key)
 
-    def _sort_command(self, session):
+    def _sort_command(self, session: InboundMessageSession):
         text = session.match.group(1).strip()
         last_message = self._last_message.get(session.message['channel'])
 
@@ -437,7 +453,7 @@ class Features(object):
 
         self._try_say_or_reply_too_long(formatted_text, session)
 
-    def _rand_case_command(self, session):
+    def _rand_case_command(self, session: InboundMessageSession):
         text = session.match.group(1).strip()
         last_message = self._last_message.get(session.message['channel'])
 
@@ -454,7 +470,21 @@ class Features(object):
 
         self._try_say_or_reply_too_long(formatted_text, session)
 
-    def _release_command(self, session):
+    def _reverse_command(self, session: InboundMessageSession):
+        text = session.match.group(1).strip()
+        last_message = self._last_message.get(session.message['channel'])
+
+        if not text and last_message:
+            text = last_message['text']
+        elif not text:
+            text = 'Groudonger'
+
+        reversed_text = ''.join(reversed(text))
+        formatted_text = '{} Reversed! {}'.format(gen_roar(), reversed_text)
+
+        self._try_say_or_reply_too_long(formatted_text, session)
+
+    def _release_command(self, session: InboundMessageSession):
         text = session.match.group(1).strip() or session.message['nick']
 
         formatted_text = \
@@ -464,7 +494,7 @@ class Features(object):
 
         self._try_say_or_reply_too_long(formatted_text, session)
 
-    def _riot_command(self, session):
+    def _riot_command(self, session: InboundMessageSession):
         text = session.match.group(1).strip()
 
         if text:
@@ -485,7 +515,7 @@ class Features(object):
 
         self._try_say_or_reply_too_long(formatted_text, session)
 
-    def _rip_command(self, session):
+    def _rip_command(self, session: InboundMessageSession):
         text = session.match.group(1).strip() or session.message['nick']
 
         formatted_text = \
@@ -495,7 +525,7 @@ class Features(object):
 
         self._try_say_or_reply_too_long(formatted_text, session)
 
-    def _room_size_command(self, session):
+    def _room_size_command(self, session: InboundMessageSession):
         formatted_text = \
             '{} {} users in chat room.'.format(
                 gen_roar(), len(self._user_list[session.message['channel']])
@@ -503,7 +533,7 @@ class Features(object):
 
         self._try_say_or_reply_too_long(formatted_text, session)
 
-    def _klappa_command(self, session):
+    def _klappa_command(self, session: InboundMessageSession):
         session.say('{}'.format(_random.choice(('Kappa //', gen_roar()))))
 
     def _xd_command(self, session):
@@ -520,7 +550,7 @@ class Features(object):
 
         session.say(formatted_text)
 
-    def _xd_rand_command(self, session):
+    def _xd_rand_command(self, session: InboundMessageSession):
         if _random.random() < 0.1 or \
                 session.message['username'] == 'wow_deku_onehand' and \
                 session.message['text'].strip() == 'xD MingLee':
@@ -531,13 +561,13 @@ class Features(object):
                 re.sub('!', rep_func, gen_roar().lower()))
             )
 
-    def _wow_command(self, session):
+    def _wow_command(self, session: InboundMessageSession):
         if self._tellnext_generator:
             session.say('> {}'.format(self._tellnext_generator.get_paragraph()))
         else:
             session.reply('{} Feature not available!'.format(gen_roar()))
 
-    def _mail_command(self, session):
+    def _mail_command(self, session: InboundMessageSession):
         if session.message['channel'] in self._mail_disabled_channels:
             session.reply(
                 '{} My mail services cannot be used here.'
@@ -602,7 +632,7 @@ class Features(object):
                     multiline=True
                 )
 
-    def _mail_status_command(self, session):
+    def _mail_status_command(self, session: InboundMessageSession):
         unread_count = self._database.get_status_count('unread')
         read_count = self._database.get_status_count('read')
 
@@ -615,7 +645,7 @@ class Features(object):
             )
         )
 
-    def _generate_match_command(self, session):
+    def _generate_match_command(self, session: InboundMessageSession):
         if not self._match_generator:
             session.reply('{} Feature not available!'.format(gen_roar()))
             return
@@ -632,12 +662,12 @@ class Features(object):
             _logger.exception('Generate match error')
             session.reply('{} An error occurred when generating a match!'.format(gen_roar()))
 
-    def _join_callback(self, session):
+    def _join_callback(self, session: InboundMessageSession):
         usernames = self._user_list[session.message['channel']]
         username = session.message['username']
         usernames.add(username)
 
-    def _part_callback(self, session):
+    def _part_callback(self, session: InboundMessageSession):
         usernames = self._user_list[session.message['channel']]
         username = session.message['username']
 
