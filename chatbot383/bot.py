@@ -6,6 +6,7 @@ import itertools
 import sched
 import time
 
+import collections
 import irc.strings
 
 from chatbot383.client import Client
@@ -44,6 +45,13 @@ class InboundMessageSession(object):
                             multiline=multiline)
 
 
+RegisteredCommandInfo = collections.namedtuple(
+    'RegisteredCommandInfo', [
+        'command_regex', 'func', 'ignore_rate_limit'
+    ]
+)
+
+
 class Bot(object):
     def __init__(self, channels, main_client: Client,
                  inbound_queue: queue.Queue,
@@ -64,8 +72,8 @@ class Bot(object):
 
         assert self._main_client.inbound_queue == inbound_queue
 
-    def register_command(self, command_regex, func):
-        self._commands.append((command_regex, func))
+    def register_command(self, command_regex, func, ignore_rate_limit=False):
+        self._commands.append(RegisteredCommandInfo(command_regex, func, ignore_rate_limit))
 
     def register_message_handler(self, event_type, func):
         self._message_handlers.append((event_type, func))
@@ -184,24 +192,30 @@ class Bot(object):
         if channel in self._lurk_channels:
             return
 
-        if username != our_username:
-            if not self._user_limiter.is_ok(username):
-                return
-            if not self._channel_spam_limiter.is_ok(channel):
-                return
+        if username == our_username:
+            return
 
-            for pattern, command_func in self._commands:
-                match = re.match(pattern, text)
+        for registered_command_info in self._commands:
+            pattern = registered_command_info.command_regex
+            command_func = registered_command_info.func
+            ignore_rate_limit = registered_command_info.ignore_rate_limit
+            match = re.match(pattern, text)
 
-                if match:
-                    session.match = match
-                    command_func(session)
+            if match:
+                if not ignore_rate_limit:
+                    if not self._user_limiter.is_ok(username):
+                        return
+                    if not self._channel_spam_limiter.is_ok(channel):
+                        return
 
-                    if not session.skip_rate_limit:
-                        self._user_limiter.update(username)
-                        self._channel_spam_limiter.update(channel)
+                session.match = match
+                command_func(session)
 
-                    break
+                if not session.skip_rate_limit and not ignore_rate_limit:
+                    self._user_limiter.update(username)
+                    self._channel_spam_limiter.update(channel)
+
+                break
 
     def _process_message_handlers(self, session: InboundMessageSession):
         event_type = session.message['event_type']
