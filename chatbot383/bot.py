@@ -79,11 +79,11 @@ class Bot(object):
         return channel_name.startswith('#_')
 
     @property
-    def user_limiter(self) -> Limiter:
+    def user_limiter(self) -> 'Limiter':
         return self._user_limiter
 
     @property
-    def channel_spam_limiter(self) -> Limiter:
+    def channel_spam_limiter(self) -> 'Limiter':
         return self._channel_spam_limiter
 
     @classmethod
@@ -230,8 +230,8 @@ class Limiter(object):
 
         return time_now - self._table[key] > self._min_interval
 
-    def update(self, key):
-        self._table[key] = time.time()
+    def update(self, key, offset=0.0):
+        self._table[key] = time.time() + offset
 
         if len(self._table) > 500:
             key = random.choice(self._table)
