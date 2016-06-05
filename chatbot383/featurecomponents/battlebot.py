@@ -103,7 +103,7 @@ class BattleSession(object):
             accuracy = move_info.accuracy / 100 if move_info.accuracy else 1.0
 
             if not move_info.power:
-                score = 0
+                score = 10
             else:
                 score = move_info.power * total_damage_factor * accuracy * stab
 
