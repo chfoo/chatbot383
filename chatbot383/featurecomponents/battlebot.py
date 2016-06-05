@@ -37,8 +37,10 @@ class NotFound(Exception):
 
 
 class BattleState(enum.Enum):
-    challenged = 'challenged'
+    idle = 'idle'
     in_battle = 'in_battle'
+    in_pwt_battle = 'in_pwt_battle'
+    in_pwt_standby = 'in_pwt_standby'
 
 
 class PokemonStats(object):
@@ -52,17 +54,12 @@ class BattleSession(object):
     def __init__(self, opponent_username: str, type_efficacy_table: dict):
         self._opponent_username = opponent_username
         self._type_efficacy_table = type_efficacy_table
-        self._state = BattleState.challenged
         self._current_pokemon = None
         self._opponent_pokemon = None
 
     @property
     def opponent_username(self):
         return self._opponent_username
-
-    @property
-    def state(self):
-        return self._state
 
     @property
     def current_pokemon(self) -> PokemonStats:
@@ -122,6 +119,7 @@ class BattleBot(object):
         self._con = sqlite3.connect(db_path)
         self._bot = bot
         self._battle_session = None
+        self._battle_state = BattleState.idle
 
     @property
     def session(self) -> BattleSession:
@@ -160,8 +158,9 @@ class BattleBot(object):
     def _parse_text(self, text):
         if CHALLENGE_PATTERN.search(text):
             self._start_battle(CHALLENGE_PATTERN.search(text).group(1))
+            self._battle_state = BattleState.in_battle
 
-        if self._battle_session:
+        if self._battle_state == BattleState.in_battle:
             if PROMPT_FOR_MOVE_PATTERN.search(text):
                 self._parse_current_moves(text)
                 self._execute_move()
@@ -169,6 +168,7 @@ class BattleBot(object):
                 self._execute_switch()
             elif WINNER_PATTERN.search(text):
                 self._end_battle()
+                self._battle_state = BattleState.idle
             elif SENDER_PATTERN.search(text):
                 self._parse_opponent_pokemon(text)
             elif SWITCH_PATTERN.search(text):
