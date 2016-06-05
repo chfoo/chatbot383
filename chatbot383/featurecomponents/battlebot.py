@@ -8,15 +8,23 @@ from chatbot383.bot import InboundMessageSession, Bot
 from chatbot383.roar import gen_roar
 from chatbot383.util import weighted_choice
 
+OUR_USERNAME = 'groudonger'
+
 BATTLEBOT_USERNAME = 'wow_battlebot_onehand'
 BATTLEBOT_CHANNEL = '#_keredau_1423645868201'
+
 CHALLENGE_PATTERN = re.compile(r'You have been challenged to a Pokemon Battle by ([a-zA-Z0-9_]+)', re.IGNORECASE)
+PWT_BATTLE_START_PATTERN = re.compile(r'tournament! This match is between.* ([a-zA-Z0-9_]+) and.* ([a-zA-Z0-9_]+)', re.IGNORECASE)
+
 SENDER_PATTERN = re.compile(r'([a-zA-Z0-9_]+) sends out ([^(]+) \(level (\d+)\)', re.IGNORECASE)
 SWITCH_PATTERN = re.compile(r'([a-zA-Z0-9_]+) calls back .+ and sent out ([^!]+)!', re.IGNORECASE)
+
 PROMPT_FOR_MOVE_PATTERN = re.compile(r'What will [^ ]+ do\?', re.IGNORECASE)
 PROMPT_FOR_SWITCH_PATTERN = re.compile(r'Type !switch', re.IGNORECASE)
 MOVE_SELECTION_PATTERN = re.compile(r'What will ([^ ]+) do\? (.+) \(!help', re.IGNORECASE)
+
 WINNER_PATTERN = re.compile(r'(\w+) wins!', re.IGNORECASE)
+PWT_GRAND_WINNER_PATTERN = re.compile(r'(\w+) has won the .+ Pokemon World Tournament', re.IGNORECASE)
 
 
 _logger = logging.getLogger(__name__)
@@ -125,6 +133,10 @@ class BattleBot(object):
     def session(self) -> BattleSession:
         return self._battle_session
 
+    @property
+    def state(self) -> BattleState:
+        return self._battle_state
+
     def message_callback(self, session: InboundMessageSession):
         event_type = session.message['event_type']
 
@@ -159,20 +171,33 @@ class BattleBot(object):
         if CHALLENGE_PATTERN.search(text):
             self._start_battle(CHALLENGE_PATTERN.search(text).group(1))
             self._battle_state = BattleState.in_battle
+        elif PWT_BATTLE_START_PATTERN.search(text):
+            match = PWT_BATTLE_START_PATTERN.search(text)
+            if self._start_pwt_battle(match.group(1), match.group(2)):
+                self._battle_state = BattleState.in_pwt_battle
 
-        if self._battle_state == BattleState.in_battle:
+        if self._battle_state in (BattleState.in_battle, BattleState.in_pwt_battle):
             if PROMPT_FOR_MOVE_PATTERN.search(text):
                 self._parse_current_moves(text)
                 self._execute_move()
             elif PROMPT_FOR_SWITCH_PATTERN.search(text):
                 self._execute_switch()
             elif WINNER_PATTERN.search(text):
-                self._end_battle()
-                self._battle_state = BattleState.idle
+                if self._battle_state == BattleState.in_pwt_battle:
+                    self._end_pwt_battle()
+                    self._battle_state = BattleState.in_pwt_standby
+                else:
+                    self._end_battle()
+                    self._battle_state = BattleState.idle
             elif SENDER_PATTERN.search(text):
                 self._parse_opponent_pokemon(text)
             elif SWITCH_PATTERN.search(text):
                 self._parse_opponent_switch(text)
+
+        elif self._battle_state == BattleState.in_pwt_standby:
+            if PWT_GRAND_WINNER_PATTERN.search(text):
+                self._end_pwt(PWT_GRAND_WINNER_PATTERN.search(text).group(1))
+                self._battle_state = BattleState.idle
 
     def _start_battle(self, opponent_username: str):
         opponent_username = opponent_username.lower()
@@ -184,10 +209,43 @@ class BattleBot(object):
         self._bot.send_text(BATTLEBOT_CHANNEL, gen_roar())
         self._bot.send_whisper(BATTLEBOT_USERNAME, '!accept', allow_command_prefix=True)
 
+    def _start_pwt_battle(self, username1: str, username2: str) -> bool:
+        username1 = username1.lower()
+        username2 = username2.lower()
+
+        if username2 == OUR_USERNAME:
+            opponent_username = username1
+        elif username1 == OUR_USERNAME:
+            opponent_username = username2
+        else:
+            return False
+
+        assert opponent_username != OUR_USERNAME, opponent_username
+
+        _logger.info('Start PWT battle with %s', opponent_username)
+
+        self._battle_session = BattleSession(opponent_username, self._get_type_efficacy_table())
+
+        self._bot.send_text(BATTLEBOT_CHANNEL, gen_roar())
+
+        return True
+
     def _end_battle(self):
         _logger.info('End battle')
         self._bot.send_text(BATTLEBOT_CHANNEL, gen_roar())
         self._battle_session = None
+
+    def _end_pwt_battle(self):
+        _logger.info('End PWT battle')
+        self._bot.send_text(BATTLEBOT_CHANNEL, gen_roar())
+        self._battle_session = None
+
+    def _end_pwt(self, winner: str):
+        _logger.info('End PWT')
+        winner = winner.lower()
+
+        if winner == OUR_USERNAME:
+            self._bot.send_text(BATTLEBOT_CHANNEL, gen_roar())
 
     def _execute_move(self):
         move_index = self._battle_session.get_move() + 1
