@@ -1,7 +1,9 @@
 Commands
 ========
 
-This is a help page for a chat bot. If you are trying to learn about a Twitch stream, please read the description by scrolling down the page or clicking the "i" icon button on mobile. (Traditional Twitch Plays streams do not have "!help" or "!commands" :P .)
+This is a help page for a chat bot run by someone else. If you are trying
+to learn about a Twitch stream, please read the description by scrolling
+down the page or clicking the "i" icon button on mobile.
 
 
 ``!help``
@@ -88,3 +90,7 @@ This is a help page for a chat bot. If you are trying to learn about a Twitch st
 
 ``!wow``
     Generate a short story or fanfic.
+
+To prevent spam, you can only use a command every 5 seconds. Also, if
+people use the bot at the same time, it will only respond to the first
+command to avoid being overloaded.
