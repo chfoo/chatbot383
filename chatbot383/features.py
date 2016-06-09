@@ -130,7 +130,8 @@ class Features(object):
         'I cry and start to whine ┌༼@ل͜@༽┐'
         'But never need to worry ༼ ºل͟º༽ '
         'my {donger}\'s staying strong ヽ༼ຈل͜ຈ༽ﾉ'
-        'A {donger} saved is a {donger} earned so sing the {donger} song!'
+        'A {donger} saved is a {donger} earned so sing the {donger} song! '
+        'ᕦ༼ຈل͜ຈ༽ᕤ'
     )
     TOO_LONG_TEXT_TEMPLATE = '{} Message length exceeds my capabilities!'
     MAIL_MAX_LEN = 300
