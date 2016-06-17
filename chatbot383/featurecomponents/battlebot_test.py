@@ -1,6 +1,8 @@
 import os
 import unittest
 
+import collections
+
 from chatbot383.featurecomponents.battlebot import BattleBot, BattleState
 
 POKEDEX = os.environ.get('POKEDEX', 'veekun_pokedex.sqlite')
@@ -47,16 +49,22 @@ class TestBattleBot(unittest.TestCase):
             battle_bot.session.opponent_pokemon.dex_info.species_id
         )
 
-        battle_bot._parse_text(
-            'What will Tentacool do? '
-            '(!move1)Icy-wind, (!move2)Water-gun, (!move3)Acid, '
-            '(!move4)Knock-off (!help)Additional Commands '
-            '(reply in Battle Dungeon)'
-        )
-        self.assertIn(
-            bot.last_whisper[1],
-            ('!move1', '!move2', '!move3', '!move4')
-        )
+        move_counter = collections.Counter()
+
+        for dummy in range(100):
+            battle_bot._parse_text(
+                'What will Tentacool do? '
+                '(!move1)Icy-wind, (!move2)Water-gun, (!move3)Acid, '
+                '(!move4)Knock-off (!help)Additional Commands '
+                '(reply in Battle Dungeon)'
+            )
+            self.assertIn(
+                bot.last_whisper[1],
+                ('!move1', '!move2', '!move3', '!move4')
+            )
+            move_counter[bot.last_whisper[1]] += 1
+
+        self.assertTrue('!move2', move_counter.most_common()[0][0])
 
         battle_bot._parse_text(
             'Type !list to get a list of your Pokemon. Type !switch<number> '
@@ -80,6 +88,46 @@ class TestBattleBot(unittest.TestCase):
 
         self.assertTrue(bot.last_text[1].startswith('G'))
         self.assertEqual(BattleState.idle, battle_bot.state)
+
+    def test_no_moves(self):
+        bot = MockBot()
+        battle_bot = BattleBot(POKEDEX, bot)
+
+        self.assertEqual(BattleState.idle, battle_bot.state)
+
+        battle_bot._parse_text(
+            'You have been challenged to a Pokemon Battle by TestUser! '
+            'To accept, go to the Battle Dungeon and type !accept. '
+            'You have one minute.'
+        )
+        battle_bot._parse_text(
+            'BotUsername sends out Farfetch\'d (Level 97)! TestUser sends '
+            'out Gastly (Level 97)!'
+        )
+        self.assertEqual(
+            92,
+            battle_bot.session.opponent_pokemon.dex_info.species_id
+        )
+
+        move_counter = collections.Counter()
+
+        for dummy in range(100):
+            battle_bot._parse_text(
+                'What will Farfetch\'d do? '
+                '(!move1)Slash, (!move2)Feint, (!move3)Fury Attack, '
+                '(!move4)Leer (!help)Additional Commands '
+                '(reply in Battle Dungeon)'
+            )
+            self.assertIn(
+                bot.last_whisper[1],
+                ('!move1', '!move2', '!move3', '!move4')
+            )
+            move_counter[bot.last_whisper[1]] += 1
+
+        self.assertTrue(move_counter['!move1'])
+        self.assertTrue(move_counter['!move2'])
+        self.assertTrue(move_counter['!move3'])
+        self.assertTrue(move_counter['!move4'])
 
     def test_pwt_loser(self):
         self._pwt_iteration('loser')

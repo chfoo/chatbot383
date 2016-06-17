@@ -1,5 +1,6 @@
 import enum
 import logging
+import random
 import re
 import sqlite3
 import collections
@@ -114,7 +115,11 @@ class BattleSession(object):
 
             candidate_moves.append((index, score))
 
-        picked_move = weighted_choice(candidate_moves)
+        if all(score <= 10 for index, score in candidate_moves):
+            # Just fail wildly until switching is implemented
+            picked_move = random.choice(candidate_moves)[0]
+        else:
+            picked_move = weighted_choice(candidate_moves)
 
         _logger.info('Move candidates: %s', candidate_moves)
 
