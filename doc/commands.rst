@@ -6,8 +6,8 @@ to learn about a Twitch stream, please read the description by scrolling
 down the page or clicking the "i" icon button on mobile.
 
 
-``!help``
-    Show link to this page.
+``!help``, ``!commands``
+    Show link to this page. You may need to use ``!help`` instead for other bots.
 
 ``s/pattern/replacement/options``
     Correct someone's message.
