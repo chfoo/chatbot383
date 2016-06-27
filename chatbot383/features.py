@@ -192,7 +192,8 @@ class Features(object):
         bot.register_command(r'(?i)!rip($|\s.{,100})$', self._rip_command)
         bot.register_command(r'(?i)!roomsize?($|\s.*)', self._room_size_command)
         bot.register_command(r'(?i)!gen(?:erate)?match($|\s.*)$', self._generate_match_command)
-        bot.register_command(r'(?i)!(xd|minglee|chfoo)($|\s.*)', self._xd_command)
+        bot.register_command(r'(?i)!(xd|minglee)($|\s.*)', self._xd_command)
+        # bot.register_command(r'(?i)!(set)?{}($|\s.*)'.format(username), self._username_command)
         # Temporary disabled. interferes with rate limit
         # bot.register_command(r'.*\b[xX][dD] +MingLee\b.*', self._xd_rand_command)
         bot.register_command(r'(?i)!(wow)($|\s.*)', self._wow_command)
