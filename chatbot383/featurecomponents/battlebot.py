@@ -24,9 +24,9 @@ PROMPT_FOR_MOVE_PATTERN = re.compile(r'What will [^ ]+ do\?', re.IGNORECASE)
 PROMPT_FOR_SWITCH_PATTERN = re.compile(r'Type !switch', re.IGNORECASE)
 MOVE_SELECTION_PATTERN = re.compile(r'What will ([^ ]+) do\? (.+) \(!help', re.IGNORECASE)
 
-WINNER_PATTERN = re.compile(r'(\w+) wins!', re.IGNORECASE)
-PWT_GRAND_WINNER_PATTERN = re.compile(r'(\w+) has won the .+ Pokemon World Tournament', re.IGNORECASE)
-
+WINNER_PATTERN = re.compile(r'([a-zA-Z0-9_]+) wins!', re.IGNORECASE)
+PWT_GRAND_WINNER_PATTERN = re.compile(r'([a-zA-Z0-9_]+) has won the .+ Pokemon World Tournament', re.IGNORECASE)
+LOSER_PATTERN = re.compile(r'([a-zA-Z0-9_]+) is out of usable Pokemon', re.IGNORECASE)
 
 _logger = logging.getLogger(__name__)
 
@@ -127,10 +127,11 @@ class BattleSession(object):
 
 
 class BattleBot(object):
-    def __init__(self, db_path: str, bot: Bot):
+    def __init__(self, db_path: str, bot: Bot, our_username=OUR_USERNAME):
         self._path = db_path
         self._con = sqlite3.connect(db_path)
         self._bot = bot
+        self._our_username = our_username.lower()
         self._battle_session = None
         self._battle_state = BattleState.idle
 
@@ -192,7 +193,9 @@ class BattleBot(object):
                     self._end_pwt_battle()
                     self._battle_state = BattleState.in_pwt_standby
                 else:
-                    self._end_battle()
+                    winner_username = WINNER_PATTERN.search(text).group(1)
+                    loser_username = LOSER_PATTERN.search(text).group(1)
+                    self._end_battle(winner_username, loser_username)
                     self._battle_state = BattleState.idle
             elif SENDER_PATTERN.search(text):
                 self._parse_opponent_pokemon(text)
@@ -218,14 +221,14 @@ class BattleBot(object):
         username1 = username1.lower()
         username2 = username2.lower()
 
-        if username2 == OUR_USERNAME:
+        if username2 == self._our_username:
             opponent_username = username1
-        elif username1 == OUR_USERNAME:
+        elif username1 == self._our_username:
             opponent_username = username2
         else:
             return False
 
-        assert opponent_username != OUR_USERNAME, opponent_username
+        assert opponent_username != self._our_username, opponent_username
 
         _logger.info('Start PWT battle with %s', opponent_username)
 
@@ -235,9 +238,15 @@ class BattleBot(object):
 
         return True
 
-    def _end_battle(self):
+    def _end_battle(self, winner_username, loser_username):
+        winner_username = winner_username.lower()
+        loser_username = loser_username.lower()
         _logger.info('End battle')
-        self._bot.send_text(BATTLEBOT_CHANNEL, gen_roar())
+
+        if frozenset([winner_username, loser_username]) == frozenset([self._our_username, self._battle_session.opponent_username]):
+            self._bot.send_text(BATTLEBOT_CHANNEL, gen_roar())
+        else:
+            _logger.warning('Winner username %s or loser username %s not recognized', winner_username, loser_username)
         self._battle_session = None
 
     def _end_pwt_battle(self):
@@ -249,7 +258,7 @@ class BattleBot(object):
         _logger.info('End PWT')
         winner = winner.lower()
 
-        if winner == OUR_USERNAME:
+        if winner == self._our_username:
             self._bot.send_text(BATTLEBOT_CHANNEL, gen_roar())
 
     def _execute_move(self):

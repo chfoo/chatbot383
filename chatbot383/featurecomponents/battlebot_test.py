@@ -25,7 +25,7 @@ class MockBot(object):
 class TestBattleBot(unittest.TestCase):
     def test_battle(self):
         bot = MockBot()
-        battle_bot = BattleBot(POKEDEX, bot)
+        battle_bot = BattleBot(POKEDEX, bot, 'BotUsername')
 
         self.assertEqual(BattleState.idle, battle_bot.state)
 
