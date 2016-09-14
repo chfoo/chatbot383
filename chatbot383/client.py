@@ -29,6 +29,8 @@ class Client(irc.client.SimpleIRCClient):
         self._inbound_queue = inbound_queue or queue.Queue(100)
         self._outbound_queue = queue.Queue(10)
 
+        self.reactor.execute_every(300, self._keep_alive)
+
     @property
     def inbound_queue(self):
         return self._inbound_queue
@@ -284,6 +286,10 @@ class Client(irc.client.SimpleIRCClient):
             (item.get('key'), item.get('value'))
             for item in tags
         ])
+
+    def _keep_alive(self):
+        if self.connection.is_connected():
+            self.connection.ping('keep-alive')
 
 
 class ClientThread(threading.Thread):
