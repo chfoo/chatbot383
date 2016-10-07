@@ -102,13 +102,13 @@ class Database(object):
                 (username,)
             ).fetchone()
 
-            if row[0] >= 10:
+            if row[0] >= 20:
                 raise SenderOutboxFullError()
 
             row = self._con.execute('''SELECT count(1) FROM mail
             WHERE status = 'unread' LIMIT 1''').fetchone()
 
-            if row[0] >= 100:
+            if row[0] >= 500:
                 raise MailbagFullError()
 
             self._con.execute('''INSERT INTO mail
