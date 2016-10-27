@@ -1,0 +1,6 @@
+{
+  "username": "username_here",
+  "password": "oauth:oauth_token_here",
+  "log_file": "log_filename_here.log",
+  "pokedex_database": "path/to/veekun_pokedex.sqlite"
+}
