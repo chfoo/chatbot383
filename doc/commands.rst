@@ -91,6 +91,6 @@ down the page or clicking the "i" icon button on mobile.
 ``!wow``
     Generate a short story or fanfic.
 
-To prevent spam, you can only use a command every 5 seconds. Also, if
+To prevent spam, you can only use a command every 4 seconds. Also, if
 people use the bot at the same time, it will only respond to the first
 command to avoid being overloaded.

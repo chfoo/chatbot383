@@ -61,8 +61,8 @@ class Bot(object):
         self._main_client = main_client
         self._inbound_queue = inbound_queue
         self._ignored_users = frozenset(ignored_users or ())
-        self._user_limiter = Limiter(min_interval=5)
-        self._channel_spam_limiter = Limiter(min_interval=1)
+        self._user_limiter = Limiter(min_interval=4)
+        self._channel_spam_limiter = Limiter(min_interval=0.5)
         self._scheduler = sched.scheduler()
 
         self._commands = []
@@ -232,7 +232,7 @@ class Bot(object):
 
 
 class Limiter(object):
-    def __init__(self, min_interval=5):
+    def __init__(self, min_interval: float=5):
         self._min_interval = min_interval
         self._table = {}
 
