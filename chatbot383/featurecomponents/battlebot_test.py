@@ -263,4 +263,5 @@ class TestBattleBot(unittest.TestCase):
 
         self.assertEqual(BattleState.idle, battle_bot.state)
 
-
+    def test_slugify_accents(self):
+        self.assertEqual('flabebe', BattleBot.slugify('Flabébé'))

@@ -5,6 +5,8 @@ import re
 import sqlite3
 import collections
 
+import unicodedata
+
 from chatbot383.bot import InboundMessageSession, Bot
 from chatbot383.roar import gen_roar
 from chatbot383.util import weighted_choice
@@ -398,5 +400,12 @@ class BattleBot(object):
         if no_dash:
             text = text.replace('-', '')
 
+        text = cls.remove_accents(text)
         text = re.sub(r'[^a-zA-Z-]', '', text)
         return text
+
+    @classmethod
+    def remove_accents(cls, input_str):
+        # http://stackoverflow.com/a/517974/1524507
+        nfkd_form = unicodedata.normalize('NFKD', input_str)
+        return "".join([c for c in nfkd_form if not unicodedata.combining(c)])

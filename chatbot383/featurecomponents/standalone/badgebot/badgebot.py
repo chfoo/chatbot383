@@ -16,6 +16,8 @@ import sqlite3
 
 import math
 
+import unicodedata
+
 _logger = logging.getLogger(__name__)
 
 IRC_RATE_LIMIT = (20 - 0.5) / 30
@@ -446,8 +448,15 @@ class BadgeBot(object):
         if no_dash:
             text = text.replace('-', '')
 
+        text = cls.remove_accents(text)
         text = re.sub(r'[^a-zA-Z-]', '', text)
         return text
+
+    @classmethod
+    def remove_accents(cls, input_str):
+        # http://stackoverflow.com/a/517974/1524507
+        nfkd_form = unicodedata.normalize('NFKD', input_str)
+        return "".join([c for c in nfkd_form if not unicodedata.combining(c)])
 
 
 TRADING_INTERVAL = 30  # in minutes, on the minute. how often to schedule trading
