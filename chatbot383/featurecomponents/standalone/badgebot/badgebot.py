@@ -317,12 +317,12 @@ class BadgeBot(object):
         assert num_available > 0
 
         if num_available <= 100:
-            price = max(2, math.ceil(500 * 1 / math.sqrt((num_available + 0.4) * 5) - 8)) + random.choice([0, 0, 0, 0, 1, 2])
+            price = max(2, math.ceil(300 * 1 / math.sqrt((num_available + 1.2) * 2) - 8)) + random.choice([0, 0, 0, 0, 1, 2])
         else:
             price = max(2, math.ceil(500 * 1 / math.sqrt((num_available + 0.4) * 6) - 10))
         assert price > 0
         if num_available < 4:
-            assert price > 100
+            assert price > 80
         if num_available < 10:
             assert price > 50
 
