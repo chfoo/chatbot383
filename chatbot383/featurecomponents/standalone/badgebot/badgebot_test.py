@@ -1,7 +1,7 @@
 import os
 import unittest
 
-import TPPBotFacade, BadgeBot
+from badgebot import TPPBotFacade, BadgeBot
 
 POKEDEX = os.environ.get('POKEDEX', 'veekun_pokedex.sqlite')
 
