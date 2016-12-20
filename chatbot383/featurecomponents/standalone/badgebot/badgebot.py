@@ -321,7 +321,7 @@ class BadgeBot(object):
         else:
             price = math.ceil(500 * 1 / math.sqrt((num_available + 0.4) * 6) - 10)
 
-            if random.random() < 0.9:
+            if random.random() < 0.95:
                 price = max(2, price)
             else:
                 price = max(1, price)
