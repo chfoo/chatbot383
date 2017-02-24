@@ -117,6 +117,7 @@ class Client(irc.client.SimpleIRCClient):
         channel = irc.strings.lower(event.target)
         nick = self.tags_to_dict(event.tags).get('display-name') or event.source.nick
         username = irc.strings.lower(event.source.nick)
+        user_id = self.tags_to_dict(event.tags).get('user-id')
 
         if not event.arguments:
             return
@@ -129,13 +130,15 @@ class Client(irc.client.SimpleIRCClient):
             'channel': channel,
             'nick': nick,
             'username': username,
-            'text': text
+            'text': text,
+            'user_id': user_id,
         })
 
     def _on_action(self, connection, event):
         channel = irc.strings.lower(event.target)
         nick = self.tags_to_dict(event.tags).get('display-name') or event.source.nick
         username = irc.strings.lower(event.source.nick)
+        user_id = self.tags_to_dict(event.tags).get('user-id')
 
         if not event.arguments:
             return
@@ -148,7 +151,8 @@ class Client(irc.client.SimpleIRCClient):
             'channel': channel,
             'nick': nick,
             'username': username,
-            'text': text
+            'text': text,
+            'user_id': user_id,
         })
 
     def _on_pubnotice(self, connection, event):
@@ -179,13 +183,15 @@ class Client(irc.client.SimpleIRCClient):
         nick = event.source.nick
         username = irc.strings.lower(nick)
         text = event.arguments[0]
+        user_id = self.tags_to_dict(event.tags).get('user-id')
 
         self._inbound_queue.put({
             'client': self,
             'event_type': 'whisper',
             'nick': nick,
             'username': username,
-            'text': text
+            'text': text,
+            'user_id': user_id,
         })
 
     def _on_join(self, connection, event):
