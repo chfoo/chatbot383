@@ -594,7 +594,11 @@ class Features(object):
                 return
 
             try:
-                self._database.put_mail(session.message['username'], mail_text)
+                username = '{}!{}@twitch'.format(
+                    session.message['username'],
+                    session.message['user_id'] or ''
+                )
+                self._database.put_mail(username, mail_text)
             except SenderOutboxFullError:
                 session.reply(
                     '{} How embarrassing! Your outbox is full!'
@@ -627,12 +631,14 @@ class Features(object):
                     .format(gen_roar())
                 )
             else:
+                username = mail_info['username'].split('!')[0].title()
+
                 session.reply(
                     '{roar} I am delivering mail! '
                     'Here it is, {date}, from {username}: {msg}'
                     .format(
                         roar=gen_roar(),
-                        username=mail_info['username'].title(),
+                        username=username,
                         date=arrow.get(mail_info['timestamp']).humanize(),
                         msg=mail_info['text']),
                     multiline=True
