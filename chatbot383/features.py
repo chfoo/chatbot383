@@ -220,13 +220,13 @@ class Features(object):
         self._bot.scheduler.enter(interval, 0, self._token_notify_sched)
 
     @classmethod
-    def is_too_long(cls, text):
-        return len(text.encode('utf-8', 'replace')) > 400
+    def is_too_long(cls, text, max_byte_length=400):
+        return len(text.encode('utf-8', 'replace')) > max_byte_length
 
-    @classmethod
-    def _try_say_or_reply_too_long(cls, formatted_text, session: InboundMessageSession):
-        if cls.is_too_long(formatted_text):
-            session.reply(cls.TOO_LONG_TEXT_TEMPLATE.format(gen_roar()))
+    def _try_say_or_reply_too_long(self, formatted_text, session: InboundMessageSession):
+        max_byte_length = 1800 if self._bot.twitch_char_limit else 400
+        if self.is_too_long(formatted_text, max_byte_length):
+            session.reply(self.TOO_LONG_TEXT_TEMPLATE.format(gen_roar()))
             return False
         else:
             session.say(formatted_text)

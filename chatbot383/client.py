@@ -20,7 +20,7 @@ class InvalidTextError(ValueError):
 
 
 class Client(irc.client.SimpleIRCClient):
-    def __init__(self, inbound_queue=None):
+    def __init__(self, inbound_queue=None, twitch_char_limit=False):
         super().__init__()
 
         irc.client.ServerConnection.buffer_class.errors = 'replace'
@@ -28,6 +28,12 @@ class Client(irc.client.SimpleIRCClient):
         self._running = True
         self._inbound_queue = inbound_queue or queue.Queue(100)
         self._outbound_queue = queue.Queue(10)
+
+        self.twitch_char_limit = twitch_char_limit
+        if twitch_char_limit:
+            assert self.connection.send_raw
+            assert self.connection._prep_message
+            self.connection._prep_message = ClientMonkeyPatch._prep_message
 
         self.reactor.execute_every(300, self._keep_alive)
 
@@ -307,3 +313,20 @@ class ClientThread(threading.Thread):
 
     def stop(self):
         self._running = False
+
+
+class ClientMonkeyPatch:
+    @staticmethod
+    def _prep_message(string):
+        # The string should not contain any carriage return other than the
+        # one added here.
+        if '\n' in string:
+            msg = "Carriage returns not allowed in privmsg(text)"
+            raise irc.client.InvalidCharacters(msg)
+        bytes = string.encode('utf-8') + b'\r\n'
+        # According to the RFC http://tools.ietf.org/html/rfc2812#page-6,
+        # clients should not transmit more than 512 bytes.
+        # if len(bytes) > 512:
+        #     msg = "Messages limited to 512 bytes including CR/LF"
+        #     raise irc.client.MessageTooLong(msg)
+        return bytes

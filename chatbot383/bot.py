@@ -95,11 +95,12 @@ class Bot(object):
         return self._channel_spam_limiter
 
     @classmethod
-    def is_text_safe(cls, text: str, allow_command_prefix: bool=False):
+    def is_text_safe(cls, text: str, allow_command_prefix: bool=False,
+                     max_length: int=400, max_byte_length: int=450) -> bool:
         if text == '':
             return True
 
-        if len(text) > 400 or len(text.encode('utf-8', 'replace')) > 450:
+        if len(text) > max_length or len(text.encode('utf-8', 'replace')) > max_byte_length:
             return False
 
         if text[0] in './!`_' and not allow_command_prefix:
@@ -109,6 +110,14 @@ class Bot(object):
             return False
 
         return True
+
+    @property
+    def twitch_char_limit(self) -> bool:
+        return self._main_client.twitch_char_limit
+
+    @classmethod
+    def strip_unsafe_chars(cls, text: str) -> str:
+        return re.sub(r'[\x00-\x1f]', '', text)
 
     def run(self):
         while True:
@@ -132,15 +141,22 @@ class Bot(object):
         if reply_to:
             text = '@{}, {}'.format(reply_to, text)
 
+        max_length = 500 if self._main_client.twitch_char_limit else 400
+        max_byte_length = 1800 if self._main_client.twitch_char_limit else 400
         if multiline:
-            lines = self.split_multiline(text)
+            lines = self.split_multiline(text, max_byte_length)
         else:
             lines = (text,)
 
         del text
 
         for line in lines:
-            if not self.is_text_safe(line) or channel not in self._channels:
+            line = self.strip_unsafe_chars(line)
+
+            if not self.is_text_safe(
+                    line, max_length=max_length,
+                    max_byte_length=max_byte_length) or \
+                    channel not in self._channels:
                 _logger.info('Discarded message %s %s',
                              ascii(channel), ascii(line))
                 return
@@ -148,6 +164,8 @@ class Bot(object):
             client.privmsg(channel, line, action=me)
 
     def send_whisper(self, username, text, allow_command_prefix=False):
+        text = self.strip_unsafe_chars(text)
+
         if not self.is_text_safe(text, allow_command_prefix=allow_command_prefix):
             _logger.info('Discarded message %s %s', ascii(username), ascii(text))
             return

@@ -9,7 +9,9 @@ class App(object):
     def __init__(self, config):
         self._config = config
         inbound_queue = queue.Queue(100)
-        self._main_client = Client(inbound_queue=inbound_queue)
+        self._main_client = Client(
+            inbound_queue=inbound_queue,
+            twitch_char_limit='.twitch.tv:' in config['main_server'])
         self._main_client_thread = ClientThread(self._main_client)
         channels = self._config['channels']
         self._bot = Bot(channels, self._main_client,
