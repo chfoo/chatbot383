@@ -14,7 +14,6 @@ import arrow
 from chatbot383.bot import Limiter, Bot, InboundMessageSession
 from chatbot383.featurecomponents.battlebot import BattleBot
 from chatbot383.featurecomponents.matchgen import MatchGenerator, MatchError
-from chatbot383.featurecomponents.tellnextdb import TellnextGenerator
 from chatbot383.featurecomponents.tokennotify import TokenNotifier
 from chatbot383.regex import RegexServer, RegexTimeout
 from chatbot383.roar import gen_roar
@@ -22,6 +21,11 @@ from chatbot383.roar import gen_roar
 
 _logger = logging.getLogger(__name__)
 _random = random.Random()
+
+try:
+    from chatbot383.featurecomponents.tellnextdb import TellnextGenerator
+except ImportError:
+    _logger.warning('Tellnext feature not available', exc_info=True)
 
 
 class MailbagFullError(ValueError):
