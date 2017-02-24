@@ -160,16 +160,22 @@ class BetBot(object):
         is_dead_hours = 6 < current_datetime.hour < 13
 
         if random.random() <= 0.5:
-            if random.random() < 0.6 or is_dead_hours or self._token_balance < self.BALANCE_TEETER_THRESHOLD:
+            if self._token_balance < self.BALANCE_TEETER_THRESHOLD:
                 price = 1
             else:
-                price = 2
+                if random.random() < 0.6 or is_dead_hours:
+                    price = random.choice([1, 1, 1, 1, 1, 1, 2, 2, 2, 3])
+                else:
+                    price = random.choice([1, 1, 2, 2, 2, 2, 3, 3, 3, 4])
             self._tpp_bot.place_buy_order(team, price=price, duration=duration)
         else:
-            if random.random() < 0.6 or is_dead_hours or self._token_balance < self.BALANCE_TEETER_THRESHOLD:
+            if self._token_balance < self.BALANCE_TEETER_THRESHOLD:
                 price = 9
             else:
-                price = 8
+                if random.random() < 0.6 or is_dead_hours:
+                    price = random.choice([9, 9, 9, 9, 9, 8, 8, 8, 8, 7])
+                else:
+                    price = random.choice([9, 9, 8, 8, 8, 8, 7, 7, 7, 6])
             self._tpp_bot.place_sell_order(team, price=price, duration=duration)
 
 
