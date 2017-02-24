@@ -229,7 +229,7 @@ class Features(object):
 
     def _try_say_or_reply_too_long(self, formatted_text, session: InboundMessageSession):
         max_byte_length = 1800 if self._bot.twitch_char_limit else 400
-        if self.is_too_long(formatted_text, max_byte_length):
+        if len(formatted_text) > 500 or self.is_too_long(formatted_text, max_byte_length):
             session.reply(self.TOO_LONG_TEXT_TEMPLATE.format(gen_roar()))
             return False
         else:
