@@ -138,7 +138,7 @@ class Features(object):
         'ᕦ༼ຈل͜ຈ༽ᕤ'
     )
     TOO_LONG_TEXT_TEMPLATE = '{} Message length exceeds my capabilities!'
-    MAIL_MAX_LEN = 300
+    MAIL_MAX_LEN = 500
 
     def __init__(self, bot: Bot, help_text: str, database: Database,
                  config: configparser.ConfigParser):
