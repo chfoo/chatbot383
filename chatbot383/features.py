@@ -427,7 +427,13 @@ class Features(object):
 
         formatted_text = '{} Shuffled! {}'.format(gen_roar(), shuffle_text)
 
-        self._try_say_or_reply_too_long(formatted_text, session)
+        if self._config.get('ignore_slimo', False) and \
+                ('chatotdungeon' in session.message['channel'] or
+                 'electricnet' in session.message['channel']) and \
+                session.message['username'].startswith('slimoleq'):
+            pass
+        else:
+            self._try_say_or_reply_too_long(formatted_text, session)
 
     def _song_command(self, session: InboundMessageSession):
         limiter_key = ('song', session.message['channel'])
