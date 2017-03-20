@@ -66,11 +66,24 @@ class TPPBotFacade(object):
 
 class BetBot(object):
     # \/ Please adjust these:
-    MIN_BALANCE = 105  # minimum number of tokens to do anything
-    BALANCE_TEETER_THRESHOLD = 140  # min num of tokens for regular betting
-    BETTING_CHANCE = 0.6  # chance per match to bet
-    CONSERVATIVE_BETTING_CHANCE = 0.45  # chance per match to bet conservatively
+    MIN_BALANCE = 80  # minimum number of tokens to do anything
+    TIER_BALANCE_THRESHOLD = (85, 90, 100, 120, 130, 140)
+    TIER_BUY_PRICES = (
+        (1,),
+        (1, 1, 1, 1, 1, 1, 2, 2, 2, 3),
+        (1, 1, 2, 2, 2, 2, 3, 3, 3, 4),
+        (1, 2, 2, 2, 2, 2, 3, 4, 5, 6),
+        (1, 2, 2, 3, 3, 3, 3, 4, 5, 6),
+        (2, 2, 3, 4, 4, 5, 5, 5, 5, 6),
+    )
+    TIER_SELL_PRICES = tuple(
+        tuple(10 - price for price in prices) for prices in TIER_BUY_PRICES
+    )
+    TIER_BET_CHANCES = (0.4, 0.45, 0.5, 0.6, 0.65, 0.65)
     # /\
+    assert len(TIER_BALANCE_THRESHOLD) == len(TIER_BUY_PRICES) == \
+        len(TIER_SELL_PRICES) == len(TIER_BET_CHANCES)
+    assert TIER_BUY_PRICES[0][0] + TIER_SELL_PRICES[0][0] == 10
 
     def __init__(self, tpp_bot: TPPBotFacade):
         self._battle_state = BattleState.waiting
@@ -98,16 +111,28 @@ class BetBot(object):
         timestamp_now = time.time()
         is_dead_hours = 6 < current_datetime.hour < 13
 
-        chance = self.CONSERVATIVE_BETTING_CHANCE if self._token_balance <= self.BALANCE_TEETER_THRESHOLD else self.BETTING_CHANCE
+        chance = 0
+        current_tier = 0
+
+        for tier_index, tier_balance in enumerate(self.TIER_BET_CHANCES):
+            chance = self.TIER_BET_CHANCES[tier_index]
+            current_tier = tier_index
+
+            if self._token_balance < tier_balance:
+                break
+
         if is_dead_hours:
             chance -= 0.1
+            current_tier -= 1
+            if current_tier < 0:
+                current_tier = 0
 
         if self._token_balance > self.MIN_BALANCE and \
                 (current_datetime.minute <= 2 or 15 <= current_datetime.minute <= 59) and \
                         random.random() < chance and \
                                 timestamp_now - self._cool_off_timestamp > 60:
             self._cool_off_timestamp = timestamp_now
-            self._place_bet()
+            self._place_bet(current_tier)
         else:
             _logger.info('Not betting')
 
@@ -147,35 +172,21 @@ class BetBot(object):
         self._bet_placed = False
         self._battle_state = BattleState.waiting
 
-    def _place_bet(self):
+    def _place_bet(self, tier_index):
         _logger.info('Placing bet...')
 
         assert not self._bet_placed
 
         self._bet_placed = True
 
-        current_datetime = datetime.datetime.utcnow()
         team = 'blue' if random.randint(0, 1) else 'red'
         duration = random.randint(2, 3)
-        is_dead_hours = 6 < current_datetime.hour < 13
 
         if random.random() <= 0.5:
-            if self._token_balance < self.BALANCE_TEETER_THRESHOLD:
-                price = 1
-            else:
-                if random.random() < 0.6 or is_dead_hours:
-                    price = random.choice([1, 1, 1, 1, 1, 1, 2, 2, 2, 3])
-                else:
-                    price = random.choice([1, 1, 2, 2, 2, 2, 3, 3, 3, 4])
+            price = random.choice(self.TIER_BUY_PRICES[tier_index])
             self._tpp_bot.place_buy_order(team, price=price, duration=duration)
         else:
-            if self._token_balance < self.BALANCE_TEETER_THRESHOLD:
-                price = 9
-            else:
-                if random.random() < 0.6 or is_dead_hours:
-                    price = random.choice([9, 9, 9, 9, 9, 8, 8, 8, 8, 7])
-                else:
-                    price = random.choice([9, 9, 8, 8, 8, 8, 7, 7, 7, 6])
+            price = random.choice(self.TIER_SELL_PRICES[tier_index])
             self._tpp_bot.place_sell_order(team, price=price, duration=duration)
 
 
