@@ -58,12 +58,24 @@ class Database(object):
             ON mail (status)
             ''')
 
-    def get_mail(self, skip_username=None):
+    def get_mail(self, skip_username=None, skip_user_id=None):
         with self._con:
-            row = self._con.execute(
-                '''SELECT id, username, text, timestamp FROM
-                mail WHERE status = ? AND username != ? LIMIT 1''',
-                ('unread', skip_username or '')).fetchone()
+            query = ['SELECT id, username, text, timestamp FROM mail',
+                     'WHERE status = ?']
+            params = ['unread']
+
+            if skip_username:
+                query.append('AND username != ?')
+                params.append(skip_username)
+
+            if skip_user_id:
+                assert '!' not in skip_user_id
+                query.append("AND username NOT LIKE '%!' || ?")
+                params.append(skip_user_id)
+
+            query.append('LIMIT 1')
+
+            row = self._con.execute(' '.join(query), params).fetchone()
 
             if row:
                 mail_info = {
@@ -75,7 +87,7 @@ class Database(object):
                 WHERE id = ?''', ('read', row[0]))
                 return mail_info
 
-    def get_old_mail(self):
+    def get_old_mail(self, skip_username=None, skip_user_id=None):
         with self._con:
             row = self._con.execute('''SELECT max(id) FROM mail''').fetchone()
 
@@ -83,11 +95,22 @@ class Database(object):
 
             for dummy in range(10):
                 # Retry a few times until we get an old one
-                row = self._con.execute(
-                    '''SELECT username, text, timestamp FROM
-                    mail WHERE status = ? AND id > ?''',
-                    ('read', _random.randint(0, max_id))
-                ).fetchone()
+                query = ['SELECT username, text, timestamp FROM mail',
+                         'WHERE status = ? AND id > ?']
+                params = ['read', _random.randint(0, max_id)]
+
+                if skip_username:
+                    query.append('AND username != ?')
+                    params.append(skip_username)
+
+                if skip_user_id:
+                    assert '!' not in skip_user_id
+                    query.append("AND username NOT LIKE '%!' || ?")
+                    params.append(skip_user_id)
+
+                query.append('LIMIT 1')
+
+                row = self._con.execute(' '.join(query), params).fetchone()
 
                 if row:
                     mail_info = {
@@ -618,15 +641,19 @@ class Features(object):
                     'Tremendous! I will deliver this mail to the next '
                     'recipient without fail! {}'.format(gen_roar()))
         else:
-            if _random.random() < 0.3:
-                mail_info = self._database.get_old_mail()
+            if _random.random() < 0.95:
+                skip_username = session.message['username']
+                skip_user_id = '{}@twitch'.format(session.message['user_id'])
             else:
-                if _random.random() < 0.7:
-                    skip_username = session.message['username']
-                else:
-                    skip_username = None
+                skip_username = None
+                skip_user_id = None
 
-                mail_info = self._database.get_mail(skip_username=skip_username)
+            if _random.random() < 0.3:
+                mail_info = self._database.get_old_mail(
+                    skip_username=skip_username, skip_user_id=skip_user_id)
+            else:
+                mail_info = self._database.get_mail(
+                    skip_username=skip_username, skip_user_id=skip_user_id)
 
                 if not mail_info and _random.random() < 0.3:
                     mail_info = self._database.get_old_mail()
