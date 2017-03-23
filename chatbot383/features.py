@@ -57,6 +57,13 @@ class Database(object):
             self._con.execute('''CREATE INDEX IF NOT EXISTS mail_status_index
             ON mail (status)
             ''')
+            self._con.execute('''CREATE TABLE IF NOT EXISTS greetings
+            (channel TEXT PRIMARY KEY,
+            timestamp INTEGER NOT NULL,
+            username TEXT NOT NULL,
+            text TEXT NOT NULL
+            )
+            ''')
 
     def get_mail(self, skip_username=None, skip_user_id=None):
         with self._con:
@@ -149,6 +156,20 @@ class Database(object):
 
             return row[0]
 
+    def set_greeting(self, channel, username, text):
+        with self._con:
+            self._con.execute('''INSERT OR REPLACE INTO greetings
+                (channel, timestamp, username, text) VALUES (?, ?, ?, ?)
+                ''', (channel, int(time.time()), username, text))
+
+    def get_greeting(self, channel):
+        with self._con:
+            row = self._con.execute('''SELECT text FROM greetings
+            WHERE channel = ? LIMIT 1''', (channel,)).fetchone()
+
+            if row:
+                return row[0]
+
 
 class Features(object):
     DONGER_SONG_TEMPLATE = (
@@ -200,6 +221,7 @@ class Features(object):
         bot.register_message_handler('action', self._collect_recent_message)
         bot.register_command(r's/(.+/.*)', self._regex_command)
         bot.register_command(r'(?i)!double(team)?($|\s.*)', self._double_command)
+        bot.register_command(r'(?i)!(set)?greet(ing)?($|\s.*)$', self._greeting_command)
         bot.register_command(r'(?i)!(groudonger)?(help|commands)($|\s.*)', self._help_command)
         bot.register_command(r'(?i)!groudon(ger)?($|\s.*)', self._roar_command)
         bot.register_command(r'(?i)!hypestats($|\s.*)', self._hype_stats_command)
@@ -401,6 +423,27 @@ class Features(object):
         formatted_text = '{} Doubled! {}'.format(gen_roar(), double_text)
 
         self._try_say_or_reply_too_long(formatted_text, session)
+
+    def _greeting_command(self, session: InboundMessageSession):
+        is_set = session.match.group(1)
+        text = session.match.group(3).strip()
+
+        if is_set:
+            self._database.set_greeting(
+                session.message['channel'],
+                session.message['user_id'] or session.message['username'],
+                text
+            )
+            session.reply('{} Greeting saved'.format(gen_roar()))
+        else:
+            greeting = self._database.get_greeting(session.message['channel'])
+
+            if greeting:
+                formatted_text = '{} {}'.format(gen_roar(), greeting)
+            else:
+                formatted_text = '{}'.format(gen_roar())
+
+            session.say(formatted_text, multiline=True)
 
     def _mute_command(self, session: InboundMessageSession):
         channel = session.message['channel']

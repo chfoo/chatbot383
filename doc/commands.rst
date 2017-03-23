@@ -28,6 +28,9 @@ down the page or clicking the "i" icon button on mobile.
       steel, fire, water, grass, electric, psychic, ice, dragon, dark,
       fairy (alias for normal)
 
+``!greet`` or ``!setgreeting text``
+    Show or set a greeting message for the current chat channel.
+
 ``!groudon`` or ``!groudonger``
     Roar.
 
