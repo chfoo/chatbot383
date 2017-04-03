@@ -114,7 +114,7 @@ class BetBot(object):
         chance = 0
         current_tier = 0
 
-        for tier_index, tier_balance in enumerate(self.TIER_BET_CHANCES):
+        for tier_index, tier_balance in enumerate(self.TIER_BALANCE_THRESHOLD):
             chance = self.TIER_BET_CHANCES[tier_index]
             current_tier = tier_index
 
@@ -173,7 +173,7 @@ class BetBot(object):
         self._battle_state = BattleState.waiting
 
     def _place_bet(self, tier_index):
-        _logger.info('Placing bet...')
+        _logger.info('Placing bet... Tier %s', tier_index)
 
         assert not self._bet_placed
 
