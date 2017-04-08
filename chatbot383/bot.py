@@ -10,7 +10,7 @@ import collections
 import irc.strings
 
 from chatbot383.client import Client
-from chatbot383.util import split_utf8
+from chatbot383.util import split_utf8, grouper
 
 _logger = logging.getLogger(__name__)
 
@@ -144,7 +144,10 @@ class Bot(object):
         max_length = 500 if self._main_client.twitch_char_limit else 400
         max_byte_length = 1800 if self._main_client.twitch_char_limit else 400
         if multiline:
-            lines = self.split_multiline(text, max_byte_length)
+            if self._main_client.twitch_char_limit:
+                lines = self.split_multiline(text, 400, split_bytes=False)
+            else:
+                lines = self.split_multiline(text, max_byte_length)
         else:
             lines = (text,)
 
@@ -175,8 +178,13 @@ class Bot(object):
         self._main_client.privmsg('#jtv', text)
 
     @classmethod
-    def split_multiline(cls, text, max_length=400):
-        for index, part in enumerate(split_utf8(text, max_length)):
+    def split_multiline(cls, text, max_length=400, split_bytes=True):
+        if split_bytes:
+            parts = split_utf8(text, max_length)
+        else:
+            parts = grouper(text, max_length)
+
+        for index, part in enumerate(parts):
             if index == 0:
                 yield part
             else:

@@ -1,4 +1,5 @@
 import random
+from itertools import zip_longest
 
 
 def split_utf8(text, max_length):
@@ -25,3 +26,10 @@ def weighted_choice(choices):
             return c
         upto += w
     assert False, "Shouldn't get here"
+
+
+def grouper(iterable, n, fillvalue=None):
+    "Collect data into fixed-length chunks or blocks"
+    # grouper('ABCDEFG', 3, 'x') --> ABC DEF Gxx"
+    args = [iter(iterable)] * n
+    return zip_longest(*args, fillvalue=fillvalue)
