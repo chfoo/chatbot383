@@ -182,7 +182,7 @@ class Bot(object):
         if split_bytes:
             parts = split_utf8(text, max_length)
         else:
-            parts = grouper(text, max_length)
+            parts = grouper(text, max_length, '')
 
         for index, part in enumerate(parts):
             if index == 0:
