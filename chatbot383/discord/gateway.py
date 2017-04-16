@@ -128,10 +128,13 @@ class IRCSession:
                 username = self._username
             source = '{}!{}@{}'.format(username, username, source)
 
-        self._writer.write(
-            ':{} {}\r\n'.format(source, ' '.join(str_args))
-            .encode('utf8', 'replace')
-        )
+        text = ':{} {}'.format(source, ' '.join(str_args))
+
+        if '\n' in text or '\r' in text:
+            raise ValueError('Naughty newlines found')
+
+        self._writer.write(text.encode('utf8', 'replace'))
+        self._writer.write(b'\r\n')
         yield from self._writer.drain()
 
     @asyncio.coroutine
@@ -228,7 +231,7 @@ class IRCSession:
 
         yield from self._reply(
             'PRIVMSG', CHANNEL_PREFIX + message.channel.id,
-            ':' + message.content,
+            ':' + message.content.replace('\n', ' ').replace('\r', ' '),
             tags={
                 'display-name': message.author.display_name,
                 'user-id': message.author.id
