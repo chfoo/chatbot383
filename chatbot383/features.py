@@ -690,9 +690,12 @@ class Features(object):
                     'Tremendous! I will deliver this mail to the next '
                     'recipient without fail! {}'.format(gen_roar()))
         else:
+            platform_name = session.get_platform_name()
+
             if _random.random() < 0.95:
                 skip_username = session.message['username']
-                skip_user_id = '{}@twitch'.format(session.message['user_id'])
+                skip_user_id = '{}@{}'.format(session.message['user_id'],
+                                              platform_name)
             else:
                 skip_username = None
                 skip_user_id = None

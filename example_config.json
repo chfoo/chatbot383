@@ -3,6 +3,8 @@
     "ssl": true,
     "username": "USERNAMEHERE",
     "password": "oauth:OAUTHTOKENHERE",
+    "discord_gateway_server": "localhost:10006",
+    "discord_token": "DISCORDTOKENHERE",
     "channels": [
         "#jtv", 
         "#_example_1234"

@@ -8,6 +8,7 @@ import time
 
 import collections
 import irc.strings
+from typing import Optional
 
 from chatbot383.client import Client
 from chatbot383.util import split_utf8, grouper
@@ -68,10 +69,12 @@ RegisteredCommandInfo = collections.namedtuple(
 class Bot(object):
     def __init__(self, channels, main_client: Client,
                  inbound_queue: queue.Queue,
-                 ignored_users=None, lurk_channels=()):
+                 ignored_users=None, lurk_channels=(),
+                 discord_client: Optional[Client]=None):
         self._channels = frozenset(irc.strings.lower(channel) for channel in channels)
         self._lurk_channels = frozenset(irc.strings.lower(channel) for channel in lurk_channels)
         self._main_client = main_client
+        self._discord_client = discord_client
         self._inbound_queue = inbound_queue
         self._ignored_users = frozenset(ignored_users or ())
         self._user_limiter = Limiter(min_interval=4)
@@ -149,7 +152,11 @@ class Bot(object):
     def send_text(self, channel, text, me=False, reply_to=None,
                   multiline=False, discord_reply=False):
         channel = irc.strings.lower(channel)
-        client = self._main_client
+
+        if self._discord_client and channel.startswith(chatbot383.discord.gateway.CHANNEL_PREFIX):
+            client = self._discord_client
+        else:
+            client = self._main_client
 
         if reply_to:
             if discord_reply:
@@ -157,10 +164,10 @@ class Bot(object):
             else:
                 text = '@{}, {}'.format(reply_to, text)
 
-        max_length = 500 if self._main_client.twitch_char_limit else 400
-        max_byte_length = 1800 if self._main_client.twitch_char_limit else 400
+        max_length = 500 if client.twitch_char_limit else 400
+        max_byte_length = 1800 if client.twitch_char_limit else 400
         if multiline:
-            if self._main_client.twitch_char_limit:
+            if client.twitch_char_limit:
                 lines = self.split_multiline(text, 400, split_bytes=False)
             else:
                 lines = self.split_multiline(text, max_byte_length)
@@ -207,7 +214,10 @@ class Bot(object):
                 yield '(...) ' + part
 
     def join(self, channel):
-        client = self._main_client
+        if channel.startswith(chatbot383.discord.gateway.CHANNEL_PREFIX):
+            client = self._discord_client
+        else:
+            client = self._main_client
 
         client.join(channel)
 
