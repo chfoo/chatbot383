@@ -100,6 +100,9 @@ class Database(object):
 
             max_id = row[0]
 
+            if max_id is None:
+                return
+
             for dummy in range(10):
                 # Retry a few times until we get an old one
                 query = ['SELECT username, text, timestamp FROM mail',
