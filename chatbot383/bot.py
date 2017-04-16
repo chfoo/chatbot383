@@ -11,6 +11,7 @@ import irc.strings
 
 from chatbot383.client import Client
 from chatbot383.util import split_utf8, grouper
+import chatbot383.discord.gateway
 
 _logger = logging.getLogger(__name__)
 
@@ -36,13 +37,25 @@ class InboundMessageSession(object):
         return self._client
 
     def reply(self, text, me=False, multiline=False):
+        if self.get_platform_name() == 'discord':
+            reply_to = self._message['user_id']
+        else:
+            reply_to = self._message['nick']
+
         self._bot.send_text(self._message['channel'], text, me=me,
-                            reply_to=self._message['nick'],
-                            multiline=multiline)
+                            reply_to=reply_to,
+                            multiline=multiline,
+                            discord_reply=self.get_platform_name() == 'discord')
 
     def say(self, text, me=False, multiline=False):
         self._bot.send_text(self._message['channel'], text, me=me,
                             multiline=multiline)
+
+    def get_platform_name(self) -> str:
+        if self.message['channel'].startswith(chatbot383.discord.gateway.CHANNEL_PREFIX):
+            return 'discord'
+        else:
+            return 'twitch'
 
 
 RegisteredCommandInfo = collections.namedtuple(
@@ -134,12 +147,15 @@ class Bot(object):
                 self._process_message(item, client)
 
     def send_text(self, channel, text, me=False, reply_to=None,
-                  multiline=False):
+                  multiline=False, discord_reply=False):
         channel = irc.strings.lower(channel)
         client = self._main_client
 
         if reply_to:
-            text = '@{}, {}'.format(reply_to, text)
+            if discord_reply:
+                text = '<@{}>, {}'.format(reply_to, text)
+            else:
+                text = '@{}, {}'.format(reply_to, text)
 
         max_length = 500 if self._main_client.twitch_char_limit else 400
         max_byte_length = 1800 if self._main_client.twitch_char_limit else 400

@@ -669,9 +669,12 @@ class Features(object):
                 return
 
             try:
-                username = '{}!{}@twitch'.format(
+                platform_name = session.get_platform_name()
+
+                username = '{}!{}@{}'.format(
                     session.message['username'],
-                    session.message['user_id'] or ''
+                    session.message['user_id'] or '',
+                    platform_name
                 )
                 self._database.put_mail(username, mail_text)
             except SenderOutboxFullError:
