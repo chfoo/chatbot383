@@ -121,11 +121,21 @@ class Database(object):
             if max_id is None:
                 return
 
+            min_id = 0
+
+            if channel:
+                row = self._con.execute(
+                    '''SELECT min(id) FROM mail WHERE CHANNEL = ?''',
+                    (channel,)
+                ).fetchone()
+                if row[0]:
+                    min_id = row[0]
+
             for dummy in range(10):
                 # Retry a few times until we get an old one
                 query = ['SELECT username, text, timestamp, channel FROM mail',
                          'WHERE status = ? AND id > ?']
-                params = ['read', _random.randint(0, max_id)]
+                params = ['read', _random.randint(min_id, max_id)]
 
                 if skip_username:
                     query.append('AND username != ?')
