@@ -105,7 +105,7 @@ class IRCSession:
             futures.update(pending)
 
     @classmethod
-    def escape_tag_value(self, text: str) -> str:
+    def escape_tag_value(cls, text: str) -> str:
         return text.replace('\\', '\\\\').replace('\r', '\\r')\
             .replace('\n', '\\n').replace(' ', '\\s').replace(';', '\\:')
 
@@ -236,7 +236,7 @@ class IRCSession:
                 'display-name': message.author.display_name,
                 'user-id': message.author.id
             },
-            username=message.author.name
+            username=self.escape_tag_value(message.author.name).replace(':', '_')
         )
 
 
