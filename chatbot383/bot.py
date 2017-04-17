@@ -48,6 +48,14 @@ class InboundMessageSession(object):
                             multiline=multiline,
                             discord_reply=self.get_platform_name() == 'discord')
 
+    def whisper(self, text):
+        if self.get_platform_name() == 'discord':
+            self._bot.send_discord_private_message(
+                self._message['user_id'], text
+            )
+        else:
+            self._bot.send_whisper(self._message['username'], text)
+
     def say(self, text, me=False, multiline=False):
         self._bot.send_text(self._message['channel'], text, me=me,
                             multiline=multiline)
@@ -153,7 +161,7 @@ class Bot(object):
                   multiline=False, discord_reply=False):
         channel = irc.strings.lower(channel)
 
-        if self._discord_client and channel.startswith(chatbot383.discord.gateway.CHANNEL_PREFIX):
+        if self._discord_client and self.get_platform_name(channel) == 'discord':
             client = self._discord_client
         else:
             client = self._main_client
@@ -200,6 +208,15 @@ class Bot(object):
 
         self._main_client.privmsg('#jtv', text)
 
+    def send_discord_private_message(self, username, text, allow_command_prefix=False):
+        text = self.strip_unsafe_chars(text)
+
+        if not self.is_text_safe(text, allow_command_prefix=allow_command_prefix):
+            _logger.info('Discarded message %s %s', ascii(username), ascii(text))
+            return
+
+        self._discord_client.privmsg(username, text)
+
     @classmethod
     def split_multiline(cls, text, max_length=400, split_bytes=True):
         if split_bytes:
@@ -214,7 +231,7 @@ class Bot(object):
                 yield '(...) ' + part
 
     def join(self, channel):
-        if channel.startswith(chatbot383.discord.gateway.CHANNEL_PREFIX):
+        if self.get_platform_name(channel) == 'discord':
             client = self._discord_client
         else:
             client = self._main_client
@@ -281,6 +298,13 @@ class Bot(object):
 
         for channel in channels:
             session.bot.join(channel)
+
+    @classmethod
+    def get_platform_name(cls, channel: str) -> str:
+        if channel.startswith(chatbot383.discord.gateway.CHANNEL_PREFIX):
+            return 'discord'
+        else:
+            return 'twitch'
 
 
 class Limiter(object):

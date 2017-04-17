@@ -209,14 +209,25 @@ class IRCSession:
 
         elif command.command == 'privmsg':
             channel = command.args[1]
-            channel = channel.replace(CHANNEL_PREFIX, '', 1)
 
-            if channel not in self._channel_ids:
-                yield from self._reply('442', ':Not joined in that channel')
+            if channel.startswith(CHANNEL_PREFIX):
+                channel = channel.replace(CHANNEL_PREFIX, '', 1)
+
+                if channel not in self._channel_ids:
+                    yield from self._reply('442', ':Not joined in that channel')
+                else:
+                    yield from self._discord_client.send_message(
+                        self._discord_client.get_channel(channel), command.text
+                    )
             else:
-                yield from self._discord_client.send_message(
-                    self._discord_client.get_channel(channel), command.text
-                )
+                try:
+                    user = yield from self._discord_client.get_user_info(channel)
+                except discord.NotFound:
+                    yield from self._reply('401', ':User not found')
+                else:
+                    yield from self._discord_client.send_message(
+                        user, command.text
+                    )
 
         else:
             yield from self._reply('421', command.command, ':Unknown command')
