@@ -188,7 +188,7 @@ class Features(object):
     MAIL_MAX_LEN = 500
 
     def __init__(self, bot: Bot, help_text: str, database: Database,
-                 config: configparser.ConfigParser):
+                 config: dict):
         self._bot = bot
         self._help_text = help_text
         self._database = database
