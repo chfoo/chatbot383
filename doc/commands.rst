@@ -34,6 +34,9 @@ down the page or clicking the "i" icon button on mobile.
 ``!groudon`` or ``!groudonger``
     Roar.
 
+``!huffle``
+    卅(◕‿◕)卅
+
 ``!hypestats``
     Chat activity and statistics for TPP chat.
 
