@@ -16,6 +16,9 @@
     "mail_disabled_channels": [
         "#child_friendly_channel"
     ],
+    "mail_restricted_channels": [
+        "#mail_will_be_from_this_channel_only_to_prevent_naughty_mail_leaking_in"
+    ],
 
     "x Optional specialized features; edit or remove below: ": null,
     "x hype_stats_filename": "./stats.json",

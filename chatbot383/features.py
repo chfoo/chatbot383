@@ -65,9 +65,22 @@ class Database(object):
             )
             ''')
 
-    def get_mail(self, skip_username=None, skip_user_id=None):
+            user_version = self._con.execute('PRAGMA user_version').fetchone()[0]
+
+            if user_version < 1:
+                self._con.execute(
+                    'ALTER TABLE mail ADD COLUMN channel TEXT'
+                )
+                self._con.execute(
+                    '''CREATE INDEX IF NOT EXISTS mail_channel_index
+                    ON mail (channel)
+                    ''')
+
+            self._con.execute('PRAGMA user_version = 1')
+
+    def get_mail(self, skip_username=None, skip_user_id=None, channel=None):
         with self._con:
-            query = ['SELECT id, username, text, timestamp FROM mail',
+            query = ['SELECT id, username, text, timestamp, channel FROM mail',
                      'WHERE status = ?']
             params = ['unread']
 
@@ -80,6 +93,10 @@ class Database(object):
                 query.append("AND username NOT LIKE '%!' || ?")
                 params.append(skip_user_id)
 
+            if channel:
+                query.append('AND channel = ?')
+                params.append(channel)
+
             query.append('LIMIT 1')
 
             row = self._con.execute(' '.join(query), params).fetchone()
@@ -89,12 +106,13 @@ class Database(object):
                     'username': row[1],
                     'text': row[2],
                     'timestamp': row[3],
+                    'channel': row[3]
                 }
                 self._con.execute('''UPDATE mail SET status = ?
                 WHERE id = ?''', ('read', row[0]))
                 return mail_info
 
-    def get_old_mail(self, skip_username=None, skip_user_id=None):
+    def get_old_mail(self, skip_username=None, skip_user_id=None, channel=None):
         with self._con:
             row = self._con.execute('''SELECT max(id) FROM mail''').fetchone()
 
@@ -105,7 +123,7 @@ class Database(object):
 
             for dummy in range(10):
                 # Retry a few times until we get an old one
-                query = ['SELECT username, text, timestamp FROM mail',
+                query = ['SELECT username, text, timestamp, channel FROM mail',
                          'WHERE status = ? AND id > ?']
                 params = ['read', _random.randint(0, max_id)]
 
@@ -118,6 +136,10 @@ class Database(object):
                     query.append("AND username NOT LIKE '%!' || ?")
                     params.append(skip_user_id)
 
+                if channel:
+                    query.append('AND channel = ?')
+                    params.append(channel)
+
                 query.append('LIMIT 1')
 
                 row = self._con.execute(' '.join(query), params).fetchone()
@@ -127,10 +149,11 @@ class Database(object):
                         'username': row[0],
                         'text': row[1],
                         'timestamp': row[2],
+                        'channel': row[3]
                     }
                     return mail_info
 
-    def put_mail(self, username, text):
+    def put_mail(self, username, text, channel):
         with self._con:
             row = self._con.execute(
                 '''SELECT count(1) FROM mail
@@ -149,8 +172,9 @@ class Database(object):
                 raise MailbagFullError()
 
             self._con.execute('''INSERT INTO mail
-            (timestamp, username, text, status) VALUES (?, ?, ?, 'unread')
-            ''', (int(time.time()), username, text))
+            (timestamp, username, text, status, channel)
+            VALUES (?, ?, ?, 'unread', ?)
+            ''', (int(time.time()), username, text, channel))
 
     def get_status_count(self, status):
         with self._con:
@@ -681,7 +705,8 @@ class Features(object):
                 session.message['user_id'] or '',
                 platform_name
             )
-            self._database.put_mail(username, mail_text)
+            self._database.put_mail(username, mail_text,
+                                    session.message['channel'])
         except SenderOutboxFullError:
             session.reply(
                 '{} How embarrassing! Your outbox is full!'
@@ -706,15 +731,25 @@ class Features(object):
             skip_username = None
             skip_user_id = None
 
+        channel = None
+
+        if session.message['channel'] in self._config.get('mail_restricted_channels', ()):
+            channel = session.message['channel']
+            _logger.debug('Restricting mail to channel %s', channel)
+
         if _random.random() < 0.3:
             mail_info = self._database.get_old_mail(
-                skip_username=skip_username, skip_user_id=skip_user_id)
+                skip_username=skip_username, skip_user_id=skip_user_id,
+                channel=channel
+            )
         else:
             mail_info = self._database.get_mail(
-                skip_username=skip_username, skip_user_id=skip_user_id)
+                skip_username=skip_username, skip_user_id=skip_user_id,
+                channel=channel
+            )
 
             if not mail_info and _random.random() < 0.3:
-                mail_info = self._database.get_old_mail()
+                mail_info = self._database.get_old_mail(channel=channel)
 
         if not mail_info:
             session.reply(
@@ -722,6 +757,9 @@ class Features(object):
                 .format(gen_roar())
             )
         else:
+            if channel:
+                assert mail_info['channel'] == channel
+
             username = mail_info['username'].split('!', 1)[0].title()
             username_extra = ''
             sender_platform = mail_info['username'].partition('@')[-1] or 'twitch'
@@ -745,12 +783,22 @@ class Features(object):
         unread_count = self._database.get_status_count('unread')
         read_count = self._database.get_status_count('read')
 
+        channel = session.message['channel']
+
+        disabled = channel in self._mail_disabled_channels
+        restricted = channel in self._config.get('mail_restricted_channels', ())
+
         session.reply(
-            '{roar} {unread} unread, {read} read, {total} total!'.format(
+            '{roar} {unread} unread, {read} read, {total} total! '
+            '(Channel={channel}, Disabled={disabled}, Restricted={restricted})'
+            .format(
                 roar=gen_roar(),
                 unread=unread_count,
                 read=read_count,
-                total=unread_count + read_count
+                total=unread_count + read_count,
+                channel=channel,
+                disabled=disabled,
+                restricted=restricted,
             )
         )
 
