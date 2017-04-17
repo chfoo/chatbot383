@@ -106,7 +106,7 @@ class Database(object):
                     'username': row[1],
                     'text': row[2],
                     'timestamp': row[3],
-                    'channel': row[3]
+                    'channel': row[4]
                 }
                 self._con.execute('''UPDATE mail SET status = ?
                 WHERE id = ?''', ('read', row[0]))
@@ -758,7 +758,7 @@ class Features(object):
             )
         else:
             if channel:
-                assert mail_info['channel'] == channel
+                assert mail_info['channel'] == channel, (mail_info['channel'], channel)
 
             username = mail_info['username'].split('!', 1)[0].title()
             username_extra = ''
