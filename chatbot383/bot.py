@@ -296,6 +296,17 @@ class Bot(object):
     def _join_channels(self, session: InboundMessageSession):
         channels = self._channels | self._lurk_channels
 
+        if session.client == self._discord_client:
+            channels = filter(
+                lambda chan: self.get_platform_name(chan) == 'discord',
+                channels
+            )
+        else:
+            channels = filter(
+                lambda chan: self.get_platform_name(chan) == 'twitch',
+                channels
+            )
+
         for channel in channels:
             session.bot.join(channel)
 
