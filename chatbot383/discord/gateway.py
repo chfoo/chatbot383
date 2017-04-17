@@ -8,6 +8,8 @@ import logging
 
 import discord
 
+from chatbot383.censor import censor_text
+
 _logger = logging.getLogger(__name__)
 
 CHANNEL_PREFIX = '&'
@@ -217,7 +219,8 @@ class IRCSession:
                     yield from self._reply('442', ':Not joined in that channel')
                 else:
                     yield from self._discord_client.send_message(
-                        self._discord_client.get_channel(channel), command.text
+                        self._discord_client.get_channel(channel),
+                        censor_text(command.text)
                     )
             else:
                 try:
