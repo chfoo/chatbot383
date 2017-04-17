@@ -774,12 +774,15 @@ class Features(object):
             if channel:
                 assert mail_info['channel'] == channel, (mail_info['channel'], channel)
 
-            username = mail_info['username'].split('!', 1)[0].title()
+            # From Discord proxy, space is escaped to \s and
+            # lowercase to |s via IRC rules
+            username = mail_info['username'].split('!', 1)[0]\
+                .replace('|s', ' ').title()
             username_extra = ''
             sender_platform = mail_info['username'].partition('@')[-1] or 'twitch'
 
             if platform_name != sender_platform:
-                username_extra = ' ({})'.format(sender_platform)
+                username_extra = ' ({})'.format(sender_platform.title())
 
             session.reply(
                 '{roar} I am delivering mail! '
