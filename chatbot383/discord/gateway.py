@@ -5,6 +5,8 @@ import asyncio
 import enum
 
 import logging
+import re
+import string
 
 import discord
 
@@ -250,8 +252,18 @@ class IRCSession:
                 'display-name': message.author.display_name,
                 'user-id': message.author.id
             },
-            username=self.escape_tag_value(message.author.name).replace(':', '_')
+            username=self.escape_username(message.author.name)
         )
+
+    @classmethod
+    def escape_username(cls, name: str) -> str:
+        name = cls.escape_tag_value(re.sub(r'[\x00-\x1f]', '', name))
+        name = re.sub(r'[:!@]', '_', name)
+
+        if name and name[0] not in string.ascii_letters + string.digits:
+            name = name[1:]
+
+        return name
 
 
 def main():
