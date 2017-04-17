@@ -659,75 +659,87 @@ class Features(object):
         mail_text = session.match.group(2).strip()
 
         if mail_text:
-            if len(mail_text) > self.MAIL_MAX_LEN:
-                session.reply(
-                    '{} Your message is too burdensome! '
-                    'Send a concise version instead. '
-                    '({}/{})'
-                    .format(gen_roar(), len(mail_text), self.MAIL_MAX_LEN)
-                )
-                return
-
-            try:
-                platform_name = session.get_platform_name()
-
-                username = '{}!{}@{}'.format(
-                    session.message['username'],
-                    session.message['user_id'] or '',
-                    platform_name
-                )
-                self._database.put_mail(username, mail_text)
-            except SenderOutboxFullError:
-                session.reply(
-                    '{} How embarrassing! Your outbox is full!'
-                    .format(gen_roar()))
-            except MailbagFullError:
-                session.reply(
-                    '{} Incredulous! My mailbag is full! Read one instead!'
-                    .format(gen_roar()))
-            else:
-                session.reply(
-                    'Tremendous! I will deliver this mail to the next '
-                    'recipient without fail! {}'.format(gen_roar()))
+            self._send_mail(mail_text, session)
         else:
+            self._read_mail(session)
+
+    def _send_mail(self, mail_text: str, session: InboundMessageSession):
+        if len(mail_text) > self.MAIL_MAX_LEN:
+            session.reply(
+                '{} Your message is too burdensome! '
+                'Send a concise version instead. '
+                '({}/{})'
+                    .format(gen_roar(), len(mail_text), self.MAIL_MAX_LEN)
+            )
+            return
+
+        try:
             platform_name = session.get_platform_name()
 
-            if _random.random() < 0.95:
-                skip_username = session.message['username']
-                skip_user_id = '{}@{}'.format(session.message['user_id'],
-                                              platform_name)
-            else:
-                skip_username = None
-                skip_user_id = None
+            username = '{}!{}@{}'.format(
+                session.message['username'],
+                session.message['user_id'] or '',
+                platform_name
+            )
+            self._database.put_mail(username, mail_text)
+        except SenderOutboxFullError:
+            session.reply(
+                '{} How embarrassing! Your outbox is full!'
+                    .format(gen_roar()))
+        except MailbagFullError:
+            session.reply(
+                '{} Incredulous! My mailbag is full! Read one instead!'
+                    .format(gen_roar()))
+        else:
+            session.reply(
+                'Tremendous! I will deliver this mail to the next '
+                'recipient without fail! {}'.format(gen_roar()))
 
-            if _random.random() < 0.3:
-                mail_info = self._database.get_old_mail(
-                    skip_username=skip_username, skip_user_id=skip_user_id)
-            else:
-                mail_info = self._database.get_mail(
-                    skip_username=skip_username, skip_user_id=skip_user_id)
+    def _read_mail(self, session: InboundMessageSession):
+        platform_name = session.get_platform_name()
 
-                if not mail_info and _random.random() < 0.3:
-                    mail_info = self._database.get_old_mail()
+        if _random.random() < 0.95:
+            skip_username = session.message['username']
+            skip_user_id = '{}@{}'.format(session.message['user_id'],
+                                          platform_name)
+        else:
+            skip_username = None
+            skip_user_id = None
 
-            if not mail_info:
-                session.reply(
-                    '{} Outlandish! There is no new mail! You should send some!'
-                    .format(gen_roar())
-                )
-            else:
-                username = mail_info['username'].split('!')[0].title()
+        if _random.random() < 0.3:
+            mail_info = self._database.get_old_mail(
+                skip_username=skip_username, skip_user_id=skip_user_id)
+        else:
+            mail_info = self._database.get_mail(
+                skip_username=skip_username, skip_user_id=skip_user_id)
 
-                session.reply(
-                    '{roar} I am delivering mail! '
-                    'Here it is, {date}, from {username}: {msg}'
-                    .format(
-                        roar=gen_roar(),
-                        username=username,
-                        date=arrow.get(mail_info['timestamp']).humanize(),
-                        msg=mail_info['text']),
-                    multiline=True
-                )
+            if not mail_info and _random.random() < 0.3:
+                mail_info = self._database.get_old_mail()
+
+        if not mail_info:
+            session.reply(
+                '{} Outlandish! There is no new mail! You should send some!'
+                .format(gen_roar())
+            )
+        else:
+            username = mail_info['username'].split('!', 1)[0].title()
+            username_extra = ''
+            sender_platform = mail_info['username'].partition('@')[-1] or 'twitch'
+
+            if platform_name != sender_platform:
+                username_extra = ' ({})'.format(sender_platform)
+
+            session.reply(
+                '{roar} I am delivering mail! '
+                'Here it is, {date}, from {username}{username_extra}: {msg}'
+                .format(
+                    roar=gen_roar(),
+                    username=username,
+                    username_extra=username_extra,
+                    date=arrow.get(mail_info['timestamp']).humanize(),
+                    msg=mail_info['text']),
+                multiline=True
+            )
 
     def _mail_status_command(self, session: InboundMessageSession):
         unread_count = self._database.get_status_count('unread')
