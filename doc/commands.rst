@@ -9,7 +9,7 @@ down the page or clicking the "i" icon button on mobile.
 ``!help``, ``!commands``
     Show link to this page. You may need to use ``!help`` instead for other bots.
 
-``s/pattern/replacement/options``
+``s/pattern/replacement/options`` or ``!s/pattern/replacement/options``
     Correct someone's message.
 
     * ``pattern`` is a regular expression

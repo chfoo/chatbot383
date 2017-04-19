@@ -256,7 +256,7 @@ class Features(object):
 
         bot.register_message_handler('pubmsg', self._collect_recent_message)
         bot.register_message_handler('action', self._collect_recent_message)
-        bot.register_command(r's/(.+/.*)', self._regex_command)
+        bot.register_command(r'!?s/(.+/.*)', self._regex_command)
         bot.register_command(r'(?i)!double(team)?($|\s.*)', self._double_command)
         bot.register_command(r'(?i)!(set)?greet(ing)?($|\s.*)$', self._greeting_command)
         bot.register_command(r'(?i)!(groudonger)?(help|commands)($|\s.*)', self._help_command)
@@ -382,7 +382,7 @@ class Features(object):
             return
 
         search_pattern = parts[0]
-        replacement = parts[1]
+        replacement = parts[1].replace('\\/', '/')
         options = parts[2] if len(parts) == 3 else ''
         flags = 0
         count = 1
@@ -403,7 +403,7 @@ class Features(object):
             text = history_message['text']
             channel = session.message['channel']
 
-            if text.startswith('s/'):
+            if text.startswith('s/') or text.startswith('!s/'):
                 continue
 
             try:
