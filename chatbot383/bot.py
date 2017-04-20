@@ -178,11 +178,20 @@ class Bot(object):
             else:
                 text = '@{}, {}'.format(reply_to, text)
 
-        max_length = 500 if client.twitch_char_limit else 400
-        max_byte_length = 1800 if client.twitch_char_limit else 400
+        if client == self._discord_client:
+            max_length = 2000
+            max_byte_length = max_length * 4
+        elif client == client.twitch_char_limit:
+            max_length = 500
+            max_byte_length = 1800
+        else:
+            max_length = 400
+            max_byte_length = 400
+
         if multiline:
             if client.twitch_char_limit:
-                lines = self.split_multiline(text, 400, split_bytes=False)
+                lines = self.split_multiline(text, max_length - 100,
+                                             split_bytes=False)
             else:
                 lines = self.split_multiline(text, max_byte_length)
         else:
