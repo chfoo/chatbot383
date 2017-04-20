@@ -1,4 +1,5 @@
 import random
+import re
 from itertools import zip_longest
 
 
@@ -33,3 +34,7 @@ def grouper(iterable, n, fillvalue=None):
     # grouper('ABCDEFG', 3, 'x') --> ABC DEF Gxx"
     args = [iter(iterable)] * n
     return zip_longest(*args, fillvalue=fillvalue)
+
+
+def escape_links(text: str) -> str:
+    return re.sub(r'\b(https?\S+)', '<\g<1>>', text)

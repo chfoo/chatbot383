@@ -13,6 +13,7 @@ from typing import Optional
 from chatbot383.client import Client
 from chatbot383.util import split_utf8, grouper
 import chatbot383.discord.gateway
+import chatbot383.util
 
 _logger = logging.getLogger(__name__)
 
@@ -37,7 +38,7 @@ class InboundMessageSession(object):
     def client(self) -> Client:
         return self._client
 
-    def reply(self, text, me=False, multiline=False):
+    def reply(self, text, me=False, multiline=False, escape_links=False):
         if self.get_platform_name() == 'discord':
             reply_to = self._message['user_id']
         else:
@@ -46,7 +47,9 @@ class InboundMessageSession(object):
         self._bot.send_text(self._message['channel'], text, me=me,
                             reply_to=reply_to,
                             multiline=multiline,
-                            discord_reply=self.get_platform_name() == 'discord')
+                            discord_reply=self.get_platform_name() == 'discord',
+                            escape_links=escape_links
+                            )
 
     def whisper(self, text):
         if self.get_platform_name() == 'discord':
@@ -158,13 +161,16 @@ class Bot(object):
                 self._process_message(item, client)
 
     def send_text(self, channel, text, me=False, reply_to=None,
-                  multiline=False, discord_reply=False):
+                  multiline=False, discord_reply=False, escape_links=False):
         channel = irc.strings.lower(channel)
 
         if self._discord_client and self.get_platform_name(channel) == 'discord':
             client = self._discord_client
         else:
             client = self._main_client
+
+        if escape_links and client == self._discord_client:
+            text = chatbot383.util.escape_links(text)
 
         if reply_to:
             if discord_reply:
