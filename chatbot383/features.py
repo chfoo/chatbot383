@@ -324,8 +324,19 @@ class Features(object):
         return len(text.encode('utf-8', 'replace')) > max_byte_length
 
     def _try_say_or_reply_too_long(self, formatted_text, session: InboundMessageSession):
-        max_byte_length = 1800 if self._bot.twitch_char_limit else 400
-        if len(formatted_text) > 500 or self.is_too_long(formatted_text, max_byte_length):
+        platform_name = session.get_platform_name()
+
+        if platform_name == 'twitch' and self._bot.twitch_char_limit:
+            max_length = 500
+            max_byte_length = 1800
+        elif platform_name == 'discord':
+            max_length = 2000
+            max_byte_length = max_length * 4
+        else:
+            max_length = 400
+            max_byte_length = 400
+
+        if len(formatted_text) > max_length or self.is_too_long(formatted_text, max_byte_length):
             session.reply(self.TOO_LONG_TEXT_TEMPLATE.format(gen_roar()))
             return False
         else:
