@@ -345,7 +345,8 @@ class Features(object):
                     self._last_message[channel] = session.message
 
     def _help_command(self, session: InboundMessageSession):
-        session.reply('{} {}'.format(gen_roar(), self._help_text))
+        session.reply('{} {}'.format(gen_roar(), self._help_text),
+                      escape_links=True)
 
     def _roar_command(self, session: InboundMessageSession):
         session.say('{} {} {}'.format(gen_roar(), gen_roar(), gen_roar().upper()))
@@ -806,7 +807,8 @@ class Features(object):
                     username_extra=username_extra,
                     date=arrow.get(mail_info['timestamp']).humanize(),
                     msg=mail_info['text']),
-                multiline=True
+                multiline=True,
+                escape_links=True,
             )
 
     def _mail_status_command(self, session: InboundMessageSession):
