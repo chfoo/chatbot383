@@ -15,6 +15,7 @@ from chatbot383.censor import censor_text
 _logger = logging.getLogger(__name__)
 
 CHANNEL_PREFIX = '&'
+PRESENCE_CHANNEL = '&#+!presence'
 
 
 class IRCServer:
@@ -97,7 +98,7 @@ class IRCSession:
                         if success:
                             futures.add(self._discord_client.wait_for_message())
                     else:
-                        yield from self._handle_messages(command)
+                        yield from self._handle_message_command(command)
 
                     futures.add(self._reader.readline())
                 else:
@@ -183,59 +184,87 @@ class IRCSession:
         return False
 
     @asyncio.coroutine
-    def _handle_messages(self, command: ClientCommand):
-        if command.command == 'ping':
-            yield from self._reply('PONG', ':' + command.text)
+    def _handle_message_command(self, command: ClientCommand):
+        command_table = {
+            'ping': self._ping_command,
+            'join': self._join_command,
+            'part': self._part_command,
+            'privmsg': self._privmsg_command
+        }
 
-        elif command.command == 'join':
-            channel = command.args[1]
+        func = command_table.get(command.command)
 
-            if not channel.startswith(CHANNEL_PREFIX):
-                yield from self._reply(
-                    '403', ':Channel name must start with & symbol'
-                )
-            else:
-                channel = channel.replace(CHANNEL_PREFIX, '', 1)
-                _logger.info('Join channel %s', channel)
-                self._channel_ids.add(channel)
-                yield from self._reply(
-                    'JOIN', CHANNEL_PREFIX + channel, username=True
-                )
-
-        elif command.command == 'part':
-            channel = command.args[1]
-            channel = channel.replace(CHANNEL_PREFIX, '', 1)
-            _logger.info('Part channel %s', channel)
-            self._channel_ids.remove(channel)
-            yield from self._reply(
-                'PART', CHANNEL_PREFIX + channel, username=True
-            )
-
-        elif command.command == 'privmsg':
-            channel = command.args[1]
-
-            if channel.startswith(CHANNEL_PREFIX):
-                channel = channel.replace(CHANNEL_PREFIX, '', 1)
-
-                if channel not in self._channel_ids:
-                    yield from self._reply('442', ':Not joined in that channel')
-                else:
-                    yield from self._discord_client.send_message(
-                        self._discord_client.get_channel(channel),
-                        censor_text(command.text)
-                    )
-            else:
-                try:
-                    user = yield from self._discord_client.get_user_info(channel)
-                except discord.NotFound:
-                    yield from self._reply('401', ':User not found')
-                else:
-                    yield from self._discord_client.send_message(
-                        user, command.text
-                    )
-
+        if func:
+            yield from func(command)
         else:
             yield from self._reply('421', command.command, ':Unknown command')
+
+    @asyncio.coroutine
+    def _ping_command(self, command: ClientCommand):
+        yield from self._reply('PONG', ':' + command.text)
+
+    @asyncio.coroutine
+    def _join_command(self, command: ClientCommand):
+        channel = command.args[1]
+
+        if not channel.startswith(CHANNEL_PREFIX):
+            yield from self._reply(
+                '403', ':Channel name must start with & symbol'
+            )
+        else:
+            channel = channel.replace(CHANNEL_PREFIX, '', 1)
+            _logger.info('Join channel %s', channel)
+            self._channel_ids.add(channel)
+            yield from self._reply(
+                'JOIN', CHANNEL_PREFIX + channel, username=True
+            )
+
+    @asyncio.coroutine
+    def _part_command(self, command: ClientCommand):
+        channel = command.args[1]
+        channel = channel.replace(CHANNEL_PREFIX, '', 1)
+        _logger.info('Part channel %s', channel)
+        self._channel_ids.remove(channel)
+        yield from self._reply(
+            'PART', CHANNEL_PREFIX + channel, username=True
+        )
+
+    @asyncio.coroutine
+    def _privmsg_command(self, command: ClientCommand):
+        channel = command.args[1]
+
+        if channel == PRESENCE_CHANNEL:
+            yield from self._presence_command(command)
+        elif channel.startswith(CHANNEL_PREFIX):
+            channel = channel.replace(CHANNEL_PREFIX, '', 1)
+
+            if channel not in self._channel_ids:
+                yield from self._reply('442', ':Not joined in that channel')
+            else:
+                yield from self._discord_client.send_message(
+                    self._discord_client.get_channel(channel),
+                    censor_text(command.text)
+                )
+        else:
+            try:
+                user = yield from self._discord_client.get_user_info(channel)
+            except discord.NotFound:
+                yield from self._reply('401', ':User not found')
+            else:
+                yield from self._discord_client.send_message(
+                    user, command.text
+                )
+
+    @asyncio.coroutine
+    def _presence_command(self, command: ClientCommand):
+        if command.text:
+            game = discord.Game(name=command.text)
+        else:
+            game = None
+        try:
+            yield from self._discord_client.change_presence(game=game)
+        except discord.DiscordException:
+            _logger.error('Could not update game "%s"', game)
 
     @asyncio.coroutine
     def _handle_discord_message(self, message: discord.Message):

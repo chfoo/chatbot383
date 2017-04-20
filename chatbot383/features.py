@@ -290,6 +290,7 @@ class Features(object):
 
         self._reseed_rng_sched()
         self._token_notify_sched()
+        self._discord_presence_sched()
 
     def _reseed_rng_sched(self):
         _reseed()
@@ -305,6 +306,18 @@ class Features(object):
         _logger.debug('Next token analysis interval %s', interval)
 
         self._bot.scheduler.enter(interval, 0, self._token_notify_sched)
+
+    def _discord_presence_sched(self):
+        unread_count = self._database.get_status_count('unread')
+
+        if unread_count:
+            game_text = 'Mail Delivery: {} unread'.format(unread_count)
+        else:
+            game_text = gen_roar()
+
+        self._bot.set_discord_presence(game_text)
+
+        self._bot.scheduler.enter(300, 0, self._discord_presence_sched)
 
     @classmethod
     def is_too_long(cls, text, max_byte_length=400):

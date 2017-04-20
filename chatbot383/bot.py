@@ -217,6 +217,11 @@ class Bot(object):
 
         self._discord_client.privmsg(username, text)
 
+    def set_discord_presence(self, game_text: str):
+        if self._discord_client:
+            self._discord_client.privmsg(
+                chatbot383.discord.gateway.PRESENCE_CHANNEL, game_text)
+
     @classmethod
     def split_multiline(cls, text, max_length=400, split_bytes=True):
         if split_bytes:
