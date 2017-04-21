@@ -181,7 +181,7 @@ class Bot(object):
         if client == self._discord_client:
             max_length = 2000
             max_byte_length = max_length * 4
-        elif client == client.twitch_char_limit:
+        elif client.twitch_char_limit:
             max_length = 500
             max_byte_length = 1800
         else:
