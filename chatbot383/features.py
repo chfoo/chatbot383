@@ -257,6 +257,7 @@ class Features(object):
         bot.register_message_handler('pubmsg', self._collect_recent_message)
         bot.register_message_handler('action', self._collect_recent_message)
         bot.register_command(r'!?s/(.+/.*)', self._regex_command)
+        bot.register_command(r'(?i)!countdown($|\s.*)', self._countdown_command)
         bot.register_command(r'(?i)!double(team)?($|\s.*)', self._double_command)
         bot.register_command(r'(?i)!(set)?greet(ing)?($|\s.*)$', self._greeting_command)
         bot.register_command(r'(?i)!(groudonger)?(help|commands)($|\s.*)', self._help_command)
@@ -269,6 +270,7 @@ class Features(object):
         bot.register_command(r'(?i)!mute($|\s.*)', self._mute_command, ignore_rate_limit=True)
         bot.register_command(r'(?i)!pick\s+(.*)', self._pick_command)
         bot.register_command(r'(?i)!praise($|\s.{,100})$', self._praise_command)
+        bot.register_command(r'(?i)!schedule($|\s.*)', self._schedule_command)
         bot.register_command(r'(?i)!(word)?(?:shuffle|scramble)($|\s.*)', self._shuffle_command)
         bot.register_command(r'(?i)!song($|\s.{,50})$', self._song_command)
         bot.register_command(r'(?i)!sort($|\s.*)', self._sort_command)
@@ -476,6 +478,31 @@ class Features(object):
         session.reply('{} Your request does not apply to any recent messages!'
                       .format(gen_roar()))
 
+    def _countdown_command(self, session: InboundMessageSession):
+        try:
+            with open(self._config['event_data_file']) as file:
+                doc = json.load(file)
+
+            event_name = doc['name']
+            date_now = arrow.get()
+            date_event = arrow.get(doc['date'])
+            time_delta = date_event - date_now
+
+            months, days = divmod(time_delta.days, 30)
+            minutes, seconds = divmod(time_delta.seconds, 60)
+            hours, minutes = divmod(minutes, 60)
+
+            formatted_text = '{} {} starts in ' \
+                '{}m {}d {}H {}M {}S - {}'.format(
+                    gen_roar(), event_name,
+                    months, days, hours, minutes, seconds,
+                    date_event
+                )
+        except (OSError, ValueError):
+            formatted_text = '{} Schedule not available'.format(gen_roar())
+
+        self._try_say_or_reply_too_long(formatted_text, session)
+
     def _double_command(self, session: InboundMessageSession):
         text = session.match.group(2).strip()
         last_message = self._last_message.get(session.message['channel'])
@@ -534,6 +561,19 @@ class Features(object):
             formatted_text = '{} Praise {}!'.format(gen_roar(), text)
         else:
             formatted_text = '{} Praise it! Raise it!'.format(gen_roar())
+
+        self._try_say_or_reply_too_long(formatted_text, session)
+
+    def _schedule_command(self, session: InboundMessageSession):
+        try:
+            with open(self._config['event_data_file']) as file:
+                doc = json.load(file)
+
+            formatted_text = '{} {} {}'.format(
+                gen_roar(), doc['name'], doc['schedule']
+            )
+        except (OSError, ValueError):
+            formatted_text = '{} Schedule not available'.format(gen_roar())
 
         self._try_say_or_reply_too_long(formatted_text, session)
 

@@ -16,6 +16,9 @@ down the page or clicking the "i" icon button on mobile.
     * ``replacement`` is the replacement text
     * ``options`` is a combination of: ``g`` to replace all, ``i`` for case-insensitive
 
+``!countdown``
+    Show time until next event, ie, Games Done Quick.
+
 ``!double text`` or ``!doubleteam text``
     Doubles the letters in ``text``.
 
@@ -78,6 +81,9 @@ down the page or clicking the "i" icon button on mobile.
 
 ``!roomsize``
     Count number of users in chat room.
+
+``!schedule``
+    Show link to event schedule, ie, Games Done Quick.
 
 ``!shuffle text``
     Shuffle letters in ``text``.

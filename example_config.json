@@ -26,5 +26,6 @@
     "x token_notify_interval": 12,
     "x tellnext_database": "./model.db",
     "x veekun_pokedex_database": "./veekun-pokedex.sqlite",
-    "x avoid_pikalaxbot": true
+    "x avoid_pikalaxbot": true,
+    "x event_data_file": "./event.json"
 }
