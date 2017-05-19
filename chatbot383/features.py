@@ -1,6 +1,7 @@
 import collections
 import configparser
 import copy
+import gettext
 import json
 import logging
 import os
@@ -483,22 +484,36 @@ class Features(object):
             with open(self._config['event_data_file']) as file:
                 doc = json.load(file)
 
-            event_name = doc['name']
-            date_now = arrow.get()
-            date_event = arrow.get(doc['date'])
-            time_delta = date_event - date_now
+            texts = []
 
-            months, days = divmod(time_delta.days, 30)
-            minutes, seconds = divmod(time_delta.seconds, 60)
-            hours, minutes = divmod(minutes, 60)
+            for event_doc in doc['events']:
+                event_name = event_doc['name']
+                date_now = arrow.get()
+                date_event = arrow.get(event_doc['date'])
+                time_delta = date_event - date_now
 
-            formatted_text = '{} {} starts in ' \
-                '{}m {}d {}H {}M {}S - {}'.format(
-                    gen_roar(), event_name,
-                    months, days, hours, minutes, seconds,
-                    date_event
+                months, days = divmod(time_delta.days, 30)
+                minutes, seconds = divmod(time_delta.seconds, 60)
+                hours, minutes = divmod(minutes, 60)
+
+                texts.append(
+                    '{} starts in '
+                    '{} {} {} {} {} {} {} {} {} {}'
+                    .format(
+                        event_name,
+                        months, gettext.ngettext('month', 'months', months),
+                        days, gettext.ngettext('day', 'days', days),
+                        hours, gettext.ngettext('hour', 'hours', hours),
+                        minutes, gettext.ngettext('minute', 'minutes', minutes),
+                        seconds, gettext.ngettext('second', 'seconds', seconds),
+                    )
                 )
-        except (OSError, ValueError):
+
+            formatted_text = '{} {}'.format(
+                    gen_roar(), ' • '.join(texts)
+                )
+        except (OSError, LookupError, ValueError, TypeError):
+            _logger.exception('No schedule')
             formatted_text = '{} Schedule not available'.format(gen_roar())
 
         self._try_say_or_reply_too_long(formatted_text, session)
@@ -569,10 +584,16 @@ class Features(object):
             with open(self._config['event_data_file']) as file:
                 doc = json.load(file)
 
-            formatted_text = '{} {} {}'.format(
-                gen_roar(), doc['name'], doc['schedule']
+            texts = []
+
+            for event_doc in doc['events']:
+                texts.append('{} {}'.format(event_doc['name'], event_doc['schedule']))
+
+            formatted_text = '{} {}'.format(
+                gen_roar(), ' • '.join(texts)
             )
-        except (OSError, ValueError):
+        except (OSError, LookupError, ValueError, TypeError):
+            _logger.exception('No schedule')
             formatted_text = '{} Schedule not available'.format(gen_roar())
 
         self._try_say_or_reply_too_long(formatted_text, session)

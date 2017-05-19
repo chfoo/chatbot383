@@ -1,5 +1,9 @@
 {
-  "name": "GDQ",
-  "date": "2000-01-01T00:00:00Z",
-  "schedule": "http://example.com/"
+  "events": [
+    {
+      "name": "GDQ",
+      "date": "2000-01-01T00:00:00Z",
+      "schedule": "http://example.com/"
+    }
+  ]
 }
