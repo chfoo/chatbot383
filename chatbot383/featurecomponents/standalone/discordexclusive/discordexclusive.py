@@ -150,7 +150,7 @@ class DiscordExclusiveBot:
             match = re.match('(\d+)(\w*) - (.+)\.opus$', filename)
 
             if not match:
-                return
+                continue
 
             species_id = int(match.group(1))
             species_form = match.group(2).lower() or None
