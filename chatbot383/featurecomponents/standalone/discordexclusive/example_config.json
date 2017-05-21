@@ -1,0 +1,6 @@
+{
+    "token": "discord bot token here",
+    "text_channel_id": "123",
+    "voice_channel_id": "456",
+    "sound_file_directory": "directory/of/sound/files/"
+}
