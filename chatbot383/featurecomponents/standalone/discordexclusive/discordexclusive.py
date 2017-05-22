@@ -113,6 +113,9 @@ class DiscordExclusiveBot:
         voice_channel = self._client.get_channel(self._config['voice_channel_id'])
 
         if not self._voice_client or self._voice_client.channel != voice_channel:
+            if self._voice_client:
+                yield from self._voice_client.disconnect()
+
             _logger.info('Joining voice channel %s', voice_channel.id)
             self._voice_client = yield from self._client.join_voice_channel(voice_channel)
 
