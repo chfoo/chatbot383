@@ -206,6 +206,9 @@ class DiscordExclusiveBot:
 
         slug = self.slugify(name, no_dash=True)
 
+        if not slug:
+            raise NotFoundError()
+
         row = self._db_con.execute(
             '''
             SELECT id
