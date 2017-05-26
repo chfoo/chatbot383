@@ -84,6 +84,7 @@ class DiscordExclusiveBot:
             try:
                 sound_id = self._lookup_sound_id(name)
             except NotFoundError:
+                sound_ids.append(self._lookup_sound_id(str(random.randint(1, 802))))
                 continue
             else:
                 sound_ids.append(sound_id)
