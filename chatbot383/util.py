@@ -37,4 +37,4 @@ def grouper(iterable, n, fillvalue=None):
 
 
 def escape_links(text: str) -> str:
-    return re.sub(r'(?:\s|^)(https?\S+)', '<\g<1>>', text)
+    return re.sub(r'(\s|^)(https?\S+)', '\1<\g<2>>', text)
