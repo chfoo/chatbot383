@@ -128,7 +128,7 @@ class DiscordExclusiveBot:
             loop.create_task(self._voice_client.disconnect())
             self._voice_client = None
 
-        self._voice_disconnect_timer_handle = loop.call_later(20, cleanup_voice)
+        self._voice_disconnect_timer_handle = loop.call_later(60, cleanup_voice)
 
     def _build_pokedex(self):
         _logger.info('Building sound pokedex...')
@@ -242,7 +242,7 @@ class DiscordExclusiveBot:
             text = text.replace('-', '')
 
         text = cls.remove_accents(text)
-        text = re.sub(r'[^a-zA-Z-]', '', text)
+        text = re.sub(r'[^a-zA-Z0-9-]', '', text)
         return text
 
     @classmethod
