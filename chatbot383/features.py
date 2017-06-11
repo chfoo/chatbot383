@@ -496,7 +496,7 @@ class Features(object):
                 if time_delta >= 0:
                     phrase_ago = 'starts in'
                 else:
-                    time_delta = abs(time_delta)
+                    time_delta = date_now - date_event
                     phrase_ago = 'started ago'
 
                 months, days = divmod(time_delta.days, 30)
