@@ -401,7 +401,7 @@ class BattleBot(object):
             text = text.replace('-', '')
 
         text = cls.remove_accents(text)
-        text = re.sub(r'[^a-zA-Z-]', '', text)
+        text = re.sub(r'[^a-zA-Z0-9-]', '', text)
         return text
 
     @classmethod
