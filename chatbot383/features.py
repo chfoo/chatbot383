@@ -493,10 +493,10 @@ class Features(object):
                 date_event = arrow.get(event_doc['date'])
                 time_delta = date_event - date_now
 
-                if time_delta >= 0:
+                if time_delta.total_seconds() >= 0:
                     phrase_ago = 'starts in'
                 else:
-                    time_delta = date_now - date_event
+                    time_delta = abs(time_delta)
                     phrase_ago = 'started ago'
 
                 months, days = divmod(time_delta.days, 30)
