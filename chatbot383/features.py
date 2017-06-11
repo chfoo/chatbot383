@@ -493,15 +493,21 @@ class Features(object):
                 date_event = arrow.get(event_doc['date'])
                 time_delta = date_event - date_now
 
+                if time_delta >= 0:
+                    phrase_ago = 'starts in'
+                else:
+                    time_delta = abs(time_delta)
+                    phrase_ago = 'started ago'
+
                 months, days = divmod(time_delta.days, 30)
                 minutes, seconds = divmod(time_delta.seconds, 60)
                 hours, minutes = divmod(minutes, 60)
 
                 texts.append(
-                    '{} starts in '
+                    '{} {} '
                     '{} {} {} {} {} {} {} {} {} {}'
                     .format(
-                        event_name,
+                        event_name, phrase_ago,
                         months, gettext.ngettext('month', 'months', months),
                         days, gettext.ngettext('day', 'days', days),
                         hours, gettext.ngettext('hour', 'hours', hours),
