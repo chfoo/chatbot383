@@ -11,6 +11,7 @@ import sqlite3
 import time
 
 import arrow
+import unicodedata
 
 from chatbot383.bot import Limiter, Bot, InboundMessageSession
 from chatbot383.featurecomponents.battlebot import BattleBot
@@ -270,6 +271,7 @@ class Features(object):
         bot.register_command(r'(?i)!(mail|post)($|\s.*)$', self._mail_command)
         bot.register_command(r'(?i)!(mail|post)status($|\s.*)', self._mail_status_command)
         bot.register_command(r'(?i)!mute($|\s.*)', self._mute_command, ignore_rate_limit=True)
+        bot.register_command(r'(?i)!normalize($|\s.*)', self._normalize_command)
         bot.register_command(r'(?i)!pick\s+(.*)', self._pick_command)
         bot.register_command(r'(?i)!praise($|\s.{,100})$', self._praise_command)
         bot.register_command(r'(?i)!schedule($|\s.*)', self._schedule_command)
@@ -564,6 +566,21 @@ class Features(object):
         channel = session.message['channel']
         if self._bot.channel_spam_limiter.is_ok(channel):
             self._bot.channel_spam_limiter.update(channel, offset=60)
+
+    def _normalize_command(self, session: InboundMessageSession):
+        text = session.match.group(1).strip()
+        last_message = self._last_message.get(session.message['channel'])
+
+        if not text and last_message:
+            text = last_message['text']
+        elif not text:
+            text = 'Groudonger'
+
+        normalize_text = unicodedata.normalize('NFKC', text)
+
+        formatted_text = '{} Normalized! {}'.format(gen_roar(), normalize_text)
+
+        self._try_say_or_reply_too_long(formatted_text, session)
 
     def _pick_command(self, session: InboundMessageSession):
         text = session.match.group(1).strip()

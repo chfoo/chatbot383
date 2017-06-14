@@ -58,6 +58,9 @@ down the page or clicking the "i" icon button on mobile.
 ``!mute``
     Make the bot ignore everyone in the chat room for a minute.
 
+``!normalize text``
+    Make text not fancy by applying Unicode NFKC normalization.
+
 ``!pick item1, item2, item3, ...``
    Randomly select one of ``item``.
 
