@@ -205,19 +205,20 @@ class IRCSession:
 
     @asyncio.coroutine
     def _join_command(self, command: ClientCommand):
-        channel = command.args[1]
+        channels = command.args[1].split(',')
 
-        if not channel.startswith(CHANNEL_PREFIX):
-            yield from self._reply(
-                '403', ':Channel name must start with & symbol'
-            )
-        else:
-            channel = channel.replace(CHANNEL_PREFIX, '', 1)
-            _logger.info('Join channel %s', channel)
-            self._channel_ids.add(channel)
-            yield from self._reply(
-                'JOIN', CHANNEL_PREFIX + channel, username=True
-            )
+        for channel in channels:
+            if not channel.startswith(CHANNEL_PREFIX):
+                yield from self._reply(
+                    '403', ':Channel name must start with & symbol'
+                )
+            else:
+                channel = channel.replace(CHANNEL_PREFIX, '', 1)
+                _logger.info('Join channel %s', channel)
+                self._channel_ids.add(channel)
+                yield from self._reply(
+                    'JOIN', CHANNEL_PREFIX + channel, username=True
+                )
 
     @asyncio.coroutine
     def _part_command(self, command: ClientCommand):

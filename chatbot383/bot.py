@@ -327,7 +327,12 @@ class Bot(object):
                 channels
             )
 
-        for channel in channels:
+        grouped_channels = (
+            ','.join(channel for channel in group if channel)
+            for group in grouper(channels, 10)
+        )
+
+        for channel in grouped_channels:
             session.bot.join(channel)
 
     @classmethod
