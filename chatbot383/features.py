@@ -175,7 +175,7 @@ class Database(object):
                 (username,)
             ).fetchone()
 
-            if row[0] >= 20:
+            if row[0] >= 50:
                 raise SenderOutboxFullError()
 
             row = self._con.execute('''SELECT count(1) FROM mail
