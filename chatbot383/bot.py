@@ -88,8 +88,8 @@ class Bot(object):
         self._discord_client = discord_client
         self._inbound_queue = inbound_queue
         self._ignored_users = frozenset(ignored_users or ())
-        self._user_limiter = Limiter(min_interval=4)
-        self._channel_spam_limiter = Limiter(min_interval=0.5)
+        self._user_limiter = Limiter(min_interval=3)
+        self._channel_spam_limiter = Limiter(min_interval=0.2)
         self._scheduler = sched.scheduler()
 
         self._commands = []
