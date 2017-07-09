@@ -67,6 +67,9 @@ down the page or clicking the "i" icon button on mobile.
 ``!praise``, ``!praise thing``
    Praise it or praise ``thing``.
 
+``!raccattack`` or ``!raccattack username``
+    RaccAttack !
+
 ``!randcase text``
     Randomly change the case of ``text``.
 
