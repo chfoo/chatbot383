@@ -278,7 +278,7 @@ class Features(object):
         bot.register_command(r'(?i)!(word)?(?:shuffle|scramble)($|\s.*)', self._shuffle_command)
         bot.register_command(r'(?i)!song($|\s.{,50})$', self._song_command)
         bot.register_command(r'(?i)!sort($|\s.*)', self._sort_command)
-        bot.register_command(r'(?i)!racc(?:attack)?($| \w.*)', self._raccattack_command)
+        bot.register_command(r'(?i)!racc(?:attack)?($|\s\S*)', self._raccattack_command)
         bot.register_command(r'(?i)!rand(?:om)?case($|\s.*)', self._rand_case_command)
         bot.register_command(r'(?i)!release($|\s.{,100})$', self._release_command)
         bot.register_command(r'(?i)!reverse($|\s.*)', self._reverse_command)
@@ -685,6 +685,7 @@ class Features(object):
 
     def _raccattack_command(self, session: InboundMessageSession):
         text = session.match.group(1).strip() or session.message['nick']
+        text = text.lstrip("!/.$`")
 
         extra = _random.choice([
             '',
