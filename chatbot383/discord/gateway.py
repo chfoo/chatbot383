@@ -244,7 +244,7 @@ class IRCSession:
             else:
                 yield from self._discord_client.send_message(
                     self._discord_client.get_channel(channel),
-                    censor_text(command.text)
+                    censor_text(command.text).replace('***', '\\*\\*\\*')
                 )
         else:
             try:
