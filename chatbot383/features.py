@@ -811,7 +811,9 @@ class Features(object):
 
     def _wow_command(self, session: InboundMessageSession):
         if self._tellnext_generator:
-            session.say('> {}'.format(self._tellnext_generator.get_paragraph()))
+            platform_name = session.get_platform_name()
+            max_len = 500 if platform_name == 'discord' else 400
+            session.say('> {}'.format(self._tellnext_generator.get_paragraph(max_len)), multiline=True)
         else:
             session.reply('{} Feature not available!'.format(gen_roar()))
 

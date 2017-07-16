@@ -13,7 +13,8 @@ class TellnextGenerator(object):
         sentences = []
 
         while True:
-            sentence = self._generator.generate_sentence(max_words=50)[:max_len].capitalize() + ' '
+            sentence = self._generator.generate_sentence(max_words=50)\
+                .replace(' ...', '...')[:max_len].capitalize() + ' '
             sentences.append(sentence)
 
             if sum(map(len, sentences)) >= max_len:
