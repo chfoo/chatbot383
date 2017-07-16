@@ -1,0 +1,319 @@
+# https://dekunukem.wordpress.com/
+
+SNC jvgu n Xrlobneq
+
+# Abj gung SNC’f ivqrb pneq vf svavfurq, vg’f gvzr gb zbir ba. Nygubhtu jr’ir pbzr fb sne, SNC vf fgvyy zvffvat fbzrguvat pehpvny va beqre gb or pnyyrq n cebcre pbzchgre, vg fgvyy arrqf ng yrnfg bar vachg qrivpr. Gung jvyy or gur xrlobneq. Zber fcrpvsvpnyyl, n CF/2 xrlobneq.
+
+# Hfvat CF/2 xrlobneq sbe ergeb pbzchgref vf abguvat arj gunaxf gb vgf fvzcyr cebgbpby naq jvqr ninvynovyvgl. Vg hfrf n fvzcyr flapuebabhf frevny vagresnpr, bar pybpx yvar naq bar qngn yvar, naq gur qbphzragngvba vf nyy bire gur vagrearg fb V’z abg tbvat gb obgure gb rkcynva urer ntnva. Npghnyyl V qvqa’g obgure gb ernq zhpu nobhg vg ng nyy orpnhfr bs n ernfba lbh’yy frr fbba rabhtu.
+
+# Orsber jr fgneg jbexvat ba xrlobneq gubhtu, jr arrq gb svefg svther bhg fbzr jnl sbe xrlobneq gb gnyx gb gur PCH. Trarenyyl gurer ner gjb zrnaf bs pbzzhavpngvat jvgu crevcurenyf, zrzbel znccrq V/B be cbeg V/B. Va zrzbel-znccrq V/B crevcurenyf’ ertvfgref ner znccrq gb gur zrzbel nqqerff fcnpr, naq PCH jevgrf be ernqf vgf zrzbel nqqerff gb pbageby gur crevcureny. V hfrq guvf zrgubq sbe SNC’f ivqrb pneq. Sbe gur xrlobneq V qrpvqrq gb hfr cbeg V/B, fvapr vg’f hfhnyyl hfrq jvgu rkgreany crevcurenyf, naq V srry vg’f n tbbq rkrepvfr gb gel n yvggyr ovg bs rirelguvat jvgu M80, juvpu vf jul V’z qbvat guvf va gur svefg cynpr. Gur M80 fhccbegf 256 cbegf, jura gur hfre pnyyf va be bhg vafgehpgvba vg cynprf gur ybjre 8 ovg bs gur ertvfgre ba gb gur nqqerff ohf, naq npgvingrf VBED naq bar bs gur EQ be JE yvarf gb ernq be jevgr n olgr sebz gung cbeg.
+
+# Jvgu gur V/B zrgubq fbegrq, arkg vffhr vf ubj gb yrg PCH xabj gur xrlobneq riragf. Bar jnl vf cbyyvat, va juvpu gur PCH pbafgnagyl nfxf xrlobneq vs vg unf fbzrguvat. Guvf nccebnpu vf fvzcyr ohg rkgerzryl jnfgrshy, fvapr PCH jvyy fcrag zbfg bs vgf gvzr ernqvat sebz xrlobneq vafgrnq bs qbvat npghny jbex. N zhpu orggre jnl vf hfvat vagreehcgf. Nf vgf anzr fhttrfgf, jura gurer vf npghnyyl qngn sebz xrlobneq, gur PCH jvyy or vagreehcgrq sebz vgf jbex, vg gura pna fgber gur xrlfgebxr vagb n ohssre naq qb fbzrguvat jvgu vg yngre. Guvf jnl gur PCH qbrf abg jnfgr nalgvzr cbyyvat gur xrlobneq, naq bayl npgf jura gurer vf na npghny xrl cerff, naq gung vf jung V’z tbvat gb hfr gbqnl.
+
+# Gur M80 unf n (frra sebz gbqnl)fbzrjung ehqvzragnel ohg fgvyy engure pyrire vagreehcg flfgrz. Gurer ner gjb vagreehcg cvaf ba gur cnpxntr, VAG naq AZV, gur sbezre vf sbe erthyne vagreehcg gung pna or qvfnoyrq va fbsgjner, gur ynggre vf aba-znfxnoyr vagreehcg naq nyjnlf bpphef jura gur yvar tbrf npgvir. Sbe gur erthyne vagreehcg, 3 vagreehcg zbqrf ner cebivqrq, zbqr 0 vf n 8080-pbzcngvoyr zbqr jurer jura vagreehcgrq, lbh unir gb chg fbzr vafgehpgvba ba gur qngn ohf sbe gur PCH gb rkrphgr. Vg’f onfvpnyyl jvgpupensg fb V’z abg tbvat gb hfr vg. Zbqr 1 vf zhpu fvzcyre, vg whfg whzcf gb nqqerff 0k38 jura vagreehcgrq. Guvf znxrf qrfvtavat fvzcyr flfgrzf irel rnfl fvapr lbh pna whfg chg lbhe vagreehcg unaqyre gurer, be n whzc vafgehpgvba gb whzc gb fbzrjurer ryfr vs lbh arrq zber fcnpr. Ubjrire, vs va zbqr 1 gurer ner zber guna bar vagreehcgvat qrivprf, gur PCH jvyy unir gb svther bhg jub vf gur bar gung vavgvnyvmrq gur vagreehcg, juvpu trgf pbzcyvpngrq erny snfg.
+
+# Gung’f jurer vagreehcg zbqr 2 pbzrf vagb cynl. V’z tbvat gb yvfg ubj zbqr 2 jbexf bss gur gbc bs zl urnq fvapr V jbexrq jvgu vg sbe fb ybat, vg’f tbvat gb or n zbhgushy naq V ubcr V trg vg evtug: Jura vagreehcg sverf, gur vagreehcgvat qrivpr chgf n olgr bagb gur qngn ohf, gur PCH gura pbzovarf gur 8 ovg va gur vagreehcg irpgbe onfr ertvfgre naq gur 8 ovg ba gur qngn ohf gb sbez n 16 ovg nqqerff, whzcf gb gung, ernq n 16-ovg jbeq ng gung nqqerff, juvpu vf gur vagreehcg freivpr ebhgvar nqqerff, gura znxr nabgure whzc gb gung. Sbe rknzcyr, vs V ybnq vagreehcg ertvfgre jvgu 0k12, naq chg 0k10 ba gur ohf nsgre vagreehcgvat gur PCH, gur PCH jvyy whzc gb 0k1210. Vs V chg qngn 0k3000 gurer orsberunaq, gur PCH jvyy gura ernq n jbeq sebz 0k1210, trgf 0k3000, naq whzc gb 0k3000, juvpu vf jurer gur unaqyre vf. Vg’f rkgerzryl pbashfvat ng svefg, ohg bapr lbh trg gur unat bs vg lbh’yy ernyvmrq guvf irpgbevmrq vagreehcg flfgrz vf zhpu zber cbjreshy guna bgure zbqrf, lbh pna punatr gur ybpngvba bs VFE ba gur syl, naq vg fhccbegf n uhtr ahzore bs vagreehcgvat qrivprf. Vg zvtug or whfg n xrlobneq sbe abj, ohg V’z nyfb tbvat gb nqq n JvSv zbqhyr va gur shgher, juvpu gnxrf 2 cbegf, n gvzre jbhyqa’g uheg rvgure. Naljnl, gur guvat vf gung SNC vf tbvat gb unir n pbhcyr zber crevcurenyf yngre ba, naq vagreehcg zbqr 2 vf gur orfg jnl sbe vg.
+
+# Abj yrg’f erpnc gur ragver vagreehcg cebprff gb frr jung zl xrlobneq pbagebyyre arrqf gb qb: Jura hfre cerffrf n xrl, gur pbagebyyre chyyf gur VAG yvar ybj, jnvg hagvy Z1′ naq VBED’ obgu tbrf ybj (jr’yy pnyy vg VAGNPX’, fubeg sbe vagreehcg npxabjyrqtr), chg gur vagreehcg irpgbe ba gur qngn ohf, jnvg hagvy VAGNPX tbrf uvtu, gura fgbc qevivat gur qngn ohf. Fbhaqf yvxr n ybg bs jbex, ohg V pna whfg hfr 2 puvcf sbe gung. N 74UP32 BE tngr gb trarengr VAGNPX’, juvpu vf gura gvrq gb BR’ bs  n 74UP245 ohssre, vg’f ovqverpgvbany ohg va guvf pnfr V’yy whfg frg vg gb n fvatyr qverpgvba. Guvf jnl, gur vagreehcg irpgbe ba gur bgure fvqr bs gur ohssre vf tngrq gb gur qngn ohf gur zbzrag VAGNPX’ tbrf npgvir. Gur PCH jvyy gura tb gb gur VFE nsgre 2 whzcf.
+
+Guvatf trgf fyvtugyl zber pbzcyvpngrq ng gur VFE gubhtu. Gur PCH arrqf gb ernq gur xrlobneq cbeg gb frr jung xrl hfre whfg cerffrq, gung arrqf fbzr qrpbqvat ybtvp, gur xrlobneq pbagebyyre nyfb arrqf gb erfcbaq gb PCH’f cbeg ernq whfg va gvzr, bgurejvfr gur PCH jvyy trg fbzr tneontr qngn. Gb npuvrir guvf V’z tbvat gb hfr na nqqvgvbany 2 puvcf, n 74UP688 8-ovg rdhnyvgl qrgrpgbe naq n 74UP573 genafcnerag yngpu. Gur xrlobneq pbagebyyre jvyy yngpu gur xrlobneq qngn , naq jura PCH cresbezf n ernq, gur ‘688 pbzcnerf gur cbeg nqqerff naq chg gur yngpurq qngn bagb gur qngn ohf.
+
+Fb gb fhz vg nyy hc ntnva, urer vf ubj zl xrlobneq pbagebyyre jvyy jbex: Gur pbagebyyre erprvirf n olgr bs gur xrl cerff, chg gur qngn ba gur yngpu, ranoyr gur yngpu, chyy qbja VAG’, jnvg sbe VAGNPX’, chg vagreehcg irpgbe ba gur qngn ohf, naq chyy hc VAG’ naq ghea bss yngpu jura VAGNPX’ tbrf njnl. Gur pch jvyy gura gel gb ernq sebz cbeg 0, na VBEQ’ fvtany vf trarengrq jura obgu VBED’ naq EQ’ ner ybj, VBEQ’ vf gvrq gb gur BR’ bs gur yngpu, juvpu ranoyrf vg jura vg’f npgvir, eryrnfvat gur xrlobneq qngn bagb gur qngn ohf sbe PCH gb ernq.
+
+# Sbe ernqvat CF/2 fvtany vgfrys V hfrq na Neqhvab Ceb Zvpeb gung V unir ynlvat nebhaq, juvyr gur NIE puvc va Neqhvab vgfrys zvtug frrz fybj naq bhg bs qngr pbzcnerq gb gur 32-ovg zvpebpbagebyyre gbqnl, jung’f haorngnoyr vf vgf vaperqvoyr pbzzhavgvrf. Gurer vf cebonoyl nyernql na Neqhvab yvoenel jevggra sbe rirel fvatyr guvat lbh pna guvax bs, naq sbe CF/2 vg’f ernyyl n qbqqyr. 2 zvahgrf bs tbbtyr frnepu tbg zr gur yvoenel, naq gur erfg vf whfg ubbxvat hc 2 jverf. Gur Neqhvab ernqf gur xrlcerff naq fraq bhg n olgr bs NFPVV pbqr gb gur znva pbagebyyre, juvpu vf n FGZ32S103 qri obneq, gung znantrf gur vagreehcg npgvivgl. Orybj vf gur fpurzngvpf:
+
+Nf lbh pna frr gurer ner nyernql 6 puvcf evtug bss gur ong, naq vg’f whfg gur fgneg. Ybbxf yvxr gur V/B obneq vf tbvat gb or gur zbfg pbzcyvpngrq  obneq va zl SNC pbzchgre.
+
+V nyfb jebgr n fubeg grfg cebtenz sbe gur arj V/B obneq:
+
+Abgr ubj zl cebtenz fgneg sebz 0k100 abj, vg’f phfgbznel gb fgneg M80 cebtenz ng gung ybpngvba orpnhfr gurer ner erfrg irpgbef ng $0000, $0008, $0010, $0018, $0020, $0028, $0030, $0038, V thrff lbh pna chg pbqr gurer vs lbh’er abg hfvat EFG vafgehpgvba, ohg vg’f whfg tbbq cenpgvpr gb yrnir gurz nybar. Zl pbqr frgf hc fgnpx, ybnq vagreehcg ertvfgre jvgu 0k0, fryrpg vagreehcg zbqr 2 naq ragref na vqyr ybbc. Jura xrlobneq vagreehcg pbzrf va gur pch jvyy whzc gb 0k10, gura whzc gb 0k3000, jurer gur VFE jvyy ernq n olgr sebz V/B cbeg 0 naq cevag vg ba fperra.
+
+Urer vf gur pbeerfcbaqvat FGZ32 vagreehcg pbagebyyre pbqr favccrg:
+
+Gur vagreehcg pbagebyyre gheaf bss yngpu naq vagreehcg ba fgneghc, gura fgneg yvfgravat sebz gur Neqhvab gung qrpbqrf CF/2 pbzznaqf, bapr vg erprvirf n xrlcerff olgr vg chg gung olgr ba ybjre 8 ovgf bs CBEGN, ranoyr gur xrlobneq qngn yngpu, gura npgvivgvrf M80’f VAG. Vg gura jnvgf sbe VAGNPX’ gb svavfu, nsgre juvpu vg chyyf VAG yvar uvtu ntnva naq qvfnoyrf gur xrlobneq qngn yngpu.
+
+Qbrf vg jbex? Jngpu gur ivqrb:
+
+Nf vg ghearq bhg vg jbexf fhecevfvatyl jryy, bs pbhefr gung’f abg ubj vg ybbxrq yvxr gur svefg gvzr ebhaq. Ng svefg gur SNC jbhyq cevag n srj punenpgref, naq tbrf onpx naq cevag sebz gur ortvaavat, vg jnf pybpx fcrrq qrcraq nf jryy, nf vg qvqa’g unccra dhvgr nf bsgra ng fybjre pybpx fcrrqf. N ovg bs qrohttvat yngre V sbhaq gung gur PCH jbhyq enaqbzyl whzc gb 0k66, naq fvapr gurer’f abguvat gurer, vg jbhyq fyvqr n ohapu bs ABC’f nyy gur jnl gb 0k100, naq fgneg rkrphgvat gur znva cebtenz sebz ortvaavat. Nf vg unccraf 0k66 nqqerff vf jurer AZV jvyy whzc gb vs gur yvar vf npgvir. Vg’f gur tbqqnza abvfrf ntnva, naq vg nyfb ybbxf yvxr gur chyy hc sebz znva fgz32 pbagebyyre vf gbb jrnx. N srj zber svygrevat pncf naq n qrqvpngrq chyyhc erfvfgbe ba AZV yngre, vg’f jbexvat yvxr n qernz.
+
+Arkg fgrc? JvSv. Zber fcrpvsvpnyyl, V jnag gb hfr zl SNC nf n VEP pyvrag gb hfr ba Gjvgpu pungf, abj jr unir gur ivqrb pneq naq xrlobneq, nyy gung’f yrsg vf fbzr jnl gb fgernz VEP qngn gb SNC, juvpu V’yy gnpxyr va gur arkg cbfg. Vg’f nyy trggvat irel pybfr abj.
+
+SNC fnlf Uryyb Jbeyq
+
+Vg unf orra n jrrx fvapr zl ynfg cbfg, jura jr yrsg gur npgvba ynfg gvzr gur SNC’f ivqrb pneq jnf jbexvat jvgu qbhoyr ohssrevat naq pbybe nggevohgrf, naq n grfg eha erfhygrq va guvf:
+
+Erzrzore gur cebtenz jnf svyyvat hc nggevohgr zrzbel jvgu 0k1o, n checyr pbybe, naq punenpgre zrzbel jvgu yrggre N. Ubjrire nf lbh pna frr nobir, nsgre ehaavat gur cebtenz fbzr punenpgre pryyf qvq abg ghea checyr, naq fbzr bguref ghearq checyr, ohg yrggref qvq abg punatr gb N. Guvf jnf orpnhfr gur PCH jnf gelvat gb jevgr gb IENZ juvyr IENZ pbclvat jnf haqre jnl, naq gur bcrengvba jnf vtaberq ol gur TCH. Gb cerirag guvf sebz unccravat jr arrq fbzr jnl gb yrg PCH xabj gung TCH vf ohfl fb vg pna jnvg n yvggyr hagvy gur pbclvat vf qbar. V qrpvqrq gb znxr n srj zrzbel znccrq iveghny ertvfgre sbe zl TCH, guvf jnl gur M80 pna nfx TCH vs vg’f ohfl svefg, vs vg vf gur PCH jvyy jnvg, bgurejvfr PCH pna jevgr gb IENZ evtug njnl, urer vf gur hcqngrq iveghny ertvfgre pbqr:
+
+Onfvpnyyl V whfg nqqrq n fvatyr yvar bs pbqr, abj jura PCH gevrf gb ernq nqqerff 0k92p0 vg jvyy trg gur inyhr bs pbcl_va_cebterff, juvpu vf 1 jura IENZ vf haqrejnl. Guvf jnl, gur PCH svefg cbyy guvf ertvfgre rirel gvzr vg jnagf gb jevgr gb IENZ, naq jnvg vs vgf inyhr vf 1, ceboyrz fbyirq! Jryy abg dhvgr:
+
+# Nsgre ehaavat gur IENZ-svyyvat cebtenz ntnva, gurer ner fgvyy n ohapu bs ceboyrz punenpgre pryyf, nygubhtu zhpu srjre guna orsber. Npghnyyl vg’f abg uneq gb svther bhg jul: Fbzrgvzrf gur PCH jvyy nfx evtug orsber IENZ pbcl fgnegf, fb gur TCH ercyvrf gung vg’f vqyr, ohg jura PCH gevrf gb jevgr gb IENZ n srj pybpx plpyrf yngre gur pbclvat jvyy nyernql or haqrejnl, naq gur jevgr trgf vtaberq nf n erfhyg. Jr arrq n jnl gb yrg PCH xabj n yvggyr juvyr orsber pbcl npghnyyl fgnegf. V qvq n qvegl yvggyr unpx ol perngvat nabgure fvtany gung tbrf npgvir n srj fpnayvarf orsber IOYNAX npghnyyl fgnegf, guvf jnl gur PCH jvyy frr gung TCH vf ohfl n yvggyr rneyvre, fb vs vg unccraf gb gel gb jevgr orsber gur pbcl vg jvyy unir gvzr gb qb svavfu gur bcrengvba. Nsgre gung, gur SNC vf svanyyl eraqrevat n ornhgvshy fperra shyy bs checyr N’f. Gvzr gb jevgr n cebcre “uryyb jbeyq” cebtenz:
+
+V perngrq n ‘purpx’ fhoebhgvar juvpu trgf pnyyrq rirel gvzr orsber PCH gevrf gb jevgr gb IENZ. Gur cebtenz svefg svyy gur nggevohgr jvgu lryybj, gura pyrne gur fperra, gura cevag “uryyb jbeyq” ng gur svefg ebj ba gur fperra. Urer vf ubj vg ybbx yvxr:
+
+# Avpr vfa’g vg, vg’f gur zbzragf yvxr guvf gung xrrcf zr tbvat. N srj jrrxf ntb V unir ab vqrn ubj gb ohvyq n pbzchgre, naq SNC jnf whfg n ohapu bs 20 lrne byq puvcf, naq abj vg’f ehaavat zl cebtenz naq fnlvat uryyb gb gur jbeyq yvxr nal bgure cebcre pbzchgref!
+
+Pryroengvba nfvqr gubhtu, abgvpr ubj guvf uryyb jbeyq cebtenz vf erznexnoyl fybj. V ena vg ng n fybjre pybpx gb frr gur cebterff, ohg rira ng n shyy 2ZUm vg fgvyy gnxrf yvxr unys n frpbaq gb pbzcyrgr, juvpu vf sberire va zvpebpbzchgref. Gur ernfba vf gung gur M80 unf gb ernq gur tch_ohfl ertvfgre orsber rirel fvatyr jevgr, juvpu jnfgrf n uhtr nzbhag bs gvzr. N orggre fbyhgvba jbhyq or yrg PCH or noyr gb qvfnoyr TCH pbclvat nyy gbtrgure, qb gur jevgr, gura ranoyr pbclvat ntnva. Guvf jnl gur PCH qbrf abg unir gb jnvg ng nyy, naq bayl unf gb jevgr gb TCH ertvfgre gjvpr vafgrnq bs 4800 gvzrf. Gur arj pbcl_ranoyr ertvfgre vf ng 0k92p1. Urer vf gur hcqngrq pbqr:
+
+# V nqqrq nabgure vs pbaqvgvba fb abj PCH pna ernq sebz IENZ gbb. Ubjrire zbfg vzcbegnagyl abj jura PCH jevgrf 0 gb 0k92p1, IENZ pbcl jvyy or qvfnoyrq. Gur PCH gura pna jevgr gb IENZ ng shyy fcrrq jvgubhg vagreehcgvba. Naq jura vg’f qbar gur PCH pna ranoyr IENZ pbcl ntnva naq gur erfhyg jvyy or qvfcynlrq ba gur fperra ba gur arkg senzr. V jebgr nabgure cebtenz gb grfg vg.
+
+V chg gbtrgure n “cevag” shapgvba, lbh chg punenpgre lbh jnag gb cevag va p, nggevohgr va o, vaqrk ba fperra va qr, naq pnyy vg. V svefg qvfnoyr gur IENZ pbcl, gura pyrne gur fperra jvgu pune 0 naq jevgr “Uryyb Jbeyq!” gb vg, gura ranoyr gur IENZ pbcl ntnva. Urer vf gur erfhyg:
+
+Nf lbh pna frr guvf vf zhpu snfgre guna gur svefg nggrzcg. Gur grkg nccrnef ba fperra vafgnagyl. Ybbxf yvxr qvfnoyvat pbcl qhevat ohyx IENZ jevgr vf gur jnl gb tb.
+
+Ubjrire, vs lbh ybbx ng gur ivqrb pnershyyl gur fhccbfrqyl juvgr grkg nccrnef ovg lryybj be erq. V fcrag qnlf gelvat gb svk guvf vffhr, gjrnxvat gur SCTN pbqr naq fjnccvat bhg IENZ puvcf. Va gur raq V qba’g guvax vg’f gur IENZ be gur pbcl ebhgvar, fvapr gur punenpgre naq nggevohgr ner pbcvrq gbtrgure, naq nyy gur grkgf frrzf svar. V guvax vg’f gur abvfr ntnva, jvgu zber guna 100 fcnturggv jverf ehaavat nebhaq. Vg zvtug or orggre guna oernqobneq, ohg nccneragyl fgvyy abg tbbq rabhtu. V’yy cebonoyl unir gb qrfvta n cebcre CPO sbe gur ivqrb pneq gb frr vs vg trgf orggre. V guvax V’yy zbir ba sbe abj, V’z whfg xvaq bs gverq jvgu jbexvat ba gur ivqrb pneq evtug abj.
+
+Abj gur ivqrb pneq vf jbexvat, arkg fgrc vf frggvat hc gur xrlobneq vachg sbe SNC. Svaq bhg jung unccraf va zl arkg cbfg!
+ 
+Tbg Zl Zbwb Jbexvat: Punenpgre Nggevohgrf, ITN obneq, Qbhoyr Ohssrevat, naq PCH Vagresnpr
+
+# Va zl ynfg cbfg V qrfvtarq naq ohvyg na rneyl fgntr bs SNC’f ivqrb pneq ba oernqobneq,  V qrpvqrq gb hfr ITN sbe ivqrb bhgchg, ehaavat 80×30 grkg zbqr ng 640×480. Gur IENZ jnf jbexvat, fb jnf gur punenpgre EBZ, naq abj gur obneq vf eraqrevat tneontr qngn va IENZ ba fgneg hc nf punenpgref ba fperra, nyy vf tbbq.
+
+tneontr qngn arire ybbxrq fb unccl
+Ubjrire, gurer jnf fgvyy fbzr tynevat vffhrf yrsg hagbhpurq va gur ynfg cbfg, sbe rknzcyr gur ynpx bs pbybef. Gung jbhyq or gur wbo bs gur nggevohgr olgr. Va zl qrfvta(naq n ybg bs bgure rneyl CPf) rnpu grkg zbqr punenpgre vf nppbzcnavrq ol na nggevohgr, juvpu qrfpevorf jung pbybe vf gur fnvq punenpgre, fubhyq vg or oyvaxvat, rgp. V vtaberq vg ynfg gvzr gb trg gur punenpgre trarengbe jbexvat snfgre, abj fvapr vg qbrf, vg’f gvzr gb tb onpx gb gung.
+
+Svefg n yvggyr ovg nobhg gur IENZ ynlbhg, gur 80×30 grkg zbqr arrqf 2400 olgrf sbe punenpgre, naq nabgure 2400 sbe nggevohgr. Gubfr 4800 olgrf jvyy or znccrq gb orgjrra 0k8000 naq 0k92p0 va M80’f zrzbel, svefg 2400 sbe pune naq frpbaq unys sbe nggevohgr.
+
+Urer vf hcqngrq irevybt svyr jvgu nggevohgr srgpuvat:
+
+# Guvf oybpx vf abj orvat pybpxrq ol gur 50ZUm vagreany pybpx, naq gur srgpu_nggevohgr nygreangrf orgjrra 0 naq 1 ng rnpu pybpx plpyr. Ng gur pybpx plpyr jurer srgpu_nggevohgr vf 0 gur SCTN tvirf gur punenpgre nqqerff gb gur IENZ, naq jura srgpu_nggevohgr vf 1 gur nggevohgr nqqerff. Gura gur punenpgre vf ybbxrq hc va punenpgre EBZ, juvyr ybjre 6 ovgf bs nggevohgr vf frag gb QNP qverpgyl, tvivat pbybef. Urer vf jung vg ybbxf yvxr:
+
+Ubjrire, gur shmmvarff vf onpx ntnva. V pna guvax bs frireny ernfbaf: gur IENZ vf abj orvat npprffrq gjvpr sbe rirel cvkry, bapr sbe punenpgre bapr sbe nggevohgr. Guvf pbhyq zrna vg zvtug or gbb fybj ntnva. Gur cvkry pybpx vf 25ZUm, juvpu zrnaf rnpu pybpx plpyr vf 40af, gjb zrzbel npprff qhevat guvf crevbq zrnaf rnpu npprff bayl unf 20af, naq zl IENZ vf engrq 15af, fb vg’f irel pybfr. Gur snfgre fcrrq nyfb trarengrf zber abvfr, rfcrpvnyyl ba gur oernqobneq. Ynfgyl, gur zbavgbe’f nhgb bcgvzvmngvba frrzf n ovg bss ba gur fvtany bs zl ivqrb pneq. V obhtug fbzr 12af VF61P256 puvcf, vg’f bayl 3 af snfgre, ohg va SNC, rirel anabfrpbaq pbhagf.
+
+Rirel anabfrpbaq pbhagf
+V chg vg ba, naq vg ybbxf n yvggyr ovg orggre, ohg abg ol zhpu, fvapr gurer vf fgvyy gur abvfl oernqobneq. V’yy unir gb jnvg hagvy V ohvyq gur guvat ba gur fgevcobneq.
+
+# Abj gung gur ivqrb pneq vf zbfgyl jbexvat ol vgfrys, jr pbzr gb gur vffhr bs ubj gb vagresnpr vg jvgu gur PCH. Nf lbh xabj gur IENZ ubyqf gur punenpgref naq nggevohgrf gung jvyy or eraqrerq ba fperra, ubjrire gung erdhverf PCH jevgvat fbzrguvat vagb vg va gur svefg cynpr, ohg gur IENZ vf orvat ernq ol gur ivqrb pneq zbfg bs gur gvzr fb gur bayl gvzr gung PCH unir gur punapr bs jevgvat vagb vg vf bar bs gur oynaxvat crevbqf, anzryl Ubevmbagny Oynaxvat Vagreiny naq Iregvpny Oynaxvat Vagreiny. UOYNAX unccraf rirel fpnayvar ohg vgf qhengvba vf rkgerzryl fubeg, bayl nebhaq 6hf vs V erzrzore pbeerpgyl, bhe 1970f M80 jba’g unir rabhtu gvzr gb chfu n ybg bs hfrshy guvatf vagb IENZ qhevat gung xvaq bs gvzr, naq rira vs vg qbrf vg jvyy cebonoyl pnhfr fperra grnevat be ivfhny negvsnpgf, fvapr vg punatr gur pbagrag bs n fvatyr cvkry yvar vafgrnq bs na ragver senzr. Fb gung yrnirf hf jvgu IOYNAX, gung ynfgf nebhaq 1.6zf rirel fvatyr senzr, juvpu vf cyragl bs gvzr, ohg gung zrnaf PCH jvyy unir gb fcraq 90% bs vgf gvzr qbvat abguvat ohg jnvgvat sbe IOYNAX, juvpu vf rkgerzryl jnfgrshy, gung vf jung Dhvaa pubfr gb qb jvgu ure Irebavpn. Bar jnl gb trg nebhaq guvf vf gb hfr n Qhny Cbeg ENZ juvpu nyybjf jevgr naq ernq ng gur fnzr gvzr, ohg gung fghss vf cerggl uneq gb svaq. V qrpvqrq gb hfr zl rkvfgvat cnegf naq vzcyrzrag gur gevrq-naq-gehr zrgubq bs serrvat PCH sebz jnvgvat sbe gur ornz: Qbhoyr Ohssrevat.
+
+Gur cevapvcyr bs qbhoyr ohssrevat vf npghnyyl cerggl fvzcyr: gjb IENZf, pnyyrq onpx naq sebag IENZ, ner hfrq. Gur PCH jevgrf gb onpx IENZ, naq qhevat gur IOYNAX crevbq gur pbagrag bs onpx IENZ vf pbcvrq gb gur sebag IENZ naq fhofrdhragyl eraqrerq. Guvf jnl PCH pna jevgr gb IENZ ng nalgvzr vg jnagf, ncneg sebz n zvavfphyr nzbhag bs gvzr qhevat pbclvat. Fperra grnevat naq negvsnpgf ner nyfb ryvzvangrq fvapr gur ragver senzr vf orvat zbqvsvrq. Gur bayl cbffvoyr qbjafvqrf ner cebonoyl pbfg naq pbzcyrkvgl, ohg V guvax vg jbhyq or jbegu vg va gur raq, jura V jba’g arrq gb enpr gur ornz juvyr jevgvat zl cebtenzf.
+
+Ubjrire, ng guvf fgntr gur abvfr ceboyrz ba gur oernqobneq vf cerggl boivbhf abj, naq nqqvat nabgure IENZ naq 28 jverf jvyy bayl znxr vg jbefr, fb V qrpvqrq gb whfg ohvyq vg ba gur obneq.
+
+# Naq gb znxr fher V qba’g znxr jvevat zvfgnxrf V qrpvqrq gb fgneg ntnva naq ergrfg rirelguvat sebz gur ortvaavat ntnva, svefgyl whfg gur SCTN naq QNP, qvfcynlvat pbybe onef.
+
+Pbybe onef ba gur SCTN obneq
+Tbbq, gung jbexf. Arkg fgrc vf ubbxvat hc bar IENZ naq gel eraqrevat gur tneontr qngn ntnva.
+
+Abgvpr ubj nyy gur abvfrf ner tbar, tbbq fghss, n ybg bs H’f sbe fbzr ernfba.
+
+Pbzvat hc arkg vf gur znva pbhefr bs guvf cbfg: qbhoyr ohssrevat.
+
+Gur zbqhyr jnvgf sbe gur ioynax vagreiny, naq jura vg neevirf vg ranoyrf gur ernq bs onpx IENZ naq jevgr bs gur sebag IENZ, gura fgnegf n pbhagre gung tbrf gb 4800, juvpu qbhoyrf nf gur nqqerff sbe obgu sebag naq onpx IENZ. Guvf jnl gur pbagrag bs onpx IENZ vf pbcvrq gb gur sebag nf pbhagre vaperzragf. Gur pbcl_va_cebterff fvtany vf znqr ninvynoyr fb gung bgure zbqhyrf nf jryy nf gur PCH pna xabj vs n ohssre pbcl vf haqre jnl. Gur gbgny pbcl gvzr vf nebhaq 192hf, guvf zrnaf vafgrnq bs univat gb jnvg 90% bs gur gvzr gb jevgr gb gur IENZ, gur PCH abj bayl unir gb jnvg 1.1% bs gur gvzr vafgrnq. N cerggl ovt vzcebirzrag.
+
+V nqqrq nabgure fybg ba SNC’f onpxcynar naq cyhttrq gur ivqrb pneq va, vg’f cenpgvpnyyl vaqvfgvathvfunoyr sebz n TGK980 gb or ubarfg.
+
+# Hagvy abj gur ivqrb pneq unf orra jbexvat ol vgfrys, pbclvat ohssref naq eraqrevat punenpgref. Ubjrire fbbare be yngre PCH jvyy unir gb or noyr gb pbageby vg. Gurer ner fbzr jnlf gung PCH pna gnyx gb gur TCH, pregnva pbzchgref znc gurve IENZ qverpgyl gb gur nqqerffnoyr zrzbel (ARF naq Tnzrobl pbzrf gb zvaq), juvyr bguref pubfr gb abg rkcbfr gur IENZ naq vafgrnq unir zrzbel znccrq TCH ertvfgref, ZBF Grpuabybtl 8568 naq IVP-VV orybat gb guvf xvaq. Sbe SNC, V qrpvqrq gb hfr obgu. IENZ jvyy or znccrq gb orgjrra 0k8000 naq 0k92p0, juvyr iveghny ertvfgref fbzrjurer nsgre gung. Guvf jnl V pna rnfvyl grfg fbzrguvat ol jevgvat qverpgyl vagb IENZ, juvyr V pna nyfb nfx TCH gb qb urnilyvsgvat bcrengvbaf yvxr grkg fpebyyvat, vg’f gur orfg bs obgu jbeqf.
+
+Sbe abj gubhtu, vg’f whfg gur jevgr-bayl IENZ znccvat, urer vf gur pbqr:
+
+Guvf fvzcyr zbqhyr purpxf vs gur ZERD naq JE vf ybj naq nqqerff vf va gur pbeerpg enatr, naq pbaarpgf gur PCH ohf gb onpx IENZ vs vg qbrf. V’yy vzcyrzrag IENZ ernq naq iveghny ertvfgref yngre, V pna nyernql cevag fbzr cerggl grkg jvgu whfg jevgr sbe abj.
+
+Gvzr gb jevgr n M80 cebtenz gb gel vg bhg, vs V fgneg gb jevgr n inyhr sebz gur onpx bs gur IENZ gb sebag, gur fperra fubhyq svefg punatr pbybe, fvapr nqqevohgr olgrf ner ng gur onpx bs gur IENZ, bapr nggevohgr olgrf unir orra svyyrq, grkg jvyy fgneg nccrnevat nf gur inyhr svyyf hc gur punenpgre cbegvba bs gur IENZ. Urer vf gur grfg cebtenz:
+
+# Gur cebtenz svefg svyyf gur obggbz unys bs gur IENZ jvgu 0k1o, ovanel 011011, gur svefg 01 tbrf gb erq QNP, zvqqyr 10 tbrf gb terra QNP, naq ynfg gjb ovg 11 tbrf gb oyhr QNP, gur erfhyg fubhyq or n ivbyrg pbybe. Nsgre svyyvat hc nggevohgr gur cebtenz gura svyyf gur svefg 2400 olgrf bs IENZ jvgu 65, NFPVV bs yrggre N. Fb jr fubhyq rkcrpg gur tneontr grkg ba fperra svefg ghea ivbyrg, gura svyy hc jvgu yrggre N. Urer vf jung unccraf:
+
+Jryy vg’f zbfgyl jung fubhyq or unccravat, ubjrire, fbzr punenpgref qvqa’g ghea ivbyrg, naq gurer ner srj zvffrq N’f urer naq gurer. Guvf jnf orpnhfr PCH jnf gelvat gb jevgr qhevat gur IENZ pbcl bcrengvba naq jnf vtaberq. Zl arkg fgrc jbhyq or vzcyrzragvat n srj iveghny ertvfgref fb PCH pna purpx vs TCH vf ohfl orsber gelvat gb jevgr gb IENZ. Ohg nalubj, cebterff vf cebterff.
+
+Gurer jnf npghnyyl n rkgerzryl sehfgengvat onpxfgbel gung V qvqa’g zragvba, nsgre gelvat gb trg gur nobir pbqr jbex ng nebhaq 500Um, V gevrq gb ohzc hc gur cebprffbe fcrrq gb nebhaq 500XUm naq vg fvzcyl jbhyq abg jbex. Fbzrgvzrf vg ragref gur raq ybbc rneyl, fbzrgvzrf vg vtaberf gur ybbc ragveryl naq pbagvahrf cnfg gur raq bs gur cebtenz. V gubhtug gurer jnf n ybbfr pbaarpgvba be jrnx fubeg fbzrjurer nybat gur ohf ohg nsgre vafcrpgvat naq pyrnavat gur obneq gur ceboyrz fgvyy unccraf sebz gvzr gb gvzr. V riraghnyyl yrg zl FGZ32 pbagebyyre cevag bhg gur nqqerff naq qngn pbagrag nsgre rnpu pybpx plpyr, urer vf bar bs gur rkrphgvat genprf:
+
+# Nf lbh pna frr nqqerff ohf vf zvffvat ovgf, 0k8960 ghearq vagb 0k8160, naq whzcvat gb 0ko ghearq vagb whzcvat gb 0k3, gung’f jul zl cebtenz jnf tbvat nyy bire gur cynpr. Gur phycevg? Abvfr. Nsgre nqqvat n pbhcyr bs pncf orjgrra IPP naq TAQ bs gur M80 naq zrzbel puvc, gur ceboyrz jrag njnl. Ubjrire V qvq fcrag n fghcvqyl ybat nzbhag bs gvzr gelvat gb anvy vg qbja. Vg’f bar bs gur guvatf V fubhyq unir xabja orggre, bu jryy.
+
+Naljnl, SNC’f ivqrb pneq vf unysjnl jbexvat abj. V’yy svavfu hc gur TCH iveghny ertvfgre va gur arkg cbfg, naq unir zl SNC svanyyl fnl “uryyb jbeyq” yvxr nyy gur terng pbzchgre qvq jura gurl jrer obea.
+
+Chggvat gur S va SNC: ITN Punenpgre Trarengbe
+
+Nf V zragvbarq va zl svefg cbfg, Fgrir Pvnepvn, va uvf 1981 obbx Ohvyq Lbhe Bja M80 Pbzchgre, pnyyrq uvf pbzchgre MNC nf vg fgnaqf sbe M80 Nccyvpngvba Cebprffbe. Fvapr V jnf cynaavat gb hfr SCTN nf n cneg bs zl bja M80 pbzchgre, vg’f bayl angheny gb anzr zvar SCTN Nffvfgrq Cebprffbe, be SNC va fubeg. Naq abj nsgre trggvat PCH gb jbex, nqqvat zrzbel, naq cebtenzzvat gur cebprffbe, gur gvzr unf svanyyl pbzr sbe zr gb chg gur S va SNC naq fgnegvat qrfvtavat gur ivqrb vagresnpr bs zl pbzchgre.
+
+# Ybbxvat onpx ng gur uvfgbel bs crefbany pbzchgref, vg’f abg uneq gb frr gung gur tencuvpny pncnovyvgl vf bar bs gur zbfg vzcbegnag nfcrpgf bs qrgrezvavat gur cbchynevgl bs n fnvq pbzchgre, rirelguvat jnf ubbxrq hc gb n zbavgbe be GI, naq ab bar jnagrq gb unir n pbzchgre gung bayl pbzzhavpngrf guebhtu n ebj bs 16 YRQ yvtugf. Naq vg’f gur fnzr pnfr jvgu SNC. Evtug abj vg unf ab zrnaf bs vachg/bhgchg jungfbrire, gur bayl jnl gb frr vs n cebtenz vf rkrphgvat pbeerpgyl vf unygvat gur PCH naq rknzvavat gur ENZ pbagrag. Zl cyna vf gb nqqvat xrlobneq nf vachg, naq ivqrb bhg nf bhgchg. Nf sbe gur ivqrb, gurer ner n ahzore bs fgnaqneqf gb pubbfr sebz. Gurer’f ES, naq pbzcbfvgr ivqrb, gura gur fyvtugyl zber zbqrea ITN, naq nsgre gung pbzrf QIV, QvfcynlCbeg, UQZV naq nyy gur UQ fgnaqneqf. V cvpxrq ITN orpnhfr vg’f n engure fgenvtugsbejneq vagresnpr, naq vg vf fgvyy orvat fhccbegrq ol n ybg bs zbavgbef. V arrq n ubevmbagny flap chyfr, n iregvpny flap chyfr, naq 3 nanybt pbybe fvtanyf orgjrra 0 naq 0.7I. N cvkry pybpx chfurf bhg cvkryf ng rnpu yvar sebz yrsg gb evtug, ng gur raq bs gur yvar vf gur UFLAP gb gryy zbavgbe gb zbir qbja gb gur arkg yvar, naq IFLAP vf trarengrq jura gur ynfg yvar unf ernpurq, fvtanyyvat zbavgbe gb fgneg n arj senzr. Fgnaqneq erfbyhgvba bs ITN vf 640×480, ubjrire, gurer ner nqqvgvbany cvkryf naq yvarf pnyyrq sebag naq onpx cbepu, gubfr ner abg eraqrerq ba fperra naq jrer hfrq gb nyybj gvzr sbe ryrpgeba ornz gb zbir gb gur arkg yvar/senzr. Gubfr nqqf nabgure 100 be fb cvkryf ba rnpu yvar, naq nabgure 40 arj yvarf. Gur cbepu nyfb tvirf gvzr gb hcqngr ivqrb ohssre.
+
+# Jura vg pbzrf gb npghnyyl qrfvtavat gur ivqrb vagresnpr, lbh unir gb xrrc va zvaq gung M80’f erfbheprf vf npghnyyl engure yvzvgrq. Vs jr ner gb qevir gur ITN ng 640×480, jr arrq gb chg jung rnpu cvkry vf qvfcynlvat fbzrjurer va n zrzbel, naq gung vf pnyyrq n Ivqrb ENZ. Sbe 640×480 jr’yy arrq 307200 ovgf whfg gb fgber n 1-ovg oynpx naq juvgr vzntr, naq vs jr jnag pbybef, vg jvyy hfr zber guna 300X bs zrzbel vs V hfr bar olgr sbe rnpu cvkry, naq M80 pna bayl angviryl nqqerff 64X bs zrzbel. Jung’f zber, gur cebprffbe jvyy unir gb hcqngr zber guna 300X qbgf ng rirel fvatyr senzr, juvpu vf jnl gbb fybj sbe gur 1970f PCH. Fvapr zbfg bs jung jnf gb or qvfcynlrq jnf grkg naljnl, n ybg bs crefba pbzchgref ng gur gvzr vzcyrzragrq jung pnyyrq gur Grkg Zbqr. Vafgrnq bs vaqvivqhny cvkryf, gur fperra vf qvivqrq va gb n ahzore bs grkg pryyf, rnpu bar pbagnvavat n punenpgre, naq jvgu punenpgre EBZ naq fbzr fcrpvny pvephvgf, n grkg fperra pna or eraqrerq zhpu snfgre, naq gur pbagrag bs n fperra pna or znavchyngrq rnfvre gbb. Naq zbfg vzcbegnagyl, guvf zrgubq fnirf n ybg bs zrzbel, n 80×30 grkg zbqr fperra va 640×480 bayl arrqf 2400 olgrf, pbzcnerq gb 300X va ovgznc zbqr. Vs V jnag pbybe/haqreyvar/oyvaxvat/rgp V pbhyq hfr na nqqvgvbany olgr sbe gubfr shapgvbaf, guvf vf bsgra pnyyrq gur nggevohgr. Gurersber gjb olgrf ner bsgra hfrq va IENZ va grkg zbqr, bar olgr gb fcrpvsl jung punenpgre vg vf, naq nabgure gb fcrpvsl gur pbybe naq n ahzore bs bgure nggevohgrf bs gur fnvq punenpgre.
+
+V’z hfvat SCTN sbe gur ITN ivqrb pbagebyyre, fvapr vg’f zhpu snfgre guna ovtonatvat ITN jvgu n zvpebpbagebyyre. N pynff V gbbx n srj lrnef ntb hfrq n SCTN obneq sbe n srj cebwrpgf, ohg V unir sbetbggra zbfg vg ol abj, gung pynff jnf nyfb va IUQY, juvyr n ybg bs gur erfbheprf bayvar ner va Irevybt, fb guvf vf onfvpnyyl fgnegvat narj sbe zr. V hfrq Zbwb I3 jvgu Fcnegna 6 puvc. V yvxr vg orpnhfr vg’f bcra fbhepr, unf n ybg bs cvaf, purnc, naq vg hfrf n NGzrtn32h4 zvpebpbagebyyre gb pbasvther gur SCTN fb V qba’g arrq gb fcraq zber gb ohl n cebtenzzre, zbfg vzcbegnagyl gubhtu vg qbrfa’g unir enaqbz crevcurenyf gung V qba’g arrq gnxvat hc cvaf, vg’f whfg n fvzcyr, pyrna, zvavznyvfg obneq jvgu nyy gur cvaf oebxra bhg naq abguvat ryfr, whfg ubj V yvxr vg.
+
+Urer vf SNC’f ivqrb fcrp gung V cynaarq: 640×480 erfbyhgvba, 80×30 grkg zbqr jvgu 8×16 zbabfcnpr sbag, 64 pbybef, 2.4X punenpgre ENZ naq 2.4X nggevohgr ENZ. Vg’f engure onfvp, ohg V pna nyjnlf nqq zber snapl fghss yngre.
+
+# V jnagrq gb fgneg jvgu fbzrguvat fvzcyr yvxr qvfcynlvat fbzr cnggreaf, naq gura tb sebz gurer. Sbeghangryl sbe zr ITN fvtany trarengvba vf bar bs gur zbfg pbzzba gnfxf sbe SCTN, naq gurer ner gbaf bs erfbheprf bayvar. V hfrq fbzr pbqr bs guvf engure rkpryyrag rknzcyr, vg fvzcyl qvfcynlf fbzr pbybe onef ba fperra. V gjrnxrq gur pbqr fb vg hfrf 2-ovg pbybe vafgrnq bs 3, tvivat gur ivqrb pneq 4*4*4 = 64 pbybef. Gur pbybe bhgchgf ner qvtvgny, jvgu 6 ovgf va gbgny, juvpu zrnaf V arrq gb ohvyq n fvzcyr QNP gb pbaireg vg gb nanybt fvtany orjgrra 0 naq 0.7I, n E-2E QNP vf rabhtu, V hfrq 1X-2X sbe gur wbo.
+
+Jvgu rirelguvat ubbxrq hc, V hcybnqrq gur pbqr naq ubbxrq vg hc gb na byq YPQ zbavgbe gung V cvpxrq hc sbe $7 whfg sbe guvf cebwrpg.
+
+Ibvyà, Pbybe onef! Ubjrire, gur pbybef va dhrfgvba ybbxf rkgerzryl qnex, qrfcvgr gur zbavgbe ba shyy oevtugarff. V gevrq nabgure zbavgbe naq vg jnf fgvyy gur fnzr, nsgre zrnfhevat gur bhgchg bs QNP vg gheaf bhg vg’f bayl chggvat bhg 0.09I vafgrnq bs 0.7I ng shyy vagrafvgl, vg ybbxf yvxr 1X-2X QNP pna’g cebivqr rabhtu pheerag gb qevir ITN vachgf, juvpu V fubhyq unir xabja. V gevrq gb hfr na bc-nzc ohssre, ohg vg jnf gbb fybj sbe gur 25ZUm cvkry pybpx. Va gur raq V whfg hfrq fznyyre inyhr erfvfgbef sbe gur QNP, V hfrq 150 naq 330 buz, vg’f abg rknpgyl qbhoyr ohg vg’yy unir gb qb, naq gur crnx bhgchg jvgu ITN pbaarpgrq vf 0.68I, cerggl pybfr gb 0.7I va gur fcrpvsvpngvba. Jvgu gur arj QNP, gur vzntr vf onpx gb shyy oevtugarff.
+
+Rntyr-rlrq ivrjref zvtug unir fcbggrq gur pbybe onef unir punatrq pbybef, V qvq vg gb frr gur QNP cresbeznapr, va 00, 01, 10, 11 vaperzragf, svefg bayl erq, gura nyy punaaryf. Jryy vg ybbxf rknpgyl yvxr ubj vg fubhyq or yvxr, erqf ner erq, naq terlf ner terl jvgubhg pbybe pnfgf.
+
+# Gura vg’f gvzr gb gnpxyr gur qrgnvyf bs gur grkg eraqrevat. Svefg V arrq gjb pbhagref gb xabj juvpu cvkry V’z ng, bar sbe rnpu nkvf, ucbf[9:0] vf gur ubevmbagny pbhagre gung tbrf sebz 0 gb 639, naq icbf[9:0] vf gur iregvpny pbhagre gung tbrf sebz 0 gb 479. Nf gur pbagebyyre qenjf rnpu cvkry V nyfb arrq gb xabj juvpu cvkry va gur 8*16 sbag V nz ng, guvf vf fvzcyl gur ybjre 3/4 ovg bs gur ucbf/icbf pbhagre. Juvyr gur hccre 7/6 ovgf bs ucbf/icbf vf gur vaqrk bs gur pheerag punenpgre orvat eraqrerq va gur 80×30 tevq. Gur pbagebyyre jvyy srgpu n olgr sebz punenpgre ENZ, juvpu pbagnvaf gur punenpgre gb eraqre, nf jryy nf na nggevohgr olgr gb frr jung pbybe gung punenpgre vf. Sbe fgneg V’yy vtaber nggevohgr sbe abj, naq gur zrzbel ybpngvba bs rnpu punenpgre jbhyq or 80 * ipune + upune, jurer ipune naq upune vf gur pbbeqvangr bs gur yrggre. Naq jvgu gur zrzbel nqqerff, gur ivqrb pbagebyyre pna tvir vg gb punenpgre ENZ naq trg n olgr bs qngn onpx gb eraqre. V punatrq gur punenpgre eraqrevat pbqr gb frr vs vg jbexf.
+
+Nf lbh pna frr vg pnyphyngrf n zrzbel nqqerff ienz_nqqe onfrq ba gur cvkry pbhagre, naq srrqf gur ybjre 6 ovgf bs qngn gb gur ITN bhgchg, V ubbxrq hc n yrsgbire FENZ, naq urer’f jung terrgrq zr jura V ena gur pbqr:
+
+Ornhgvshy vfa’g vg? Lbh pna frr rnpu punenpgre pryy, jurer yrggref jvyy tb va, bayl evtug abj vg’f whfg enaqbz pbybef sebz whax qngn vafvqr gur FENZ.  Fnl V jnag gb qvfcynl “N” va n punenpgre pryy, gur pbagrag bs zrzbel bs gung pryy jvyy or 65, gur NFPVV pbqr bs N. Evtug abj gur ITN pbagebyyre trgf gur qngn bs 65 naq whfg chg vgf ybjre 6 ovg bhg nf pbybe, arkg fgrc vf znxvat n punenpgre EBZ, fb gur ITN pbagebyyre jvyy ybbx hc 65 va vg, naq frr juvpu cvkry vg fubhyq eraqre gb chg gur yrggre N ba fperra vafgrnq bs whfg n oybpx bs pbybe.
+
+Naq jung qb lbh xabj? Bcra fbhepr pbzzhavgl gb gur erfphr ntnva! V sbhaq gur rknpgyl guvat V arrq ba tvguho, n 8*16 pbqr cntr 437 sbag. Nsgre qebccvat vg va naq tvivat vg pbyhza naq ebj qngn, V tbg guvf:
+
+Jr npghnyyl tbg grkg! Vafgrnq bs pbybe oybof gur ITN pbagebyyre vf eraqrevat punenpgref sebz tneontr qngn va gur FENZ. Gur punenpgref qb ybbx fbzrjung shmml gubhtu, naq fbzr punenpgref ner abg eraqrerq cebcreyl. Gb pbzcner jvgu n xabja rknzcyr, V svyyrq hc n RRCEBZ jvgu 0 gb 255 naq qebccrq vg va, vg fubhyq ybbx yvxr guvf:
+
+# Vg ybbxf rira jbefr guna orsber! Vs lbh ybbx ernyyl pybfryl lbh pna frr vg sbyybjf gur cnggrea bs gur pbqr cntr 437, ohg rirel fvatyr punenpgre vf znatyrq, fbzrgvzrf orlbaq erpbtavgvba. V svefg gubhtug vg jnf n oernqobneq abvfr ceboyrz, nf V’z ehaavat 25ZUm ba vg, naq Dhvaa unq guvf vffhr juvyr qrfvtavat uref. Ubjrire ybbxvat pybfre V pna gryy rnpu punenpgre ner znatyrq va gur rknpgyl gur fnzr jnl, naq gurl qba’g punatr jura V jvttyr fbzr jverf, abvfr graqf gb or enaqbz, fb vg vf abg gur pnfr. V gura gubhtug fbzrguvat zvtug or jebat jvgu gur punenpgre EBZ pbqr, ohg gung frrzrq hayvxryl. V gura gubhtug vg jnf zl penccl zbavgbe, ohg vg ybbxf gur fnzr ba n orggre bar V gevrq. Qehax naq bhg bs vqrnf, V gubhtu V ubbxrq zl jverf jebat naq onfvpnyyl fgnegrq zrffvat nebhaq jvgu gur FENZ qngn yvarf, juvyr qbvat fb V sbhaq fbzrguvat vagrerfgvat, guvf vf jung gur fperra ybbxf yvxr juvyr ubbxvat hc gur 2aq qngn yvar qverpgyl gb gur nqqerff yvar:
+
+Unccl snprf! Naq zbfg vzcbegnagyl vg ybbxf cresrpg! Fb vg’f abg abvfr abe punenpgre EBZ ceboyrz. V gura ubbxrq hc gur fnzr jver gb gur qngn bhgchg bs gur RRCEBZ:
+
+Vg ybbxf yvxr gur snprf ner fuvsgrq gb gur yrsg, ybbxf yvxr n gvzvat ceboyrz gb zr. Gvzr gb oernx bhg gur ybtvp nanylmre.
+
+# Punaary 4 vf cvkry pybpx, punaary 0 vf nqqerff, punaary 2 vf qngn, urer lbh pna frr qngn yntf oruvaq nqqerff sbe n jubccvat 140af, gung vf zber guna 4 cvkry pybpxf, naq gung’f jul gubfr snprf ybbxf fuvsgrq 4 cvkryf, vg ghearq bhg zl FENZ naq RRCEBZ vf gbb fybj, jub jbhyq unir gubhtug gung? Gur NG28P256-15CH V unir vf engrq 150af, fb vg’f cerggl pybfr, gur FENZ V unir vf engrq 50af, juvpu vf fgvyy abg snfg rabhtu, gung’f jul gur vzntr jvgu FENZ vf fgvyy shmml, ohg abg nf onq nf gur bar jvgu RRCEBZ.
+
+Gvzr gb ohl fbzr arj cnegf, VF61p256 ybbxf cebzvfvat, vg’f gur fnzr 32X FENZ ohg jvgu bayl 10 – 15af bs qrynl, juvpu vf 14 gvzrf snfgre guna gur bar V’z hfvat. Vg’f va FBW cnpxntr gubhtu, fb V bhtug n srr oernxbhg obneq gbb, V nyfb cvpxrq hc n arjre M80 PCH gb ercynpr gur pheerag bar V’z hfvat, guvf bar vf PZBF fb vg hfrf yrff cbjre naq pna eha hc gb 8ZUm.
+
+Fbyqrerq gur arj FENZ, ubcr V qvqa’g ohea vg bhg.
+
+Naq nsgre cyhttvat vg va, urer’f ubj vg ybbxf yvxr:
+
+Gur fcrrq qbrf znxr n qvssrerapr! Nyy gur punenpgre ner funecyl eraqrerq abj, vg’f fgvyy qvfcynlvat tneontr orpnhfr gung’f jung va gur FENZ naq gur gvzr, ohg gur flfgrz vf jbexvat.
+
+Abj gung gur grkg eraqrevat vf jbexvat, arkg cneg vf gur vagresnpr orgjrra gur cebprffbe naq gur ITN pbagebyyre. V’z fb qehax naq gverq abj fb V’z whfg tbvat gb raq vg urer, fgnl gharq sbe gur arkg cbfg!
+
+Cebtenzzvat SNC
+
+Vg unf orra n srj qnlf fvapr V ynfg jebgr nobhg SNC, vg’f abg gung V unir tvira hc ba vg, nygubhtu V qvq pbby bss n ovg naq fcrag zber gvzr ba bgure fghss. V’ir orra qrirybcvat n ivqrb pneq sbe SNC, ohg vg’f abg svavfurq lrg fb V’yy yrnir vg gb nabgure cbfg. Guvf gvzr, vg’f nyy nobhg jevgvat cebtenzf sbe SNC gb rkrphgr.
+
+# Jvgu 16XO bs ENZ naq 16XO bs EBZ, SNC vf ernql gb shapgvba yvxr nal bgure cebcre pbzchgref! Nygubhtu jvgubhg nal zrnaf bs vachg be bhgchg, vg’f abg ragveryl hfrshy ng guvf fgntr, ohg V’z abg tbvat gb yrg gung fgbc zr sebz ng yrnfg znxvat vg rkrphgr n fvzcyr cebtenz gb frr vs vg npghnyyl jbexf.
+
+Ubjrire, orsber qbvat gung, fbzr zber ubhfrxrrcvat gb qb. V arrq n fgernzyvarq jnl gb jevgr na nffrzoyl cebtenz, unir vg nffrzoyrq naq hcybnqrq gb SNC naq unir vg rkrphgrq. V ortna ol nqqvat n “cebtenzzvat zbqr”, juvpu vf ragrerq ol qrsnhyg hcba cbjrevat hc. Va guvf zbqr gur FGZ32 pbagebyyre xvpxf gur PCH bss gur ohf, gnxrf pbageby bs gur zrzbel naq yvfgraf ba gur frevny vachg, V pna gura vffhr ernq be jevgr pbzznaqf ivn oyhrgbbgu frevny naq unir vg cebtenz gur RRCEBZ. Jura V npghnyyl jnag SNC gb fgneg rkrphgvat gur cebtenz, V erfrg gur FGZ32 pbagebyyre juvyr ubyqvat qbja gur frpbaq ohggba, naq vg jvyy ragre rkrphgr zbqr naq fgneg ehaavat gur cebtenz, rnfl. Juvyr V jnf ng vg, V nyfb nqqrq nabgure ohggba nf jryy nf ynoryvat gurz. Sebz yrsg gb evtug ner erfrg, fvatyr pybpx, fvatyr vafgehpgvba, naq shyy fcrrq fgneg/fgbc.
+
+Urer vf n pbqr favccrg bs gur cebtenz zbqr shapgvba, va gur ybbc vg purpxf vs gurer vf n pbzznaq va gur HNEG erprvir ohssre, naq rkrphgr vg vs gurer vf. Gur pbzznaq pbhyq or ernq, jevgr, be mrebvat gur RRCEBZ.
+
+Jvgu gung qbar, gvzr gb sbphf ba gur CP fvqr. V arrq n M80 pebff nffrzoyre, qrohttre, naq fbzr jnl gb hcybnq zl cebtenz. Gur nffrzoyre V cvpxrq vf mznp, n ybat yvirq naq srngher evpu pebff nffrzoyre, naq bcra fbhepr gbb. Vg pbzrf jvgu n jvaqbjf rkrphgnoyr ohg lbh pna pbzcvyr vg sebz fbhepr lbhefrys. Gur qrohttre vf m80fvz, V qbjaybnqrq vg ohg unira’g tbg n punapr gb hfr vg orpnhfr nyy zl cebtenzf ner ernyyl fvzcyr evtug abj. Naljnl, gung bayl yrnirf gur znggre bs hcybnqvat gur cebtenz. V jebgr n fvzcyr naq engure penccl clguba fpevcg sbe vg:
+
+
+# Gur cebtenz fgnegf ng nqqerff 0k0, naq whfg whzc gb vgfrys raqyrffyl. Gur nffrzoyrq cebtenz vf 3 olgrf: P3 00 00, P3 vf WZC vafgehpgvba, naq 00 vf gur nqqerff vgf fhccbfrq gb whzc gb. Vs rirelguvat tbrf jryy, jr fubhyq frr gur nqqerff ohf tb va n ybbc sberire.
+
+Urer lbh pna frr zr hcybnqvat gur cebtenz jveryrffyl gb SNC ivn oyhrgbbgu, erfrg gur FGZ32 pbagebyyre juvyr ubyqvat gur frpbaq ohggba gb ragre rkrphgr zbqr, naq gura n srj fvatyr pybpx fgrcf. Lbh pna frr gur nqqerff jrag sebz 0k0 gb 0k1, gura 0k2, naq gura onpx gb 0k0 ntnva, nyfb abgvpr gur P3 naq 00 ba gur qngn ohf nf M80 srgpurf vafgehpgvbaf.  Nsgre gung V yrg vg eha ng shyy fcrrq naq lbh pna frr gur nqqerff ybbcvat. Fhpprff!
+
+Abj gung SNC vf tbvat, V jebgr n fyvtugyl zber pbzcyvpngrq cebtenz sbe vg gb grfg jevgvat gb FENZ:
+
+Nsgre pyrnevat N naq frggvat hc fgnpx cbvagre, vg nqqf 0k10 gb N, gura chfu gur pbagrag bs NS gb fgnpx rirel ybbc. Vs rirelguvat tbrf jryy V pna yrg vg eha sbe n juvyr, erfrg gur FGZ32 pbagebyyre gb tb vagb cebtenz zbqr, naq ernq onpx inyhrf va FENZ, naq vg fubhyq or 0, 10, 20, 30 rgp. Guvf cebtenz vf nyfb n jubbcvat 10 olgrf, fb vg zhfg or ng yrnfg 3 gvzrf orggre guna gur ynfg bar, evtug?
+
+
+# V hcybnq gur cebtenz, yrg vg eha sbe n juvyr, naq ernq onpx gur ortvaavat bs gur fgnpx. Lbh pna frr gur nqqerff ohf ybbcvat, naq gur FENZ nqqerff synfuvat ol va rnpu ybbc. Abj yrg’f rknzvar gur pbagrag:
+
+# Ng svefg tynapr vg zvtug ybbx yvxr V pbpxrq vg hc, fvapr vg’f abg fgevpgyl vapernfvat nf gur pbqr fhttrfgf. Ubjrire, chfu vafgehpgvba chfurf obgu N naq S gb fgnpx, S svefg gura N, fb gur inyhr bs N vf ng rira nqqerffrf, v.r. 0k7ssr, 0k7ssp, 0k7ssn rgp.  Naq vs lbh ybbx ng gur ahzoref lbh pna frr gurl ner vaqrrq vapernfvat. Gur bqq nqqerffrf ner pbagragf bs synt ertvfgre, vg fubhyq or 0 sbe gur svefg srj ybbcf, ohg fbzr bs gurz ner 0k20. 0k20 vf synt ovg 5 frg, juvpu vf npghnyyl n haqbphzragrq synt gung vf “n pbcl bs ovg 5”, juvpu vf rknpgyl jung unccrarq urer, fb nsgre nyy, rirelguvat vf nyevtug.
+
+Naq gurer lbh unir vg! SNC, ohvyg sebz n 8 napvrag puvcf naq fcnturggv bs jverf, npghnyyl  ehaavat cebcre cebtenzf gung V jebgr sbe vg. Vg’f n ovt zvyrfgbar va guvf ohvyq, naq nf lbh rkcrpg V’z guevyyrq ol vg. Ubjrire, V’z tbvat gb chg gur S va SNC nf V qrirybc n ITN tencuvpf pneq sbe gur M80 pbzchgre va gur arkg cbfg, fgnl gharq!
+
+Zrzbevrf bs SNC
+
+Abj gung SNC’f M80 vf serr ehaavat jvgu uneqjverq ABC, gur arkg fgrc jbhyq or gb nqq fbzr zrzbevrf fb V pna fgber cebtenzf vagb vg naq guhf rkrphgrq ol gur PCH. Fb va guvf cneg bs gur ohvyq ybt V’z tbvat gb nqq fbzr EBZ naq ENZ gb zl pbzchgre.
+
+V chepunfrq n pbhcyr bs NG28P256 RRCEBZ nf jryy nf UZ62256 Fgngvp ENZ. Obgu ner 32XO puvcf va QVC, naq snveyl bsgra hfrq va ubzroerj pbzchgre ohvyqf. Ohg orsber gung, fbzr ubhfrxrrcvat gb qb. Fvapr V’z tbvat gb znxr nabgure pneq jvgu obgu zrzbevrf ba vg, V arrq gb nqq nabgure fybg ba gur onpxcynar. Naq orpnhfr gur onpxcynpr fgevcf ner 5-jvqr, juvpu vf gbb pybfr gb chg nabgure pneq evtug arkg gb gur PCH pneq, V oevqtrq vg jvgu znyr qbhoyr ebj urnqref naq fbzr whzcref.
+
+# Abj pbzrf gur qvssvphyg cneg, orsber V fgneg ohvyqvat V arrq gb cyna bhg gur zrzbel znc bs SNC, bayl jura gung vf qbar pna V fgneg qrfvtavat zrzbel qrpbqvat ybtvp naq nyy gur erfg bs vg. Nsgre fbzr ernqvat V qrpvqrq gb xrrc vg fvzcyr, naq gur zrzbel znc bs SNC jvyy or yvxr guvf: 16XO EBZ sebz nqqerff 0k0 gb 0k3SSS, naq 16XO ENZ sebz 0k4000 gb 0k7SSS. Fvapr M80 pna nqqerff 64XO bs zrzbel qverpgyl, gung yrnirf zr jvgu 32XO bs haznccrq zrzbel, juvpu pna hfr sbe IENZ be fbzr bgure zrzbel znccrq VB qrivpr. V thrff 16XO vf bs ENZ naq EBZ vf cyragl sbe abj, vs V arrqrq zber V pna znxr nabgure pneq.
+
+Abj pbzrf gur zrzbel qrpbqvat, V’z tbvat gb hfr nqqerff yvarf sbe puvc fryrpg fvtany, naq ZERD’, EQ’ naq JE’ sbe BR’ naq JR’.  Sbe puvc fryrpg, abgvpr ubj gur zbfg fvtavsvpnag gjb ovg bs nqqerff fryrpg gur zrzbel. Jura obgu N15 naq N14 ner 0, nqqerff ner jvguva 0k0000 naq 0k3SSS, juvpu fryrpgf gur EBZ. Fvapr obgu N15 naq N14 unf gb or ybj sbe PF’ ba EBZ puvc gb or ybj, vg’f rnfl gb frr n fvzcyr BE tngr vf rabhtu. Zrzbl ernq vf ranoyrq jura obgu ZERD’ naq EQ’ ner ybj, ntnva, BE tngr. Zrzbel jevgr vf rknpgyl gur fnzr, npgvir jura obgu ZERD’ naq JE’ ner ybj, nabgure BE tngr. 3 BE tngrf, cresrpg sbe bar 74UP32, juvpu V unir. Gur PF’ naq JR’ fvtanyf ner funerq orgjrra gjb puvcf. Naq fvapr jr’er hfvat bayl unys bs gur puvc, N14 ba rnpu puvc vf gvrq gb gur tebhaq.
+
+Abj sbe fryrpgvat ENZ, vgf PF’ arrqf gb or ybj jura N15 vf ybj naq N14 vf uvtu, juvpu zrnaf vairegrq N15 ANAQ N14, V pna hfr n 74UP00 sbe gung.
+
+Fb, orybj vf gur fpurzngvp sbe SNC’f zrzbel pneq, bayl 4 puvcf, abg onq.
+
+SNC’f Zrzbel Pneq
+# Abj pbzrf gur dhrfgvba bs ubj gb cebtenz gur RRCEBZ, sbeghangryl vg’f ynetryl abg n ceboyrz orpnhfr V pna whfg chyy ybj gur OHFERD’, pybpx gur PCH hagvy OHFNPX’ vf ybj, guvf chg gur nqqerff, qngn naq pbageby yvarf vagb uvtu-M naq xvpxf gur PCH bss gur ohf, gura V whfg jevgr gb gur RRCEBZ ol qevivat gur ohf jvgu gur FGZ32 obneq. Juvpu vf zhpu fvzcyre guna Irebavpn‘f fbyhgvba jvgu n qrqvpngrq cebtenzzre naq ohf neovgengvba fjvgpurf. Rirelguvat vf qbar va gur FGZ32S1 obneq, juvpu vf gur ovt nqinagntr V gnyxrq nobhg va zl svefg cbfg.
+
+Gvzr gb ohvyq gur obneq svefg ba oernqobneq naq grfg vg, gurer’f abg zhpu gb jevgr nobhg gur ohvyqvat cebprff, ncneg vg pbafhzvat zl ragver pbyyrpgvba bs whzcref. V nyfb chg gjb YRQf ba PF’ yvarf fb V pna frr juvpu puvc vf orvat fryrpgrq. Fb qbrf vg jbex? Ybbx ng gur ivqrb orybj.
+
+# Va guvf qrzb V fvzcyl chg fbzr nqqerff ba gur ohf va 0k1000 vaperzragf, lbh pna frr gur EBZ puvc fryrpg’f YRQ yvtugf hc jura nqqerff vf orjgrra 0k0 naq 0k3SSS, naq ENZ’f YRQ yvtugf hc jura nqqerff vf orgjrra 0k4000 naq 0k7sss.
+
+Jung n zrff
+# Arkg hc vf gelvat gb ernq be jevgr fbzr inyhrf vagb gur EBZ, vg’f eryngviryl fybj gb jevgr gb RRCEBZ, rnpu olgr znl gnxr hc gb 10zf, gung zrnaf vg’yy gnxr n jubccvat 160 frpbaqf gb jevgr 16XO vagb vg. Vg qbrf fhccbeg cntr jevgr zbqr gung jevgrf 64 olgrf ng gur fnzr gvzr, ohg vg’f abg vzcyrzragrq sbe abj.
+
+Nf ernqvat RRCEBZ vf snfg juvyr jevgvat vf fybj, V jebgr zl RRCEBZ jevgr shapgvba gb purpx gur rkvfgvat qngn svefg, vs gurl’er gur fnzr n pbfgyl jevgr pna or fxvccrq. Va gur ivqrb orybj V’z jevgvat gur svefg 256 olgrf bs gur EBZ jvgu vgf nqqerff, nf va jevgvat 0k1 gb nqqerff 0k1, 0k2 gb nqqerff 0k2 rgp. Va gur svefg cnff lbh pna frr vg’f jevgvat vagb gur RRCEBZ, gur frpbaq cnff gur inyhr vf nyernql gur fnzr fb vg’f fxvccvat rirel fvatyr jevgr.
+
+Fb sne fb tbbq. Guvatf jrag n ovg jebat jura gelvat gb jevgr gb FENZ gubhtu, gur jevgr frrzf gb jbex, ohg jura ernq onpx gur qngn vf pybfr, ohg abg rknpgyl gur fnzr nf jung unf orra jevggra gb vg. V gubhtug vg jnf gur gvzvat qvssrerapr orgjrra gur EBZ naq ENZ jevgr, nsgre nyzbfg na ubhe bs gvaxrevat jvgu gur pbqr gb ab ninvy,  V qrpvqrq gb purpx gur pbaarpgvba naq qvfpbirerq gung V jverq gjb bs FENZ’f nqqerff yvarf jebat. V fubhyq unir xabja fvapr vg’f nf lbh pna frr vg’f fhpu n zrff.  Nsgre pbeerpgvat gur jvevat, vg jbexrq yvxr n punez, juvpu zrnaf vg’f gvzr gb tb ba gur npghny pneq.
+
+Ovg bs fbyqrevat yngre, V chg EBZ naq vgf qrpbqvat ybtvp ba gur pneq.
+
+SNC zrzbel pneq jvgu whfg EBZ naq vgf qrpbqvat ybtvp
+# Arkg fgrc vf ENZ, ubjrire vs lbh ybbx ng gur qngnfurrg, lbh’yy ernyvmr gur cvabhg bs gur gjb puvcf ner rknpgyl gur fnzr, fb vafgrnq bs fbyqrevat nabgure 28 jverf V qrpvqr gb fvzcyl cvttlonpx gur ENZ ba gbc bs EBZ, n grpuavdhr Dhvaa nyfb hfrq va ure Irebavpn.
+
+SNC’f fhcre AFSJ ENZ ba EBZ npgvba
+# Ol fbyqrevat rirel cva bs gur gjb puvcf gbtrgure ncneg sebz gur puvc fryrpg, V pna chg gur cvttlonpx puvcf onpx va gur fbpxrg naq bayl ubbx hc gur pf yvar sbe gur arj ENZ puvc. Orybj vf gur pbzcyrgrq zrzbel pneq.
+
+Pbzcyrgrq SNC Zrzbel Zbqhyr
+Cvttlonpxrq ENZ jvgu vgf PF fvtany
+# Gb grfg vg, V ybnqrq hc EBZ jvgu 0 naq yrg vg ena, vg jnf rknpgyl gur fnzr nf gur serr eha ynfg gvzr, fb V qvqa’g gnxr n ivqrb, ohg vg jbexrq arireguryrff!
+
+Abj gur zl pbzchgre unir vgf bja zrzbevrf, V pna svanyyl hcybnq fbzr cebtenz vagb vg naq yrg vg npghnyyl qb fghss. Ubjrire, jvgubhg nal zrnaf bs vachg be bhgchg, SNC vf tbvat gb or n uneq fryy sbe nalbar ryfr. Gung jbhyq or zl arkg fgrc, znlor znxvat n ITN ivqrb pneq, be n HNEG, be rira ernqvat n xrlobneq! Fgnl gharq gb svaq bhg ba gur arkg rcvfbqr bs gur Nqiragher bs SNC!
+
+Nf hfhny, lbh pna svaq gur hc-gb-qngr erfbheprf ba gur Tvguho ercb bs guvf cebwrpg.
+
+Ohf Obneq, PCH Obneq, naq Serrehaavat SNC
+
+Svanyyl jr’er tbvat gb gb npghnyyl fgneg ohvyqvat gur pbzchgre! V’z cebonoyl tbvat gb engure serdhragyl pbzcner jung V’z qbvat gb  jung Dhvaa Qhaxv qvq jvgu Irebavpn, fvapr n ynetr cneg bs guvf cebwrpg’f vafcvengvba pbzrf sebz uref.
+
+Yrg’f fgneg sebz gur irel onfvpf, gur pbafgehpgvba zngrevny. Dhvaa rgpurf, qevyyf naq fbyqref ure bja pvephvg obneq, V qba’g unir fhpu yhkhel urer fb V’z tbvat gb znxr zvar bhg bs cebgbglcvat obneqf, svefg pbzrf gb zvaq vf gur cresobneq, V nyernql unir n pbhcyr bs gurz ynlvat nebhaq naq gubhtug vg’f n tbbq vqrn gb hfr gurz. Nf vg gheaf bhg 3 ubhef yngre, ab, whfg fnl ab.
+
+Cresobneq: abg rira bapr
+# Vs lbh qba’g xabj nobhg cresobneq, vg’f n erthyne CPO jvgu qevyyrq ubyrf va n fdhner tevq bs 0.1 vapu fcnpvat, naq rnpu ubyr vf ryrpgevpnyyl vfbyngrq sebz rnpu bgure, naq gung zrnaf lbh unir gb rvgure jver jenc, juvpu V qba’g unir, be hfr cbvag gb cbvag fbyqrevat, juvpu zrnaf fbyqrevat rirel fvatyr pbaarpgvbaf hfvat 30NJT jverf, juvpu vf uneq gb fgevc naq cbfvgvba orpnhfr gurl jba’g fgnl va cynpr. Vg’f nyevtug sbe fznyyre cebwrpgf, ohg vs V qvq gur jubyr guvat hfvat cresobneq V zvtug jryy or qrnq orsber rira tbg gb gur S cneg bs gur SNC.
+
+N ovg bs vagrearg frnepu yngre, V tbg fbzr arj cebgbglcvat obneqf gung V’yy or hfvat gb ohvyq gur pbzchgre, svefg bs nyy vf gur ynetr “zbgureobneq” be “onpxcynar” jurer nyy gur zbqhyrf jvyy or cyhttrq va. Vg’f n obneq jvgu 5-ubyr pbaqhpgvir fgevcf tebhcrq gbtrgure, fb vg’f fbeg bs yvxr n fgevcobneq ohg abg ernyyl. Guvf obneq vf nebhaq 6 k 8 vapurf, rabhtu sbe n pbhcyr bs rkcnafvbaf yngre ba.
+
+Guvf jvyy or SNC’f onpxcynar
+
+# Abj jr unir gur zbgureobneq, arkg hc vf gur obneqf gung bhe zbqhyrf hfr, sbe gung V obhtug jung fbzr znl pnyy “fbyqrenoyr oernqobneqf”, juvpu vf onfvpnyyl CPOf jvgu oernqobneq cnggreaf. Guvf vf zhpu orggre guna cresobneq orpnhfr lbh pna hfr fbyqre jverf gb gur nqwnprag cvaf bs pbzcbaragf, naq vg nyernql unf cbjre ohfrf ninvynoyr. Guvf obneq vf 5.5 k 3.7 vapu, cresrpg svg sbe cyhttvat vagb gur onpxcynar iregvpnyyl.
+
+SNC’f zbqhyrf jvyy tb ba guvf.
+Abj n yvggyr ovg nobhg ohf qrfvta, Dhvaa hfrf VFN pbaarpgbef sbe ure Irebavpn jvgu 31 cvaf ninvynoyr, vg jbexf jura lbh znxr lbhe bja CPO, ohg boivbhfyl abg urer. Fb V’z tbvat gb tb jvgu gur gevrq naq gehr cva urnqref. Qbhoyr ebj srznyr cva urnqref ba gur onpxcynar, qbhoyr ebj evtug natyr znyr cva urnqref ba gur zbqhyrf, naq vg’yy cyht evtug va. Naq orpnhfr gur gjb ebjf ner pbaarpgrq ba gur zbqhyr pneq, vg jvyy oevqtr gur tnc orgjrra 5-ubyr tebhcf ba gur onpxcynar nf jryy. Jung’f zber, cva urnqre pbzrf 40 cvaf jvqr, n avpr ahzore sbe n flfgrz ohf, naq V pna nqq zber yngre vs V jnag.
+
+Jvgu gur onfvpf qbar, vg’f gvzr gb qrfvta gur ohf cvabhg naq gur PCH obneq. Orpnhfr vg’f zl svefg gvzr qbvat guvf, V’z tbvat gb cynl vg fnsr naq chg nyzbfg nyy PCH fvtanyf bagb gur ohf. Cva 1 jvyy or 5I,  cva 2 gb 9 vf QNGN[0:7], cva 10 gb 25 vf NQQERFF[0:15], cva 26 gb 37 vf rirel fvatyr PCH pbageby fvtanyf ncneg sebz ERSERFU naq UNYG, fvapr jr’er abg hfvat qlanzvp zrzbevrf, cva 40 vf TAQ. Guvf yrnirf 2 cvaf serr ba gur 40 cva ohf, naq unir gur bcgvba gb znxr vg rira jvqre ol whfg nqqvat zber cva urnqref, cerggl tbbq.
+
+# Sbe gur PCH obneq vgfrys, vg’f cerggl fgenvtugsbejneq. NQQERFF naq QNGN yvarf ner ohssrerq jvgu 3 74UP245f, juvyr pbageby fvtanyf ner pbaarpgrq gb ohf qverpgyl, vs vg gheaf bhg gubfr arrqf ohssrevat gbb V pna nqq gurz yngre. Fvapr NQQERFF vf bhgchg bayl, gur QVE cva ba gur ‘245 vf gvrq gb TAQ fb O fvqr vf vachg. Nf sbe ovqverpgvbany QNGN yvarf, V pbaarpgrq gur QVE cva gb JE’. Jura JE’ vf npgvir(ybj), QNGN yvarf ner bhgchg, naq va 245 qngn tbrf sebz O gb N, jura JE’ vf vanpgvir(uvtu), QNGN yvarf ner vachg, naq 245 qngn tbrf sebz N gb O. Gur bhgchg ranoyr bs gur 245f ner pbaarpgrq gb vairegrq OHFNPX’ fvtany, fb jura OHFNPX’ vf ybj, bhgchg ranoyrf ner uvtu, NQQE naq QNGN tbrf vagb uvtu vzcrqnapr, xvpxvat gur PCH bss gur ohf. Orybj vf gur fpurzngvp.
+
+PCH obneq fpurzngvp
+Gvzr gb fgneg ohvyqvat. Urer ner nyy gur puvcf va cynpr jvgu nyy gur cbjre pbaarpgvbaf, nf jryy nf gur QNGN yvar sebz gur ohssre gb gur urnqre. V unq gb phg n fvatyr yvar bss gur obggbz bs gur obneq fb gur znyr urnqre npghnyyl fgvpxf bhg.
+
+Bar ubhe yngre, nyy gur pbaarpgvbaf ner qbar, vg ybbxf yvxr n zrff, ohg gung’f jung unccraf jvgu guvf znal fvtanyf.
+
+Znxvat fher gurer vf ab fubegf orgjrra cbjre ohfrf naq nyy gur pbaarpgvba ner pbeerpg jvgu gur pbagvahvgl grfgre, gur PCH obneq vf qbar. Gur ybtvpny arkg guvat gb qb vg grfg vg. Vg’f abg nf rnfl nf vg fbhaqf gubhtu, gur PCH arrqf pybpx fvtany, qngn vachgf, naq 6 pbageby fvtanyf, naq V arrq n jnl gb frr jung’f ba gur NQQERFF naq QNGN ohf gb frr jung gur PCH vf qbvat, jr arrq fbzr jnl gb qb nyy gubfr.
+
+Jung Dhvaa qvq jnf qrfvtavat n qrqvpngrq pybpx pvephvg jvgu zbabfgnoyr 555 sbe fvatyr-fgrc pybpx, nf jryy nf pelfgny bfpvyyngbe sbe shyy fcrrq pybpx, naq FCQG fjvgpu gb fryrpg orgjrra gur gjb. Naq sbe ivfhnyvmvat gur ohf pbagrag, gur UrkBhg qvfcynl zbqhyr. Vg’f sha naq nyy qrfvtavat nyy gubfr fhccbeg pvephvgf, ohg V’z tbvat gb fxvc nyy gung gebhoyr naq hfr n zvpebpbagebyyre gb pbageby gur SNC va gur rneyl fgntr bs gur qrirybczrag. Fvapr gur zvpebpbagebyyre vf cebtenzznoyr V pna pybpx gur PCH nf snfg be fybj nf V jnag, chg nalguvat V jnag ba gur QNGN ohf, frr jung’f ba gur NQQERFF ohf, npuvrir eryvnoyr cbjre-ba erfrgf, zbavgbe naq punatr nyy gur pbageby fvtanyf, naq vg nyfb npgf nf n HFO cbjre fhccyl. Vg’f zhpu zber ebohfg naq phfgbzvmnoyr guna hfvat qrqvpngrq pvephvgf, gnxrf zhpu yrff fcnpr, naq cebonoyl purncre va gur raq gbb.
+
+# Gur zvpebpbagebyyre va dhrfgvba vf gur FGZ32S103IPG6 ba vgf Zvavzhz Flfgrz Qrirybczrag Obneq sebz ronl. Guvf yvggyr ornfg bs n hP unf 5 16-ovg TCVB cbegf, n gbgny bs jbbcvat 80 TCVB cvaf, cyragl rabhtu sbe SNC. Vg nyfb unf 256XO bs synfu zrzbel naq 64 XO bs FENZ, juvpu zrnaf V pna svg gur ragver nqqerffnoyr fcnpr bs M80 vafvqr gur synfu zrzbel bs guvf hP 4 gvzrf vs V jnag. Vg nyfb ehaf ng 72ZUm, 18 gvzrf snfgre guna M80, naq unf n zvyyvba crevcurenyf gung V’z abg tbvat gb hfr va guvf cebwrpg. Naq gur orfg guvat nobhg vg vf gung vg qbrfa’g unir nyy gur ohyyfuvg pbzcbaragf gnpxrq ba yvxr gurl qb va gur Qvfpbirel obneqf FG znxrf gurzfryirf, whfg n fvzcyr zvavzny jbexvat flfgrz jvgu nyy gur cva oebxra bhg, naq abguvat ryfr. Ubj zhpu sbe guvf? $6.5. Vs abg orpnhfr bs gur rkgrafvir yvoenevrf, gurer vf nyzbfg ab ernfba yrsg hfr Neqhvab abj jr unir guvf. Nyy va nyy, abg onq ng nyy.
+
+SNC’f oenva, ng yrnfg va gur ortvaavat.
+# V gubhtug V jbhyq svavfu gur onpxcynar obneq orsber grfgvat gur PCH obneq. Gur oynpxcynar vf cerggl fvzcyr gbb, nyy gur ohf fvtanyf tbrf vagb gur zvpebpbagebyyre, n pbhcyr bs ohggbaf sbe erfrg naq pybpx pbageby, naq gjb HNEGf jvyy or hfrq, bar sbe qroht bhgchg, bar sbe frevny YPQ. Gur ragver CBEGR jvyy or hfrq sbe NQQERFF, ybjre 8 ovg bs CBEGQ sbe QNGN, CBEGP sbe pbageby fvtanyf, CBEGO sbe ohggbaf, naq CBEGN sbe 2 HNEGF.
+
+Gur pbafgehpgvba vf fvzvyne gb gur PCH obneq, whfg gbaf bs jverf fbyqre, juvpu vfa’g irel vagrerfgvat. V arrqrq gb phg npebff gjb genprf fb gung gur qbhoyr ebj urnqref ba gur pbagebyyre obneq qbrfa’g trg pbaarpgrq gbtrgure.
+
+Obk phggre jbexf
+Svavfurq onpxcynar, gur 40-cva qbhoyr-ebj urnqre vf sbe PCH pneq, gur pbagebyyre tbrf gb gur ybjre evtug, naq ohggbaf ner sbe erfrg, fvatyr fgrc, naq eha/fgbc.
+
+Jryy abg npghnyyl dhvgr svavfurq, V sbetbg gb nqq gur gjb HNEG urnqref. V hfrq n oyhrgbbgu zbqhyr, fb V qba’g unir gb nggnpu nabgure jver gb vg. Urer vf gur ernyyl svavfurq obneq:
+
+# Abj vg’f svanyyl gvzr gb grfg gur PCH obneq. Jr jnag gur PCH gb rkrphgr fbzr vafgehpgvbaf, ohg fvapr jr qba’g npghnyyl unir nal zrzbevrf, V’yy fgneg jvgu n fvzcyr bar. Jung V’yy qb vf gb gvr gur QNGN yvar gb TAQ, nyy gur pbageby vachgf gb IPP, ubyq ERFRG ybj sbe ng yrnfg 3 pybpx plpyrf gb cebcreyl erfrg vg, gura pybpx vg abeznyyl. Gur PCH jvyy fgneg rkrphgvat sebz nqqerff 0k0, naq srgpu na vafgehpgvba sebz gur QNGN ohf, vg jvyy or 0k0 fvapr V gvrq nyy bs gurz gb TAQ. Gur M80 jvyy gurersber rkrphgr gur 0k0 vafgehpgvba, juvpu unccraf gb or ABC, juvpu qbrfa’g qb nalguvat ng nyy. Vg jvyy fvzcyl tb gb gur arkg nqqerff naq srgpu nabgure vafgehpgvba, juvpu vf fgvyy 0k0, nabgure ABC. Va gur raq vg whfg xrrcvat tbvat gb gur arkg nqqerffrf, naq jr pna frr gur nqqerff vapernfr va gur NQQERFF ohf, guvf vf pnyyrq serr ehaavat gur PCH, n fvzcyr jnl gb znxr fher zl PCH vf jbexvat.
+
+V frg ybjre 8 ovgf bs CBEGQ, juvpu vf pbaarpgrq gb QNGN ohf, gb bhgchg 0, naq CBEGR, pbaarpgrq gb NQQERFF ohf, nf vachg. Gur pbagrag bs NQQERFF naq QNGN ohf ner qvfcynlrq ba gur YPQ fperra, naq PCH ner pybpxrq ol cerffvat n ohggba, be frg gb eha pbagvahbhfyl ng gur cerff bs nabgure ohggba.
+
+Jryy qbrf vg jbex? Frr sbe lbhefrys:
+
+Nf lbh pna frr, V fgnegrq ol fvatyr fgrccvat gur pybpx, rnpu gvzr V cerff gur ohggba gur pybpx nqinaprf 1 plpyr. Vg gnxrf 4 plpyrf sbe gur nqqerff gb nqinapr 1, juvpu vf va yvar jvgu jung qngnfurrg fgngrf.Pncgher
+
+Nsgre yrggvat vg serr eha sbe n juvyr, lbh zvtug abgvpr gur nqqerff vf syhpghngvat vafgrnq bs fvzcyl tbvat hc. Guvf vf qhr gb gur zrzbel erserfu bcrengvbaf gung vf ohvyg vagb gur M80 fb vg jbhyq or rnfvre gb hfr jvgu gur purncre QENZ. V fgbccrq gur pybpx gb fvatyr fgrc ntnva, naq lbh pna frr gur nqqerff punatrf rirel gjb pybpx plpyrf abj, whfg yvxr gur jung qngnfurrg fnl ntnva. Gur svefg gjb plpyr vf CP, naq gur ynfg gjb vf erserfu nqqerff.
+
+Nsgre guvaxvat ybat naq uneq nobhg gur qrfvta, zl SNC svanyyl yvirf! Nyy vf jryy, V’z tynq vg jbexf nsgre nyy gur jbex. Arkg fgrc vf gb nqq fbzr EBZ naq ENZ, fb vg pna npghnyyl rkrphgr fbzr zrnavatshy vafgehpgvbaf. Fgnl gharq gb svaq bhg zber!
+
+SNC yvirf!
+ 
+Ntnva, lbh pna svaq gur hc-gb-qngr erfbheprf ba gur Tvguho ercb bs guvf cebwrpg.
+
+Ybat Gvzr Pbzvat: Ohvyqvat gur SNC M80 Pbzchgre
+V svtherq gung V fubhyq fgneg qbphzragvat zl batbvat cebwrpgf urer sebz abj ba. V thrff vg zvtug uryc bgure crbcyr jvgu fvzvyne vagrerfgf, be znlor whfg zlfrys fb V qba’g ybfr gur qrgnvyf va n srj lrnef gvzr.
+
+Bire gur lrnef V jbexrq ba n ahzore bs cebwrpgf vaibyivat rzorqqrq flfgrzf, vagrerfgvat fghss yvxr gur Tnzrphor pbagebyyre zbq sbe 3QF, n fuval svaqre sbe 3QF Cbxrzba tnzrf, phfgbz uneqjnerf sbe GjvgpuCynlfCbxrzba punaary, naq n jubyr ohapu bs bguref gung V zvtug jevgr nobhg yngre. Qrfcvgr nyy gurfr gubhtu, fbzrguvat unf nyjnlf orra yvatrevat ng gur onpx bs zl urnq. V jnagrq gb ohvyq na ragver pbzchgre sebz fpengpu.
+
+# Onpx va gur yngr 70f naq rneyl 80f, gur zvpebpbzchgre znexrg jnf qbzvangrq ol gjb 8-ovg cebprffbef, Mvybt M80 naq ZBF Grpuabybtl 6502. Nyzbfg nyy cbchyne crefbany pbzchgref bs gur ren unq bar bs gurfr gjb puvcf, 6502 jnf hfrq va gur yvxrf bs Nccyr V, Nccyr VVr, Pbzzbqber CRG, Pbzzbqber IVP-20 naq OOP Zvpeb,  juvyr M80 jnf hfrq va Bfobear 1, Enqvb Funpx GEF-80, MK Fcrpgehz, Pbzzbqber 128, nybat jvgu pbhagyrff bguref. Gubfr puvcf jrer cbjreshy rabhtu gb qb fbzr erny jbex, ohg nyfb fvzcyr rabhtu fb bar pna qrfvta n shyyl srngherq pbzchgre ol uvz/urefrys. Naq gung’f jul n ynetr ahzore bs ergeb pbzchgre cebwrpgf ba gur vagrearg hfrf bar bs gurfr gjb. Nabgure znwbe snpgbe bs gubfr ergeb ohvyqf vf gur abfgnytvn, nf znal unq gurve irel svefg pbzchgre jvgu gubfr cebprffbef. Zl svefg pbzchgre jnf n Cragvhz VVV, fb V thrff gung’f bhg bs gur jvaqbj sbe zr.
+
+Be vf vg?
+
+# Vg ghearq bhg gung gubfr gjb puvcf jrer fb cbchyne, gurl jrer hfrq va gbaf bs ivqrb tnzr pbafbyrf nf jryy, 6502 jnf hfrq, nzbat bguref, va Ngnev 2600, 5200, 7800, ARF, naq Ngnev Ylak, juvyr M80 raqrq hc va PbyrpbIvfvba, Frtn Znfgre Flfgrz, Tnzr Trne, Trarfvf, FAX Arb-Trb, Avagraqb TnzrObl, Tnzrobl Pbybe, Tnzrobl Nqinapr, nf jryy nf pynffvp nepnqr tnzr znpuvarf yvxr Cnp-Zna, Sebttre naq bgure Anzpb naq Frtn nepnqr flfgrzf. Fb vs lbh yvxr ivqrb tnzrf, lbh unir 6502 naq M80 gb gunax sbe. V qb, naq gung’f jul V’z cynaavat gb ohvyq n ergeb znpuvar bhg bs bar bs gurfr puvcf. Bs pbhefr trareny cebcbfr pbzchgref ner abg rknpgyl gur fnzr nf tnzr pbafbyrf. Jung V’z cynaavat vf gb ohvyq n pbzchgre svefg, naq gura gel gb ohvyq n pbafbyr pybar bapr V tbg hc gb fcrrq jvgu qrfvtavat ergeb pbzchgref.
+
+Abj pbzrf gur cneg bs cvpxvat orgjrra gur gjb, V pubbfr M80 orpnhfr vg unf zber ertvfgref, fbzrjung zber cbjreshy, naq frra ol fbzr gb or zber bs n “cebcre” zvpebcebprffbe fvapr 6502 jnf gur “purnc nygreangvir” onpx va gur qnl. Npghnyyl V jbhyqa’g xabj fvapr V arire jbexrq ba n 6502 naljnl. Gur erny ernfba gubhtu, vf gung M80 jnf hfrq va Avagraqb Tnzrobl yvarf, naq gung’f gur bar V terj hc jvgu. Lbh frr, vg’f fgvyy nyy nobhg gur abfgnytvn.
+
+# Nf sbe gur CP,  vg’yy unir gur M80, fbzr ENZ naq EBZ, n ivqrb pneq, naq fbzr xvaq bs vachg yvxr n wblfgvpx be xrlobneq. V zvtug nqq be qryrgr fghss nybat gur jnl ohg V’yy fgneg fvzcyr va gur ortvaavat. Vs lbh’er cynaavat gb ohvyq lbhe bja M80 pbzchgre, bar bs gur zhfg-ernqf vf gur nccebcevngryl anzrq Ohvyq Lbhe Bja M80 Pbzchgre ol Fgrir Pvnepvn, va guvf 1981 obbx ur rkcynvaf fgrc-ol-fgrc gur cebprff bs ohvyqvat n M80 pbzchgre sebz fpengpu, fgnegvat sebz gur cbjre fhccyl, gb nqqvat ENZ naq EBZ, naq gb nqinaprq fghss yvxr PEG grezvany naq gncr qevir vagresnpr. Ur pnyyf uvf pbzchgre MNC, juvpu fgnaqf sbe M80 Nccyvpngvba Cebprffbe. Va gur fvzvyneyl gubhtugshy naq frevbhf irva V’z tbvat gb pnyy zvar SNC, juvpu vf SCTN-Nffvfgrq Cebprffbe. Jurer vf gur SCTN lbh nfx? Zbfg yvxryl sbe gur ivqrb pneq. Ohg vg’f tbvat gb or n juvyr sbe zr gb trg gurer, fb qba’g jbeel nobhg vg evtug abj.
+
+Bar guvat lbh’yy ernyvmr vf gurer ner tbvat gb or n ybg bs cynaavat gb qb orsber lbh rira fgneg ohvyqvat nalguvat, abj gung jr unir cvpxrq gur cebprffbe naq gur engure rkpryyrag anzr, arkg vf gb qrpvqr gur sbez snpgbe bs zl SNC. Ng guvf cbvag vg’f vzcbffvoyr sbe zr gb abg zragvba gur ovttrfg vafcvengvba gung znqr zr, naq cebonoyl n ybg bguref, gb chefhr zl cebwrpg, Dhvaa Qhaxv’f Irebavpn pbzchgre. Ehaavat gur Oybaqvunpxf oybt, fur qbphzragf n ahzore bs ure cebwrpgf va qrgnvy, fghss yvxr ercnvevat n cvaonyy znpuvar, svkvat naq unpxvat na Nccyr VVp pbzchgre, naq zbfg vzcbegnagyl va bhe pnfr, gur Irebavpn. Gur Irebavpn vf n 6502-onfrq pbzchgre fur ohvyg sebz fpengpu whfg yvxr jung V nobhg gb qb, fur fgnegrq sebz whfg serrehaavat gur PCH, naq raqrq hc nqqvat ENZ, EBZ, qrfvtavat gur TCH jvgu ITN bhgchg, zbqvslvat n ergeb enqvb pnfr gb chg vg va, nqqvat gur tnzrcnq vachg naq HFO xrlobneq vagresnpr, bire gur wbhearl bs 3 lrnef.  Dhvaa pubfr abg gb ohvyq n Fvatyr Obneq Pbzchgre, vafgrnq tbvat sbe n ohfrq qrfvta, guvf jnl rirelguvat vf zbqhyne, naq vg’f gevivny gb hctenqr be nqq shapgvbaf, whfg cyht n arj pneq va. V shyyl nterr jvgu guvf qrfvta qverpgvba, naq SNC jvyy or hfvat gur onpxcynar qrfvta gbb, nygubhtu gurer jvyy or n srj qvssrerag qrgnvyf ertneqvat gur vzcyrzragngvbaf juvpu jr funyy frr va yngre cbfgf.
+
+Sbe abj V guvax guvf vagebqhpgbel cbfg vf ybat rabhtu, jr’yy trg vagb gur zrng bs SNC fgnegvat sebz gur arkg negvpyr jurer V’yy npghnyyl fgneg ohvyqvat fghss.
+
