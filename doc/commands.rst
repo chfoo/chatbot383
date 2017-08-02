@@ -16,6 +16,9 @@ down the page or clicking the "i" icon button on mobile.
     * ``replacement`` is the replacement text
     * ``options`` is a combination of: ``g`` to replace all, ``i`` for case-insensitive
 
+``!caw`` or ``!caw text``
+    ⋛⋋( ՞ਊ ՞)⋌⋚ CAW
+
 ``!countdown``
     Show time until next event, ie, Games Done Quick.
 
@@ -67,7 +70,7 @@ down the page or clicking the "i" icon button on mobile.
 ``!praise``, ``!praise thing``
    Praise it or praise ``thing``.
 
-``!raccattack`` or ``!raccattack username``
+``!raccattack`` or ``!racc username``
     RaccAttack !
 
 ``!randcase text``
@@ -87,6 +90,9 @@ down the page or clicking the "i" icon button on mobile.
 
 ``!roomsize``
     Count number of users in chat room.
+
+``!spellchatot text``
+    Spell out text in Chatot copypasta.
 
 ``!schedule``
     Show link to event schedule, ie, Games Done Quick.

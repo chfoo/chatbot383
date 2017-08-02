@@ -9,6 +9,7 @@ import random
 import re
 import sqlite3
 import time
+import io
 
 import arrow
 import unicodedata
@@ -221,6 +222,16 @@ class Features(object):
         'A {donger} saved is a {donger} earned so sing the {donger} song! '
         'ᕦ༼ຈل͜ຈ༽ᕤ'
     )
+    CHATOT_TEMPLATE = (
+        '░░░░░░░░░░░░░░░░░█░░░░ '
+        '░░░░░░░░░░░░░░░░███▄░░ '
+        '░░░░░░░░░▄██▄░▄██████░ '
+        '░░░░░░▄█████████░░████ '
+        '░░░░▒▒▒███▀█████░░░▀██ '
+        '░░▒▒▒▒▒▒█▄▀▄████░░░░█░ '
+        '░░▒░░▒▒██████▀░░░░░░░░ '
+        '░░░░░░░░▀▀▀▀░░░░░░░░░ '
+    )
     TOO_LONG_TEXT_TEMPLATE = '{} Message length exceeds my capabilities!'
     MAIL_MAX_LEN = 500
 
@@ -260,6 +271,7 @@ class Features(object):
         bot.register_message_handler('pubmsg', self._collect_recent_message)
         bot.register_message_handler('action', self._collect_recent_message)
         bot.register_command(r'!?s/(.+/.*)', self._regex_command)
+        bot.register_command(r'(?i)!caw($|\s.*)', self._caw_command)
         bot.register_command(r'(?i)!countdown($|\s.*)', self._countdown_command)
         bot.register_command(r'(?i)!double(team)?($|\s.*)', self._double_command)
         bot.register_command(r'(?i)!(set)?greet(ing)?($|\s.*)$', self._greeting_command)
@@ -278,6 +290,7 @@ class Features(object):
         bot.register_command(r'(?i)!(word)?(?:shuffle|scramble)($|\s.*)', self._shuffle_command)
         bot.register_command(r'(?i)!song($|\s.{,50})$', self._song_command)
         bot.register_command(r'(?i)!sort($|\s.*)', self._sort_command)
+        bot.register_command(r'(?i)!spellchat(?:ot)?($|\s.*)', self._spell_chatot_command)
         bot.register_command(r'(?i)!racc(?:attack)?($|\s\S*)', self._raccattack_command)
         bot.register_command(r'(?i)!rand(?:om)?case($|\s.*)', self._rand_case_command)
         bot.register_command(r'(?i)!release($|\s.{,100})$', self._release_command)
@@ -482,6 +495,18 @@ class Features(object):
 
         session.reply('{} Your request does not apply to any recent messages!'
                       .format(gen_roar()))
+
+    def _caw_command(self, session: InboundMessageSession):
+        words = session.match.group(1).split()
+        text = words[0] if words else 'CAW'
+
+        amount = _random.randint(1, 6)
+        if amount == 1:
+            formatted_text = '⋛⋋( ՞ਊ ՞)⋌⋚ {}'.format(text)
+        else:
+            formatted_text = text.join([' ⋛⋋( ՞ਊ ՞)⋌⋚ '] * amount)
+
+        self._try_say_or_reply_too_long(formatted_text, session)
 
     def _countdown_command(self, session: InboundMessageSession):
         try:
@@ -700,6 +725,34 @@ class Features(object):
             formatted_text = 'RaccAttack {} {}'.format(extra, text)
 
         self._try_say_or_reply_too_long(formatted_text, session)
+
+    def _spell_chatot_command(self, session: InboundMessageSession):
+        limiter_key = ('chatot', session.message['channel'])
+        if not self._spam_limiter.is_ok(limiter_key):
+            return
+
+        text = session.match.group(1).strip() or 'I LIKE CHATOT'
+        text = text[:len(self.CHATOT_TEMPLATE)]
+
+        buf = io.StringIO()
+        text_index = 0
+
+        for index, letter in enumerate(self.CHATOT_TEMPLATE):
+            if index % 2 == 0:
+                buf.write(letter)
+            elif text_index < len(text) and letter.strip():
+                if text[text_index].strip():
+                    buf.write(text[text_index])
+                else:
+                    buf.write(letter)
+                text_index += 1
+            else:
+                buf.write(letter)
+
+        formatted_text = buf.getvalue()
+
+        session.say(formatted_text, multiline=True)
+        self._spam_limiter.update(limiter_key)
 
     def _rand_case_command(self, session: InboundMessageSession):
         text = session.match.group(1).strip()
