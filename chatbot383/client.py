@@ -35,7 +35,7 @@ class Client(irc.client.SimpleIRCClient):
             assert self.connection._prep_message
             self.connection._prep_message = ClientMonkeyPatch._prep_message
 
-        self.reactor.execute_every(300, self._keep_alive)
+        self.reactor.scheduler.execute_every(300, self._keep_alive)
 
     @property
     def inbound_queue(self):
@@ -65,7 +65,7 @@ class Client(irc.client.SimpleIRCClient):
         return connect_factory
 
     def async_connect(self, *args, **kwargs):
-        self.reactor.execute_delayed(
+        self.reactor.scheduler.execute_after(
             0, functools.partial(self.autoconnect, *args, **kwargs))
 
     def autoconnect(self, *args, **kwargs):
@@ -80,7 +80,7 @@ class Client(irc.client.SimpleIRCClient):
             self._schedule_reconnect()
 
     def _schedule_reconnect(self):
-        self.reactor.execute_delayed(RECONNECT_INTERVAL, self.autoconnect)
+        self.reactor.scheduler.execute_after(RECONNECT_INTERVAL, self.autoconnect)
 
     def _on_disconnect(self, connection, event):
         _logger.info('Disconnected %s!', self.connection.server_address)
