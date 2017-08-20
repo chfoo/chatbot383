@@ -724,6 +724,10 @@ class Features(object):
         else:
             formatted_text = 'RaccAttack {} {}'.format(extra, text)
 
+        if session.get_platform_name() == 'discord':
+            formatted_text = formatted_text.replace(
+                'RaccAttack', '<:RaccAttack:273584139469324299>')
+
         self._try_say_or_reply_too_long(formatted_text, session)
 
     def _spell_chatot_command(self, session: InboundMessageSession):
