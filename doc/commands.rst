@@ -123,7 +123,7 @@ command to avoid being overloaded.
 Discord server exclusive commands
 ---------------------------------
 
-Commands for specific discord servers.
+Commands for specific Discord servers.
 
 ``!cry pokemon``
     Play the cry of given Pokémon (name or species ID). You can specify
