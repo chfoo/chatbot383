@@ -304,7 +304,7 @@ class Features(object):
         # Temporary disabled. interferes with rate limit
         # bot.register_command(r'.*\b[xX][dD] +MingLee\b.*', self._xd_rand_command)
         bot.register_command(r'(?i)!(wow)($|\s.*)', self._wow_command)
-        bot.register_command(r'(?i)(?:has )?donate(?:d|s)? [^0-9]+([0-9,.]+)', self._donation_trigger)
+        bot.register_command(r'(?i)(?:has )?donate(?:d|s)? [^0-9]{0,5}([0-9][0-9,.]*)', self._donation_trigger)
 
         bot.register_message_handler('join', self._join_callback)
         bot.register_message_handler('part', self._part_callback)
