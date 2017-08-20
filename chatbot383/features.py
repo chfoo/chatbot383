@@ -304,6 +304,7 @@ class Features(object):
         # Temporary disabled. interferes with rate limit
         # bot.register_command(r'.*\b[xX][dD] +MingLee\b.*', self._xd_rand_command)
         bot.register_command(r'(?i)!(wow)($|\s.*)', self._wow_command)
+        bot.register_command(r'(?i)(?:has )?donate(?:d|s)? [^0-9]+([0-9,.]+)', self._donation_trigger)
 
         bot.register_message_handler('join', self._join_callback)
         bot.register_message_handler('part', self._part_callback)
@@ -873,6 +874,34 @@ class Features(object):
             session.say('> {}'.format(self._tellnext_generator.get_paragraph(max_len)), multiline=True)
         else:
             session.reply('{} Feature not available!'.format(gen_roar()))
+
+    def _donation_trigger(self, session: InboundMessageSession):
+        points = session.match.group(1).replace('.', '').replace(',', '') + '0'
+        minutes = _random.randint(20, 1200) / 10
+
+        formatted_text = '{} {} {} {}'.format(
+            _random.choice([
+                'Thanks for donating!',
+                'Thank you for your donation!',
+                'Thank you for donating!'
+            ]),
+            _random.choice([
+                'You gained {} points.'.format(points),
+                'You now have {} points.'.format(points),
+                'Your balance is now {} points.'.format(points),
+            ]),
+            _random.choice([
+                'Your donation will be read by the streamer in {} minutes.'
+                .format(minutes),
+                'Your donation has been queued. '
+                '{} donations waiting to be read.'.format(int(minutes)),
+                'Please wait {} minutes for your donation to be processed.'
+                .format(minutes),
+            ]),
+            _random.choice(['<3', '<3', ':)', ':)', ':o'])
+        )
+
+        session.reply(formatted_text)
 
     def _mail_command(self, session: InboundMessageSession):
         if session.message['channel'] in self._mail_disabled_channels:
