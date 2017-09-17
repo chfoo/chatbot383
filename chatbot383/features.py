@@ -1,7 +1,7 @@
 import collections
-import configparser
 import copy
 import gettext
+import io
 import json
 import logging
 import os
@@ -9,18 +9,17 @@ import random
 import re
 import sqlite3
 import time
-import io
-
-import arrow
 import unicodedata
 
+import arrow
+
+import chatbot383.censor
 from chatbot383.bot import Limiter, Bot, InboundMessageSession
 from chatbot383.featurecomponents.battlebot import BattleBot
 from chatbot383.featurecomponents.matchgen import MatchGenerator, MatchError
 from chatbot383.featurecomponents.tokennotify import TokenNotifier
 from chatbot383.regex import RegexServer, RegexTimeout
 from chatbot383.roar import gen_roar
-
 
 _logger = logging.getLogger(__name__)
 _random = random.Random()
@@ -273,6 +272,7 @@ class Features(object):
         bot.register_command(r'!?s/(.+/.*)', self._regex_command)
         bot.register_command(r'(?i)!caw($|\s.*)', self._caw_command)
         bot.register_command(r'(?i)!countdown($|\s.*)', self._countdown_command)
+        bot.register_command(r'(?i)!debugecho\s+(.*)', self._debug_echo_command)
         bot.register_command(r'(?i)!double(team)?($|\s.*)', self._double_command)
         bot.register_command(r'(?i)!(set)?greet(ing)?($|\s.*)$', self._greeting_command)
         bot.register_command(r'(?i)!(groudonger)?(help|commands)($|\s.*)', self._help_command)
@@ -551,6 +551,16 @@ class Features(object):
         except (OSError, LookupError, ValueError, TypeError):
             _logger.exception('No schedule')
             formatted_text = '{} Schedule not available'.format(gen_roar())
+
+        self._try_say_or_reply_too_long(formatted_text, session)
+
+    def _debug_echo_command(self, session: InboundMessageSession):
+        text = session.match.group(1).strip()
+        formatted_text = '{} {} {}'.format(
+            gen_roar(),
+            self._censor_text(session, text),
+            self._censor_text(session, text, extra_censor=True)
+        )
 
         self._try_say_or_reply_too_long(formatted_text, session)
 
@@ -871,7 +881,10 @@ class Features(object):
         if self._tellnext_generator:
             platform_name = session.get_platform_name()
             max_len = 500 if platform_name == 'discord' else 400
-            session.say('> {}'.format(self._tellnext_generator.get_paragraph(max_len)), multiline=True)
+            session.say('> {}'.format(
+                self._censor_text(
+                    self._tellnext_generator.get_paragraph(max_len)
+                )), multiline=True)
         else:
             session.reply('{} Feature not available!'.format(gen_roar()))
 
@@ -968,19 +981,21 @@ class Features(object):
             channel = session.message['channel']
             _logger.debug('Restricting mail to channel %s', channel)
 
+        mail_info = None
+
         if _random.random() < 0.3:
             mail_info = self._database.get_old_mail(
                 skip_username=skip_username, skip_user_id=skip_user_id,
                 channel=channel
             )
-        else:
+
+        if not mail_info:
             mail_info = self._database.get_mail(
-                skip_username=skip_username, skip_user_id=skip_user_id,
-                channel=channel
+                skip_username=skip_username, skip_user_id=skip_user_id
             )
 
-            if not mail_info and _random.random() < 0.3:
-                mail_info = self._database.get_old_mail(channel=channel)
+            if not mail_info and _random.random() < 0.6:
+                mail_info = self._database.get_old_mail()
 
         if not mail_info:
             session.reply(
@@ -988,9 +1003,6 @@ class Features(object):
                 .format(gen_roar())
             )
         else:
-            if channel:
-                assert mail_info['channel'] == channel, (mail_info['channel'], channel)
-
             # From Discord proxy, space is escaped to \s and
             # lowercase to |s via IRC rules
             username = mail_info['username'].split('!', 1)[0]\
@@ -1009,7 +1021,10 @@ class Features(object):
                     username=username,
                     username_extra=username_extra,
                     date=arrow.get(mail_info['timestamp']).humanize(),
-                    msg=mail_info['text']),
+                    msg=self._censor_text(
+                        session, mail_info['text'],
+                        extra_censor=True if channel else False)
+                ),
                 multiline=True,
                 escape_links=True,
             )
@@ -1065,6 +1080,16 @@ class Features(object):
 
         if username in usernames:
             usernames.remove(username)
+
+    def _censor_text(self, session: InboundMessageSession, text: str,
+                     extra_censor: bool=False) -> str:
+        if session.get_platform_name() == 'discord':
+            text = chatbot383.censor.censor_text(text).replace('***',
+                                                               '\\*\\*\\*')
+        if extra_censor:
+            text = chatbot383.censor.censor_link(text)
+
+        return text
 
 
 _seed = int.from_bytes(os.urandom(2500), 'big')  # copied from std lib

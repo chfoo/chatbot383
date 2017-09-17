@@ -86,6 +86,15 @@ def censor_text(text: str) -> str:
     return NAUGHTY_REGEX.sub('***', text)
 
 
+def censor_link(text: str) -> str:
+    def _regex_callback(match):
+        return '{}<naughty link>'.format(
+            match.group(1),
+        )
+
+    return re.sub(r'(\s|^)((?:https?\S+)|(?:\S+\.[a-zA-Z]{1,10}\S*))', _regex_callback, text)
+
+
 if __name__ == '__main__':
     while True:
         print(censor_text(input('>')))
