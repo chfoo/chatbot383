@@ -562,7 +562,7 @@ class Features(object):
             self._censor_text(session, text, extra_censor=True)
         )
 
-        self._try_say_or_reply_too_long(formatted_text, session)
+        session.reply(formatted_text, escape_links=True)
 
     def _double_command(self, session: InboundMessageSession):
         text = session.match.group(2).strip()
