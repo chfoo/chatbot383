@@ -883,6 +883,7 @@ class Features(object):
             max_len = 500 if platform_name == 'discord' else 400
             session.say('> {}'.format(
                 self._censor_text(
+                    session,
                     self._tellnext_generator.get_paragraph(max_len)
                 )), multiline=True)
         else:
