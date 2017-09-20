@@ -125,7 +125,7 @@ def censor_link(text: str) -> str:
         if is_link_whitelisted(link):
             return '{}{}'.format(match.group(1), match.group(2))
         else:
-            shibe = '<:PancakeShibe:349613344572833815>'
+            shibe = ' <:PancakeShibe:349613344572833815> '
             return '{}<naughty link {}>'.format(
                 match.group(1),
                 SUBSTRING_NAUGHTY_REGEX.sub(shibe, match.group(2), 2).replace('.', shibe, 2)
