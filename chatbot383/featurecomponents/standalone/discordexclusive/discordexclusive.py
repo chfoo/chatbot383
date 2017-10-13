@@ -97,7 +97,8 @@ class DiscordExclusiveBot:
 
             if os.path.isfile(filename):
                 player = self._voice_client.create_ffmpeg_player(filename,
-                    # before_options='-re'
+                    # before_options='-re',
+                    options='-filter:a "volume=-10dB"'
                 )
                 player.start()
                 while not player.is_done():
