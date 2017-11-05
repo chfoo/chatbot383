@@ -128,3 +128,12 @@ Commands for specific Discord servers.
 ``!cry pokemon``
     Play the cry of given Pokémon (name or species ID). You can specify
     up to 5.
+
+``!radio``
+    Play the audio stream from TPP.
+
+``!radio off``
+    Stop the audio stream.
+
+``!movevoice 12345`` or ``!movevoice``
+    Move the bot to the specified voice channel or list voice channel IDs.

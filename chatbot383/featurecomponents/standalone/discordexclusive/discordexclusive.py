@@ -1,15 +1,18 @@
 import argparse
 import asyncio
+import enum
 import json
+import logging
 import os
 import random
 import re
 import signal
+import sqlite3
+import subprocess
 import unicodedata
-import logging
+from typing import Optional
 
 import discord
-import sqlite3
 
 _logger = logging.getLogger(__name__)
 
@@ -18,18 +21,32 @@ class NotFoundError(Exception):
     pass
 
 
+class VoiceState(enum.Enum):
+    idle = 'idle'
+    playing_cry = 'playing_cry'
+    playing_radio = 'playing_radio'
+
+
 class DiscordExclusiveBot:
     def __init__(self, config):
         self._config = config
         self._client = discord.Client()
         self._db_con = sqlite3.connect(':memory:')
-        self._voice_client = None
+
+        self._voice_client = None  # type: Optional[discord.VoiceClient]
+        self._player = None  # type: Optional[discord.StreamPlayer]
+        self._voice_disconnect_task = None
+        self._voice_state = VoiceState.idle
+        self._current_voice_channel = None  # type: Optional[str]
+        self._background_play_task = None
+
         self._build_pokedex()
-        self._voice_disconnect_timer_handle = None
-        self._voice_busy = False
 
     def run(self):
-        asyncio.get_event_loop().run_until_complete(self._run_loop())
+        loop = asyncio.get_event_loop()
+
+        self._voice_disconnect_task = loop.create_task(self._clean_up_voice())
+        loop.run_until_complete(self._run_loop())
 
     @asyncio.coroutine
     def _run_loop(self):
@@ -62,23 +79,41 @@ class DiscordExclusiveBot:
         while True:
             message = yield from self._client.wait_for_message(channel=text_channel)
 
-            match = re.match(r'(?i)!cry(?:\s|$)(.*)', message.content)
+            commands = [
+                self._cry_command,
+                self._move_voice_command,
+                self._radio_command
+            ]
 
-            if match:
-                if self._voice_busy:
-                    continue
+            for command in commands:
+                result = yield from command(message)
 
-                yield from self._join_voice_channel()
-                # yield from self._client.add_reaction(message, random.choice(emojis))
-                yield from self._cry_command(match.group(1))
-                # yield from self._client.add_reaction(message, random.choice(emojis))
+                if result:
+                    break
 
     @asyncio.coroutine
-    def _cry_command(self, names:str):
+    def _cry_command(self, message: discord.Message) -> bool:
+        match = re.match(r'(?i)!cry(?:\s|$)(.*)', message.content)
+
+        if not match:
+            return False
+
+        if self._voice_state == VoiceState.playing_cry:
+            return True
+        elif self._voice_state == VoiceState.playing_radio:
+            self._stop_player()
+
+        yield from self._join_voice_channel()
+        yield from self._play_cry(match.group(1))
+
+        return True
+
+    @asyncio.coroutine
+    def _play_cry(self, names:str):
         names = names.split()
         sound_ids = []
 
-        self._voice_busy = True
+        self._voice_state = VoiceState.playing_cry
 
         for name in names:
             try:
@@ -96,23 +131,114 @@ class DiscordExclusiveBot:
             filename = self._get_sound_path(sound_ids)
 
             if os.path.isfile(filename):
-                player = self._voice_client.create_ffmpeg_player(filename,
+                yield from self._play_and_wait(
+                    filename,
                     # before_options='-re',
                     options='-filter:a "volume=-10dB"'
                 )
-                player.start()
-                while not player.is_done():
-                    yield from asyncio.sleep(0.2)
 
-        self._voice_busy = False
+        self._voice_state = VoiceState.idle
+
+    @asyncio.coroutine
+    def _radio_command(self, message: discord.Message) -> bool:
+        match = re.match(r'(?i)!radio(?:\s|$)(.*)', message.content)
+
+        if not match:
+            return False
+
+        if self._voice_state == VoiceState.playing_cry:
+            yield from self._stop_player()
+        elif self._voice_state == VoiceState.playing_radio:
+            if match.group(1).lower() in ('stop', 'off', 'cancel', 'poweroff'):
+                self._stop_player()
+                self._voice_state = VoiceState.idle
+
+            return True
+
+        self._voice_state = VoiceState.playing_radio
+
+        yield from self._join_voice_channel()
+
+        _logger.info('Playing radio')
+
+        proc = yield from asyncio.create_subprocess_exec(
+            'youtube-dl',
+            'http://twitch.tv/twitchplayspokemon',
+            '--get-url',
+            '--format', 'audio_only',
+            '--quiet',
+            stdout=subprocess.PIPE)
+
+        out_data, in_data = yield from proc.communicate()
+
+        url = out_data.decode('utf8', 'replace').strip()
+
+        if not url.startswith('http'):
+            _logger.error('Url did not start with http: %s', url)
+            self._voice_state = VoiceState.idle
+            return True
+
+        @asyncio.coroutine
+        def background_play():
+            yield from self._play_and_wait(
+                url,
+                before_options='-re',
+                #options='-filter:a "volume=-2dB"'
+            )
+
+            self._voice_state = VoiceState.idle
+            self._background_play_task = None
+            _logger.info('Radio stopped')
+
+        assert self._background_play_task is None
+
+        self._background_play_task = asyncio.get_event_loop()\
+            .create_task(background_play())
+
+        return True
+
+    @asyncio.coroutine
+    def _move_voice_command(self, message: discord.Message):
+        match = re.match(r'(?i)!movevoice(?:\s|$)(.*)', message.content)
+
+        if not match:
+            return False
+
+        channel_id = match.group(1).strip()
+
+        if not channel_id:
+            yield from self._client.send_message(
+                message.channel,
+                '\n'.join(
+                    'Channel ID {id_str} - <#{id_str}>'.format(id_str=id_str)
+                    for id_str in self._config['voice_channel_whitelist']
+                )
+            )
+            return True
+
+        elif channel_id not in self._config['voice_channel_whitelist']:
+            yield from self._client.send_message(
+                message.channel, "Unrecognized voice channel ID")
+            return True
+
+        self._current_voice_channel = voice_channel = \
+            self._client.get_channel(channel_id)
+
+        if self._voice_client:
+            _logger.info('Moving voice to %s', voice_channel)
+            yield from self._voice_client.move_to(voice_channel)
+
+        return True
 
     @asyncio.coroutine
     def _join_voice_channel(self):
-        if self._voice_disconnect_timer_handle:
-            self._voice_disconnect_timer_handle.cancel()
-            self._voice_disconnect_timer_handle = None
+        if self._current_voice_channel is None:
+            voice_channel_id = self._config['voice_channel_id']
 
-        voice_channel = self._client.get_channel(self._config['voice_channel_id'])
+            self._current_voice_channel = \
+                self._client.get_channel(voice_channel_id)
+
+        voice_channel = self._current_voice_channel
 
         if not self._voice_client or self._voice_client.channel != voice_channel:
             if self._voice_client:
@@ -121,15 +247,31 @@ class DiscordExclusiveBot:
             _logger.info('Joining voice channel %s', voice_channel.id)
             self._voice_client = yield from self._client.join_voice_channel(voice_channel)
 
-        loop = asyncio.get_event_loop()
+    @asyncio.coroutine
+    def _clean_up_voice(self):
+        while True:
+            _logger.debug('Clean up voice schedule, state %s', self._voice_state)
 
-        def cleanup_voice():
-            _logger.debug('Cleaning up voice')
-            self._voice_disconnect_timer_handle = None
-            loop.create_task(self._voice_client.disconnect())
-            self._voice_client = None
+            if self._voice_state == VoiceState.idle and self._voice_client:
+                _logger.info('Cleaning up voice')
 
-        self._voice_disconnect_timer_handle = loop.call_later(60, cleanup_voice)
+                yield from self._voice_client.disconnect()
+                self._voice_client = None
+
+            yield from asyncio.sleep(120)
+
+    @asyncio.coroutine
+    def _play_and_wait(self, *args, **kwargs):
+        self._player = self._voice_client.create_ffmpeg_player(*args, **kwargs)
+        self._player.start()
+        while self._player and not self._player.is_done():
+            yield from asyncio.sleep(0.2)
+
+    def _stop_player(self):
+        if self._player:
+            _logger.debug('Stopping player')
+            self._player.stop()
+            self._player = None
 
     def _build_pokedex(self):
         _logger.info('Building sound pokedex...')
@@ -286,6 +428,7 @@ def main():
     signal.signal(signal.SIGINT, cleanup)
 
     bot.run()
+
 
 if __name__ == '__main__':
     main()
