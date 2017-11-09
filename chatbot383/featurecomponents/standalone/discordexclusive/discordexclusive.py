@@ -14,6 +14,8 @@ from typing import Optional
 
 import discord
 
+from chatbot383.roar import gen_roar
+
 _logger = logging.getLogger(__name__)
 
 
@@ -152,6 +154,12 @@ class DiscordExclusiveBot:
             if match.group(1).lower() in ('stop', 'off', 'cancel', 'poweroff'):
                 self._stop_player()
                 self._voice_state = VoiceState.idle
+                yield from self._client.send_message(
+                    message.channel,
+                    "{} {} switched radio off 📻🔇".format(
+                        gen_roar(),
+                        message.author.display_name,
+                    ))
 
             return True
 
@@ -160,6 +168,13 @@ class DiscordExclusiveBot:
         yield from self._join_voice_channel()
 
         _logger.info('Playing radio')
+
+        yield from self._client.send_message(
+            message.channel,
+            "{} {} switched radio on 📻🎶".format(
+                gen_roar(),
+                message.author.display_name,
+            ))
 
         proc = yield from asyncio.create_subprocess_exec(
             'youtube-dl',
@@ -218,7 +233,9 @@ class DiscordExclusiveBot:
 
         elif channel_id not in self._config['voice_channel_whitelist']:
             yield from self._client.send_message(
-                message.channel, "Unrecognized voice channel ID")
+                message.channel,
+                "{} Unrecognized voice channel ID".format(gen_roar())
+            )
             return True
 
         self._current_voice_channel = voice_channel = \
