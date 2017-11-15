@@ -132,6 +132,9 @@ Commands for specific Discord servers.
 ``!radio``
     Play the audio stream from TPP.
 
+``!radio chef``
+    Play Chef's music.
+
 ``!radio off``
     Stop the audio stream.
 

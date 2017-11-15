@@ -148,10 +148,12 @@ class DiscordExclusiveBot:
         if not match:
             return False
 
+        subcommand = match.group(1).lower()
+
         if self._voice_state == VoiceState.playing_cry:
             yield from self._stop_player()
         elif self._voice_state == VoiceState.playing_radio:
-            if match.group(1).lower() in ('stop', 'off', 'cancel', 'poweroff'):
+            if subcommand in ('stop', 'off', 'cancel', 'poweroff'):
                 self._stop_player()
                 self._voice_state = VoiceState.idle
                 yield from self._client.send_message(
@@ -176,29 +178,30 @@ class DiscordExclusiveBot:
                 message.author.display_name,
             ))
 
-        proc = yield from asyncio.create_subprocess_exec(
-            'youtube-dl',
-            'http://twitch.tv/twitchplayspokemon',
-            '--get-url',
-            '--format', 'audio_only',
-            '--quiet',
-            stdout=subprocess.PIPE)
+        options_before = '-re '
+        options = '-filter:a "volume=-6dB"'
 
-        out_data, in_data = yield from proc.communicate()
+        if subcommand in ('chef', 'cheg'):
+            url = os.path.abspath(
+                os.path.join(os.path.dirname(__file__),
+                             'Tale_of_the_Spirit_of_Speed_loop.opus')
+            )
+            options_before += ' -stream_loop -1 '
+        else:
+            url = yield from self._get_tpp_stream_url()
 
-        url = out_data.decode('utf8', 'replace').strip()
-
-        if not url.startswith('http'):
-            _logger.error('Url did not start with http: %s', url)
-            self._voice_state = VoiceState.idle
-            return True
+            if not url.startswith('http'):
+                _logger.error('Url did not start with http: %s', url)
+                self._voice_state = VoiceState.idle
+                return True
 
         @asyncio.coroutine
         def background_play():
+            _logger.info('Radio url %s', url)
             yield from self._play_and_wait(
                 url,
-                before_options='-re',
-                #options='-filter:a "volume=-2dB"'
+                before_options=options_before,
+                options=options
             )
 
             self._voice_state = VoiceState.idle
@@ -211,6 +214,21 @@ class DiscordExclusiveBot:
             .create_task(background_play())
 
         return True
+
+    @asyncio.coroutine
+    def _get_tpp_stream_url(self) -> str:
+        proc = yield from asyncio.create_subprocess_exec(
+            'youtube-dl',
+            'http://twitch.tv/twitchplayspokemon',
+            '--get-url',
+            '--format', 'audio_only',
+            '--quiet',
+            stdout=subprocess.PIPE)
+
+        out_data, in_data = yield from proc.communicate()
+
+        url = out_data.decode('utf8', 'replace').strip()
+        return url
 
     @asyncio.coroutine
     def _move_voice_command(self, message: discord.Message):
@@ -276,7 +294,12 @@ class DiscordExclusiveBot:
 
     @asyncio.coroutine
     def _play_and_wait(self, *args, **kwargs):
-        self._player = self._voice_client.create_ffmpeg_player(*args, **kwargs)
+        try:
+            self._player = self._voice_client.create_ffmpeg_player(*args, **kwargs)
+        except discord.ClientException:
+            _logger.error('Player error!')
+            return
+
         self._player.start()
         while self._player and not self._player.is_done():
             yield from asyncio.sleep(0.2)
