@@ -1,6 +1,7 @@
 import collections
 import copy
 import gettext
+import hashlib
 import io
 import json
 import logging
@@ -12,6 +13,8 @@ import time
 import unicodedata
 
 import arrow
+import requests
+import requests.exceptions
 
 import chatbot383.censor
 from chatbot383.bot import Limiter, Bot, InboundMessageSession
@@ -243,6 +246,7 @@ class Features(object):
         self._recent_messages_for_regex = collections.defaultdict(lambda: collections.deque(maxlen=100))
         self._last_message = {}
         self._spam_limiter = Limiter(min_interval=10)
+        self._password_api_limiter = Limiter(min_interval=2)
         self._user_list = collections.defaultdict(set)
         self._regex_server = RegexServer()
         self._token_notifier = TokenNotifier(
@@ -284,6 +288,7 @@ class Features(object):
         bot.register_command(r'(?i)!(mail|post)status($|\s.*)', self._mail_status_command)
         bot.register_command(r'(?i)!mute($|\s.*)', self._mute_command, ignore_rate_limit=True)
         bot.register_command(r'(?i)!normalize($|\s.*)', self._normalize_command)
+        bot.register_command(r'(?i)!password\s+(.*)', self._password_command)
         bot.register_command(r'(?i)!pick\s+(.*)', self._pick_command)
         bot.register_command(r'(?i)!praise($|\s.{,100})$', self._praise_command)
         bot.register_command(r'(?i)!schedule($|\s.*)', self._schedule_command)
@@ -616,6 +621,41 @@ class Features(object):
         normalize_text = unicodedata.normalize('NFKC', text)
 
         formatted_text = '{} Normalized! {}'.format(gen_roar(), normalize_text)
+
+        self._try_say_or_reply_too_long(formatted_text, session)
+
+    def _password_command(self, session: InboundMessageSession):
+        text = session.match.group(1).strip()
+
+        if not text:
+            text = 'Groudonger'
+
+        if not self._password_api_limiter.is_ok('password'):
+            time.sleep(2)
+
+        self._password_api_limiter.update('password')
+
+        hasher = hashlib.sha1()
+        hasher.update(text.encode('utf8', 'replace'))
+        digest = hasher.hexdigest().lower()
+
+        result = 'Unable to check password.'
+
+        try:
+            response = requests.get(
+                'https://api.pwnedpasswords.com/range/{}'.format(digest[:5]),
+                headers={'user-agent': 'chatbot383'}
+            )
+
+            if response.status_code == 200:
+                if digest[5:] in response.text.lower():
+                    result = '{} **is** a Pwned Password!'.format(text)
+                else:
+                    result = '{} is not a Pwned Password'.format(text)
+        except requests.exceptions.RequestException:
+            _logger.exception('Password check error')
+
+        formatted_text = '{} {}'.format(gen_roar(), result)
 
         self._try_say_or_reply_too_long(formatted_text, session)
 

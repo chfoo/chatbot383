@@ -64,6 +64,9 @@ down the page or clicking the "i" icon button on mobile.
 ``!normalize text``
     Make text not fancy by applying Unicode NFKC normalization.
 
+``!password text``
+    Checks whether the given password is in the Pwned Password list.
+
 ``!pick item1, item2, item3, ...``
    Randomly select one of ``item``.
 
