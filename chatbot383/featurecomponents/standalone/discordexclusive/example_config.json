@@ -3,5 +3,8 @@
     "text_channel_id": "123",
     "voice_channel_id": "456",
     "voice_channel_whitelist": ["456", "789"],
-    "sound_file_directory": "directory/of/sound/files/"
+    "sound_file_directory": "directory/of/sound/files/",
+    "puppy_user_id": "123456789",
+    "puppy_channel_id": "123456789",
+    "puppy_emoji_id": "123456789"
 }

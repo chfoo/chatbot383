@@ -84,7 +84,8 @@ class DiscordExclusiveBot:
             commands = [
                 self._cry_command,
                 self._move_voice_command,
-                self._radio_command
+                self._radio_command,
+                self._puppy_kick_reaction,
             ]
 
             for command in commands:
@@ -410,6 +411,25 @@ class DiscordExclusiveBot:
         ''', (sound_id, )).fetchone()
 
         return row[0]
+
+    @asyncio.coroutine
+    def _puppy_kick_reaction(self, message: discord.Message) -> bool:
+        if message.author.id == self._config.get('puppy_user_id') \
+                and message.channel.id == self._config.get('puppy_channel_id'):
+
+            emojis = self._client.get_all_emojis()
+            emoji_id = self._config.get('puppy_emoji_id')
+
+            for emoji in emojis:
+                if emoji.id == emoji_id:
+                    yield from self._client.add_reaction(message, emoji)
+                    break
+            else:
+                _logger.error('Puppy emoji missing')
+
+            return True
+        else:
+            return False
 
     @classmethod
     def slugify(cls, text, no_dash=False):
