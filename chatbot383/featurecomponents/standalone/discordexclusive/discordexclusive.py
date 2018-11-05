@@ -415,7 +415,8 @@ class DiscordExclusiveBot:
     @asyncio.coroutine
     def _puppy_kick_reaction(self, message: discord.Message) -> bool:
         if message.author.id == self._config.get('puppy_user_id') \
-                and message.channel.id == self._config.get('puppy_channel_id'):
+                and message.channel.id == self._config.get('puppy_channel_id') \
+                and re.search(r'\bpupp(y|ies)\b', message, re.IGNORECASE):
 
             emojis = self._client.get_all_emojis()
             emoji_id = self._config.get('puppy_emoji_id')
