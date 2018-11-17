@@ -68,7 +68,7 @@ class DiscordExclusiveBot:
         except discord.LoginFailure as error:
             raise ValueError('Bad token') from error
 
-        asyncio.get_event_loop().create_task(self._client.connect())
+        yield from self._client.connect()
         yield from self._client.wait_until_ready()
 
         _logger.info('Logged in')
