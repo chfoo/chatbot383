@@ -81,7 +81,7 @@ class DiscordExclusiveBot:
 
         while True:
             message_task = asyncio.get_event_loop().create_task(self._client.wait_for_message(channel=text_channel))
-            done, pending = yield from asyncio.wait_for([connect_task, message_task], asyncio.FIRST_COMPLETED)
+            done, pending = yield from asyncio.wait_for([connect_task, message_task], return_when=asyncio.FIRST_COMPLETED)
 
             for done_task in done:
                 if done_task == message_task:
