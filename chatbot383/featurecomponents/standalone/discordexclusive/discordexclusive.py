@@ -68,7 +68,8 @@ class DiscordExclusiveBot:
         except discord.LoginFailure as error:
             raise ValueError('Bad token') from error
 
-        asyncio.get_event_loop().create_task(self._client.connect())
+        # connect() designed as an infinite loop..
+        connect_task = asyncio.get_event_loop().create_task(self._client.connect())
         yield from self._client.wait_until_ready()
 
         _logger.info('Logged in')
@@ -79,20 +80,27 @@ class DiscordExclusiveBot:
         _logger.info('Listening for messages on %s', text_channel.id)
 
         while True:
-            message = yield from self._client.wait_for_message(channel=text_channel)
+            message_task = asyncio.get_event_loop().create_task(self._client.wait_for_message(channel=text_channel))
+            done, pending = yield from asyncio.wait_for([connect_task, message_task], asyncio.FIRST_COMPLETED)
 
-            commands = [
-                self._cry_command,
-                self._move_voice_command,
-                self._radio_command,
-                self._puppy_kick_reaction,
-            ]
+            for done_task in done:
+                if done_task == message_task:
+                    message = yield from message_task
 
-            for command in commands:
-                result = yield from command(message)
+                    commands = [
+                        self._cry_command,
+                        self._move_voice_command,
+                        self._radio_command,
+                        self._puppy_kick_reaction,
+                    ]
 
-                if result:
-                    break
+                    for command in commands:
+                        result = yield from command(message)
+
+                        if result:
+                            break
+                else:
+                    yield from done_task
 
     @asyncio.coroutine
     def _cry_command(self, message: discord.Message) -> bool:
