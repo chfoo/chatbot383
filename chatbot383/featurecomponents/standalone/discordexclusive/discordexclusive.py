@@ -409,8 +409,8 @@ class DiscordExclusiveBot:
         return row[0]
 
     async def _puppy_kick_reaction(self, message: discord.Message) -> bool:
-        if message.author.id == self._config.get('puppy_user_id') \
-                and message.channel.id == self._config.get('puppy_channel_id') \
+        if message.author.id == int(self._config.get('puppy_user_id')) \
+                and message.channel.id == int(self._config.get('puppy_channel_id')) \
                 and re.search(r'\bpupp(y|ies)\b', message.content, re.IGNORECASE):
 
             emojis = self._client.emojis
