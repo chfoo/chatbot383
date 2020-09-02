@@ -163,8 +163,7 @@ class DiscordExclusiveBot:
             if subcommand in ('stop', 'off', 'cancel', 'poweroff'):
                 self._stop_player()
                 self._voice_state = VoiceState.idle
-                await self._client.send_message(
-                    message.channel,
+                await message.channel.send(
                     "{} {} switched radio off 📻🔇".format(
                         gen_roar(),
                         message.author.display_name,
@@ -178,8 +177,7 @@ class DiscordExclusiveBot:
 
         _logger.info('Playing radio')
 
-        await self._client.send_message(
-            message.channel,
+        await message.channel.send(
             "{} {} switched radio on 📻🎶".format(
                 gen_roar(),
                 message.author.display_name,
@@ -244,8 +242,7 @@ class DiscordExclusiveBot:
         channel_id = match.group(1).strip()
 
         if not channel_id:
-            await self._client.send_message(
-                message.channel,
+            await message.channel.send(
                 '\n'.join(
                     'Channel ID {id_str} - <#{id_str}>'.format(id_str=id_str)
                     for id_str in self._config['voice_channel_whitelist']
@@ -254,8 +251,7 @@ class DiscordExclusiveBot:
             return True
 
         elif channel_id not in self._config['voice_channel_whitelist']:
-            await self._client.send_message(
-                message.channel,
+            await message.channel.send(
                 "{} Unrecognized voice channel ID".format(gen_roar())
             )
             return True
