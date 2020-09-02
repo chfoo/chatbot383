@@ -22,19 +22,17 @@ class IRCServer:
         self._port = port
         self._stop_event = asyncio.Event()
 
-    @asyncio.coroutine
-    def run(self):
+    async def run(self):
         server_coro = asyncio.start_server(self._handler, '127.0.0.1', self._port)
-        yield from server_coro
-        yield from self._stop_event.wait()
+        await server_coro
+        await self._stop_event.wait()
 
-    @asyncio.coroutine
-    def _handler(self, reader: asyncio.StreamReader, writer: asyncio.StreamWriter):
+    async def _handler(self, reader: asyncio.StreamReader, writer: asyncio.StreamWriter):
         _logger.info('Connected to client.')
 
         session = IRCSession(reader, writer)
         try:
-            yield from session.handle()
+            await session.handle()
         except ConnectionError:
             _logger.info('Connection closed.')
         except Exception:
@@ -68,17 +66,16 @@ class IRCSession:
         self._password = None
         self._discord_connect_task = None
 
-    @asyncio.coroutine
-    def handle(self):
+    async def handle(self):
         futures = set()
         futures.add(self._reader.readline())
 
         while True:
-            done, pending = yield from asyncio.wait(futures, return_when=asyncio.FIRST_COMPLETED)
+            done, pending = await asyncio.wait(futures, return_when=asyncio.FIRST_COMPLETED)
             futures = set(pending)
 
             for future in done:
-                result = yield from future
+                result = await future
 
                 if isinstance(result, bytes):
                     line = result.decode('utf8', 'replace').strip('\r\n')
@@ -92,19 +89,19 @@ class IRCSession:
                     command = self.ClientCommand(line)
 
                     if self._state == self.State.wait_for_login:
-                        success = yield from self._handle_login(command)
+                        success = await self._handle_login(command)
 
                         if success:
-                            futures.add(self._discord_client.wait_for_message())
+                            futures.add(self._discord_client.wait_for('message'))
                     else:
-                        yield from self._handle_message_command(command)
+                        await self._handle_message_command(command)
 
                     futures.add(self._reader.readline())
                 else:
                     message = result
 
-                    yield from self._handle_discord_message(message)
-                    futures.add(self._discord_client.wait_for_message())
+                    await self._handle_discord_message(message)
+                    futures.add(self._discord_client.wait_for('message'))
 
             futures.update(pending)
 
@@ -113,8 +110,7 @@ class IRCSession:
         return text.replace('\\', '\\\\').replace('\r', '\\r')\
             .replace('\n', '\\n').replace(' ', '\\s').replace(';', '\\:')
 
-    @asyncio.coroutine
-    def _reply(self, *args, tags=None, username=None):
+    async def _reply(self, *args, tags=None, username=None):
         str_args = (str(arg) for arg in args)
         if tags:
             tag_str = ';'.join(
@@ -139,10 +135,9 @@ class IRCSession:
 
         self._writer.write(text.encode('utf8', 'replace'))
         self._writer.write(b'\r\n')
-        yield from self._writer.drain()
+        await self._writer.drain()
 
-    @asyncio.coroutine
-    def _handle_login(self, command: ClientCommand) -> bool:
+    async def _handle_login(self, command: ClientCommand) -> bool:
         if command.command == 'nick':
             self._username = command.args[1]
 
@@ -152,38 +147,37 @@ class IRCSession:
         elif command.command == 'user':
             pass
         else:
-            yield from self._reply('421', command.command, ':Unknown command')
+            await self._reply('421', command.command, ':Unknown command')
 
         if self._username and self._password:
             _logger.info('Logging into Discord.')
 
             try:
-                yield from self._discord_client.login(self._password)
+                await self._discord_client.login(self._password)
             except discord.LoginFailure:
-                yield from self._reply('464', ':Login error')
+                await self._reply('464', ':Login error')
                 self._writer.close()
                 return False
 
             _logger.info('Waiting for Discord client..')
             self._discord_connect_task = asyncio.get_event_loop().create_task(self._discord_client.connect())
-            yield from self._discord_client.wait_until_ready()
+            await self._discord_client.wait_until_ready()
 
             _logger.info('Discord login success!')
             self._state = self.State.logged_in
 
-            yield from self._reply('001', self._username, ':')
-            yield from self._reply('002', self._username, ':')
-            yield from self._reply('003', self._username, ':')
-            yield from self._reply('004', self._username, ':')
-            yield from self._reply('375', self._username, ':')
-            yield from self._reply('376', self._username, ':')
+            await self._reply('001', self._username, ':')
+            await self._reply('002', self._username, ':')
+            await self._reply('003', self._username, ':')
+            await self._reply('004', self._username, ':')
+            await self._reply('375', self._username, ':')
+            await self._reply('376', self._username, ':')
 
             return True
 
         return False
 
-    @asyncio.coroutine
-    def _handle_message_command(self, command: ClientCommand):
+    async def _handle_message_command(self, command: ClientCommand):
         command_table = {
             'ping': self._ping_command,
             'join': self._join_command,
@@ -194,92 +188,82 @@ class IRCSession:
         func = command_table.get(command.command)
 
         if func:
-            yield from func(command)
+            await func(command)
         else:
-            yield from self._reply('421', command.command, ':Unknown command')
+            await self._reply('421', command.command, ':Unknown command')
 
-    @asyncio.coroutine
-    def _ping_command(self, command: ClientCommand):
-        yield from self._reply('PONG', ':' + command.text)
+    async def _ping_command(self, command: ClientCommand):
+        await self._reply('PONG', ':' + command.text)
 
-    @asyncio.coroutine
-    def _join_command(self, command: ClientCommand):
+    async def _join_command(self, command: ClientCommand):
         channels = command.args[1].split(',')
 
         for channel in channels:
             if not channel.startswith(CHANNEL_PREFIX):
-                yield from self._reply(
+                await self._reply(
                     '403', ':Channel name must start with & symbol'
                 )
             else:
                 channel = channel.replace(CHANNEL_PREFIX, '', 1)
                 _logger.info('Join channel %s', channel)
                 self._channel_ids.add(channel)
-                yield from self._reply(
+                await self._reply(
                     'JOIN', CHANNEL_PREFIX + channel, username=True
                 )
 
-    @asyncio.coroutine
-    def _part_command(self, command: ClientCommand):
+    async def _part_command(self, command: ClientCommand):
         channel = command.args[1]
         channel = channel.replace(CHANNEL_PREFIX, '', 1)
         _logger.info('Part channel %s', channel)
         self._channel_ids.remove(channel)
-        yield from self._reply(
+        await self._reply(
             'PART', CHANNEL_PREFIX + channel, username=True
         )
 
-    @asyncio.coroutine
-    def _privmsg_command(self, command: ClientCommand):
+    async def _privmsg_command(self, command: ClientCommand):
         channel = command.args[1]
 
         if channel == PRESENCE_CHANNEL:
-            yield from self._presence_command(command)
+            await self._presence_command(command)
         elif channel.startswith(CHANNEL_PREFIX):
             channel = channel.replace(CHANNEL_PREFIX, '', 1)
 
             if channel not in self._channel_ids:
-                yield from self._reply('442', ':Not joined in that channel')
+                await self._reply('442', ':Not joined in that channel')
             else:
-                yield from self._discord_client.send_message(
-                    self._discord_client.get_channel(channel),
-                    command.text
-                )
+                channel_obj = self._discord_client.get_channel(int(channel))
+                await channel_obj.send(command.text)
         else:
             try:
-                user = yield from self._discord_client.get_user_info(channel)
+                user = await self._discord_client.get_user_info(int(channel))
             except discord.NotFound:
-                yield from self._reply('401', ':User not found')
+                await self._reply('401', ':User not found')
             else:
-                yield from self._discord_client.send_message(
-                    user, command.text
-                )
+                await user.send(command.text)
 
-    @asyncio.coroutine
-    def _presence_command(self, command: ClientCommand):
+    async def _presence_command(self, command: ClientCommand):
         if command.text:
             game = discord.Game(name=command.text)
         else:
             game = None
         try:
-            yield from self._discord_client.change_presence(game=game)
+            await self._discord_client.change_presence(game=game)
         except discord.DiscordException:
             _logger.error('Could not update game "%s"', game)
 
-    @asyncio.coroutine
-    def _handle_discord_message(self, message: discord.Message):
+    async def _handle_discord_message(self, message: discord.Message):
         if not message.channel:
             return
 
-        if message.channel.id not in self._channel_ids:
+        if str(message.channel.id) not in self._channel_ids:
             return
 
-        yield from self._reply(
-            'PRIVMSG', CHANNEL_PREFIX + message.channel.id,
+        await self._reply(
+            'PRIVMSG', CHANNEL_PREFIX + str(message.channel.id),
             ':' + message.content.replace('\n', ' ').replace('\r', ' '),
             tags={
                 'display-name': message.author.display_name,
-                'user-id': message.author.id
+                'user-id': str(message.author.id)
             },
             username=self.escape_username(message.author.name)
         )
