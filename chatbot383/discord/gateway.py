@@ -247,7 +247,7 @@ class IRCSession:
         else:
             game = None
         try:
-            await self._discord_client.change_presence(game=game)
+            await self._discord_client.change_presence(activity=game)
         except discord.DiscordException:
             _logger.error('Could not update game "%s"', game)
 

@@ -294,7 +294,7 @@ class DiscordExclusiveBot:
         try:
             self._player = discord.FFmpegPCMAudio(*args, **kwargs)
         except discord.ClientException:
-            _logger.error('Player error!')
+            _logger.exception('Player error!')
             return
 
         self._voice_client.play(self._player)
